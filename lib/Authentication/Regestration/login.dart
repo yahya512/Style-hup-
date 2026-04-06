@@ -1,9 +1,8 @@
-// ignore_for_file: avoid_print
-
 import 'package:dx/Authentication/Regestration/brand_complete_profile.dart';
 import 'package:dx/Authentication/Regestration/signup.dart';
 import 'package:dx/Authentication/Regestration/user_complete_profile.dart';
 import 'package:dx/Widgets/email_form_field.dart';
+import 'package:dx/Widgets/login_with_google.dart';
 import 'package:dx/Widgets/password_form_field.dart';
 import 'package:dx/cache/cache_helper.dart';
 import 'package:dx/core/api/endpoints.dart';
@@ -13,6 +12,7 @@ import 'package:dx/core/theme/appstyles.dart';
 import 'package:dx/Authentication/models/loginmodel.dart';
 import 'package:dx/Authentication/models/user_date_model.dart';
 import 'package:dx/repositories/user_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dx/Authentication/ForgetPsssword/forgetpasswordone.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -123,7 +123,6 @@ class _LogInState extends State<LogIn> {
                       // PassWord
                       passwordField(
                         passwordController,
-                        "Enter Your Password",
                         _visiblePassword,
                         IconButton(
                           onPressed: () {
@@ -252,15 +251,17 @@ class _LogInState extends State<LogIn> {
                                 );
                                 setState(() {
                                   _isloading = false;
-                                  print(
-                                    "message FromAPI  : ${e.errormodel.message}",
-                                  );
-                                  print(
-                                    "error FromAPI : ${e.errormodel.error}",
-                                  );
-                                  print(
-                                    "Status FromAPI : ${e.errormodel.status}",
-                                  );
+                                  if (kDebugMode) {
+                                    print(
+                                      "message FromAPI  : ${e.errormodel.message}",
+                                    );
+                                    print(
+                                      "error FromAPI : ${e.errormodel.error}",
+                                    );
+                                    print(
+                                      "Status FromAPI : ${e.errormodel.status}",
+                                    );
+                                  }
                                 });
                               }
                             }
@@ -325,33 +326,9 @@ class _LogInState extends State<LogIn> {
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton.icon(
-                          onPressed: () {},
-                          icon: Image.asset(
-                            alignment: Alignment.centerLeft,
-                            "images/google logo.png",
-                            width: 30.w,
-                            height: 30.h,
-                          ),
-                          style: AppStyles.googleElevatedButtonStyle,
-                          label: Text(
-                            "Login with Google",
-                            maxLines: 1,
-                            style: AppStyles.greyTextButtonStyle,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+
+              // Login with Google
+              gooleLogIn(),
             ],
           ),
         ),

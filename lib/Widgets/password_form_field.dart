@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 Widget passwordField(
   TextEditingController passswordController,
-  String lable,
   bool visiable,
   Widget eyeicone,
 ) {
@@ -17,7 +16,7 @@ Widget passwordField(
     obscureText: visiable,
     textInputAction: TextInputAction.next,
     decoration: InputDecoration(
-      label: Text(lable, style: AppStyles.labelTextStyle),
+      label: Text("Enter Your Password", style: AppStyles.labelTextStyle),
       suffixIcon: eyeicone,
       border: AppStyles.outlineInputBorderstyle,
       focusedBorder: AppStyles.foucasedoutlineInputBorder,

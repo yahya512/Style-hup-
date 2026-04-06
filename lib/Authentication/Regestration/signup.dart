@@ -1,15 +1,14 @@
-// ignore_for_file: avoid_print
-
 import 'package:dx/Authentication/Regestration/login.dart';
 import 'package:dx/Widgets/email_form_field.dart';
+import 'package:dx/Widgets/login_with_google.dart';
 import 'package:dx/Widgets/password_confirm_field.dart';
 import 'package:dx/Widgets/password_form_field.dart';
 import 'package:dx/core/errors/exceptions.dart';
 import 'package:dx/core/services/service_locator.dart';
 import 'package:dx/core/theme/appstyles.dart';
-import 'package:dx/core/validators/password_validator.dart';
 import 'package:dx/Authentication/models/signupmodel.dart';
 import 'package:dx/repositories/user_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 
@@ -144,7 +143,6 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
                         // Password Field
                         passwordField(
                           _userPassword,
-                          "Enter Your Password",
                           _visiblePassword,
                           IconButton(
                             onPressed: () {
@@ -162,7 +160,6 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
                         passwordConfirmField(
                           _userPassword, //Checker
                           _userConfirmPassword,
-                          "Confirm Your Password",
                           _visibleconfirmPassword,
                           IconButton(
                             onPressed: () {
@@ -196,8 +193,8 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
                                     setState(() {
                                       _isloading = true;
                                     });
-                                    print("UserRoleType :$userType");
-                                    print("Role : $_selectedRole");
+                                    // print("UserRoleType :$userType");
+                                    // print("Role : $_selectedRole");
                                     // print("$_checkPassword \n $_confirmPassword");
                                     if (_singUpFormKeyNormalUser.currentState!
                                         .validate()) {
@@ -226,9 +223,9 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
                                             ),
                                           ),
                                         );
-                                        print(
-                                          "***********  Before Navigator ************",
-                                        );
+                                        // print(
+                                        //   "***********  Before Navigator ************",
+                                        // );
                                         Navigator.of(
                                           context,
                                         ).pushAndRemoveUntil(
@@ -253,15 +250,17 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
                                         }
                                         setState(() {
                                           _isloading = false;
-                                          print(
-                                            "message FromAPI  : ${e.errormodel.message}",
-                                          );
-                                          print(
-                                            "error FromAPI : ${e.errormodel.error}",
-                                          );
-                                          print(
-                                            "Status FromAPI : ${e.errormodel.status}",
-                                          );
+                                          if (kDebugMode) {
+                                            print(
+                                              "message FromAPI  : ${e.errormodel.message}",
+                                            );
+                                            print(
+                                              "error FromAPI : ${e.errormodel.error}",
+                                            );
+                                            print(
+                                              "Status FromAPI : ${e.errormodel.status}",
+                                            );
+                                          }
                                         });
                                       }
                                     } else {
@@ -305,33 +304,8 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
                           ),
                         ),
 
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.w),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: SizedBox(
-                                  width: 400,
-                                  child: ElevatedButton.icon(
-                                    onPressed: () {},
-                                    icon: Image.asset(
-                                      "images/google logo.png",
-                                      width: 30,
-                                      height: 30,
-                                    ),
-                                    style: AppStyles.googleElevatedButtonStyle,
-                                    label: Text(
-                                      maxLines: 1,
-                                      "Login with Google",
-                                      style: AppStyles.greyTextButtonStyle,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        // login with Google
+                        gooleLogIn(),
                       ],
                     ),
                   ),
@@ -357,79 +331,37 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
                         //Owner Email Field
                         emailFormField(_signUpOnwerEmail),
 
-                        //Owner Passsword
-                        TextFormField(
-                          onTapOutside: (event) {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                          },
-                          controller: _ownerPaswword,
-                          obscureText:
-                              _visiblePassword, // false (Visiable input)
-                          textInputAction: TextInputAction.next,
-                          keyboardType: TextInputType.visiblePassword,
-                          decoration: InputDecoration(
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _visiblePassword = !_visiblePassword;
-                                });
-                              },
-                              icon: _visiblePassword
-                                  ? Icon(Icons.visibility_off_outlined)
-                                  : Icon(Icons.visibility_outlined),
-                            ),
-                            label: Text(
-                              "Enter Your Password",
-                              style: TextStyle(color: Colors.blueGrey[600]),
-                            ),
-                            enabledBorder: AppStyles.outlineInputBorderstyle,
-                            focusedBorder: AppStyles.foucasedoutlineInputBorder,
-                            errorBorder: AppStyles.errorBorder,
-                            focusedErrorBorder: AppStyles.errorBorder,
+                        passwordField(
+                          _ownerPaswword,
+                          _visiblePassword,
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _visiblePassword = !_visiblePassword;
+                              });
+                            },
+                            icon: _visiblePassword
+                                ? Icon(Icons.visibility_off_outlined)
+                                : Icon(Icons.visibility_outlined),
                           ),
-                          validator: (value) =>
-                              PasswordValidator.passwordChecker(value!),
                         ),
 
                         //Owner Confirm Password
-                        TextFormField(
-                          onTapOutside: (event) {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                          },
-                          controller: _ownerConfirmPassword,
-                          obscureText: _visibleconfirmPassword,
-                          textInputAction: TextInputAction.next,
-                          keyboardType: TextInputType.visiblePassword,
-                          decoration: InputDecoration(
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _visibleconfirmPassword =
-                                      !_visibleconfirmPassword;
-                                });
-                              },
-                              icon: _visibleconfirmPassword
-                                  ? Icon(Icons.visibility_off_outlined)
-                                  : Icon(Icons.visibility_outlined),
-                            ),
-                            label: Text(
-                              "Confirm Your Password",
-                              style: TextStyle(color: Colors.blueGrey[600]),
-                            ),
-                            enabledBorder: AppStyles.outlineInputBorderstyle,
-                            focusedBorder: AppStyles.foucasedoutlineInputBorder,
-                            errorBorder: AppStyles.errorBorder,
-                            focusedErrorBorder: AppStyles.errorBorder,
+                        passwordConfirmField(
+                          _ownerPaswword,
+                          _ownerConfirmPassword,
+                          _visibleconfirmPassword,
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _visibleconfirmPassword =
+                                    !_visibleconfirmPassword;
+                              });
+                            },
+                            icon: _visibleconfirmPassword
+                                ? Icon(Icons.visibility_off_outlined)
+                                : Icon(Icons.visibility_outlined),
                           ),
-                          validator: (String? value) {
-                            if (value!.isEmpty) {
-                              return "Required field please Enter confirmed password";
-                            }
-                            if (value != _ownerPaswword.text) {
-                              return "The passwords doesn't match";
-                            }
-                            return null;
-                          },
                         ),
 
                         SizedBox(
@@ -447,8 +379,8 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
                                 )
                               : ElevatedButton(
                                   onPressed: () async {
-                                    print("BrandRoleType :$userType");
-                                    print("Role : $_selectedRole");
+                                    // print("BrandRoleType :$userType");
+                                    // print("Role : $_selectedRole");
                                     // print("$_checkPassword \n $_confirmPassword");
                                     if (_ownerFormKey.currentState!
                                         .validate()) {
@@ -538,33 +470,7 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
                         ),
 
                         //Login with Google
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.w),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: SizedBox(
-                                  width: 400.w,
-                                  child: ElevatedButton.icon(
-                                    onPressed: () {},
-                                    icon: Image.asset(
-                                      "images/google logo.png",
-                                      width: 30.w,
-                                      height: 30.h,
-                                    ),
-                                    style: AppStyles.googleElevatedButtonStyle,
-                                    label: Text(
-                                      maxLines: 1,
-                                      "Login with Google",
-                                      style: AppStyles.greyTextButtonStyle,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        gooleLogIn(),
                       ],
                     ),
                   ),

@@ -75,7 +75,6 @@ class _ForgetpasswordTwoState extends State<ForgetpassordThree> {
                   children: [
                     passwordField(
                       _passwordController,
-                      "Enter Your New password",
                       _visiblePassword,
                       IconButton(
                         onPressed: () {
@@ -92,7 +91,6 @@ class _ForgetpasswordTwoState extends State<ForgetpassordThree> {
                     passwordConfirmField(
                       _passwordController, // Checker
                       _confirmPasswordController,
-                      "Enter Your Confirm password",
                       _visibleConfirmPassword,
                       IconButton(
                         onPressed: () {

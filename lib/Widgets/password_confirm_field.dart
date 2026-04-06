@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 Widget passwordConfirmField(
   TextEditingController passChecker,
   TextEditingController passwordController,
-
-  String lable,
   bool visiable,
   Widget eyeicone,
 ) {
@@ -19,7 +17,7 @@ Widget passwordConfirmField(
     obscureText: visiable,
     textInputAction: TextInputAction.next,
     decoration: InputDecoration(
-      label: Text(lable, style: AppStyles.labelTextStyle),
+      label: Text("Confirm Your Password", style: AppStyles.labelTextStyle),
       suffixIcon: eyeicone,
       border: AppStyles.outlineInputBorderstyle,
       focusedBorder: AppStyles.foucasedoutlineInputBorder,
