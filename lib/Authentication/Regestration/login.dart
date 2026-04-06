@@ -123,7 +123,6 @@ class _LogInState extends State<LogIn> {
                       // PassWord
                       passwordField(
                         passwordController,
-                        TextInputType.visiblePassword,
                         "Enter Your Password",
                         _visiblePassword,
                         IconButton(

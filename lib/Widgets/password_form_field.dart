@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 Widget passwordField(
   TextEditingController passswordController,
-  TextInputType keyboardType,
   String lable,
   bool visiable,
   Widget eyeicone,
@@ -14,7 +13,7 @@ Widget passwordField(
       FocusManager.instance.primaryFocus?.unfocus();
     },
     controller: passswordController,
-    keyboardType: keyboardType,
+    keyboardType: TextInputType.visiblePassword,
     obscureText: visiable,
     textInputAction: TextInputAction.next,
     decoration: InputDecoration(

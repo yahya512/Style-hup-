@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 Widget passwordConfirmField(
   TextEditingController passChecker,
-  TextEditingController password,
-  TextInputType keyboardType,
+  TextEditingController passwordController,
+
   String lable,
   bool visiable,
   Widget eyeicone,
@@ -14,8 +14,8 @@ Widget passwordConfirmField(
     onTapOutside: (event) {
       FocusManager.instance.primaryFocus?.unfocus();
     },
-    controller: password,
-    keyboardType: keyboardType,
+    controller: passwordController,
+    keyboardType: TextInputType.visiblePassword,
     obscureText: visiable,
     textInputAction: TextInputAction.next,
     decoration: InputDecoration(
@@ -30,7 +30,7 @@ Widget passwordConfirmField(
         return "Required field,Please enter your Password";
       }
       if (kDebugMode) {
-        print("VALUE : $value\n PASSWORD : ${password.text}");
+        print("VALUE : $value\n PASSWORD : ${passwordController.text}");
       }
       if (value != passChecker.text) {
         return "The passwords doesn't match";

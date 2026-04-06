@@ -2,6 +2,8 @@
 
 import 'package:dx/Authentication/Regestration/login.dart';
 import 'package:dx/Widgets/email_form_field.dart';
+import 'package:dx/Widgets/password_confirm_field.dart';
+import 'package:dx/Widgets/password_form_field.dart';
 import 'package:dx/core/errors/exceptions.dart';
 import 'package:dx/core/services/service_locator.dart';
 import 'package:dx/core/theme/appstyles.dart';
@@ -139,81 +141,42 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
                         //Email Field
                         emailFormField(_signUpUserEmail),
 
-                        // Passsword
-                        TextFormField(
-                          onTapOutside: (event) {
-                            // click outside to cancel typing
-                            FocusManager.instance.primaryFocus?.unfocus();
-                          },
-                          controller: _userPassword,
-                          obscureText:
-                              _visiblePassword, // false (Visiable input)
-                          textInputAction: TextInputAction.next,
-                          keyboardType: TextInputType.visiblePassword,
-                          decoration: InputDecoration(
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _visiblePassword = !_visiblePassword;
-                                });
-                              },
-                              icon: _visiblePassword
-                                  ? Icon(Icons.visibility_off_outlined)
-                                  : Icon(Icons.visibility_outlined),
-                            ),
-                            label: Text(
-                              "Enter Your Password",
-                              style: AppStyles.labelTextStyle,
-                            ),
-                            enabledBorder: AppStyles.outlineInputBorderstyle,
-                            focusedBorder: AppStyles.foucasedoutlineInputBorder,
-                            errorBorder: AppStyles.errorBorder,
-                            focusedErrorBorder: AppStyles.errorBorder,
+                        // Password Field
+                        passwordField(
+                          _userPassword,
+                          "Enter Your Password",
+                          _visiblePassword,
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _visiblePassword = !_visiblePassword;
+                              });
+                            },
+                            icon: _visiblePassword
+                                ? Icon(Icons.visibility_off_outlined)
+                                : Icon(Icons.visibility_outlined),
                           ),
-                          validator: (value) =>
-                              PasswordValidator.passwordChecker(value!),
                         ),
 
                         // Confirm Password
-                        TextFormField(
-                          onTapOutside: (event) {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                          },
-                          controller: _userConfirmPassword,
-                          obscureText: _visibleconfirmPassword,
-                          textInputAction: TextInputAction.next,
-                          keyboardType: TextInputType.visiblePassword,
-                          decoration: InputDecoration(
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _visibleconfirmPassword =
-                                      !_visibleconfirmPassword;
-                                });
-                              },
-                              icon: _visibleconfirmPassword
-                                  ? Icon(Icons.visibility_off_outlined)
-                                  : Icon(Icons.visibility_outlined),
-                            ),
-                            label: Text(
-                              "Confirm Your Password",
-                              style: TextStyle(color: Colors.blueGrey[600]),
-                            ),
-                            enabledBorder: AppStyles.outlineInputBorderstyle,
-                            focusedBorder: AppStyles.foucasedoutlineInputBorder,
-                            errorBorder: AppStyles.errorBorder,
-                            focusedErrorBorder: AppStyles.errorBorder,
+                        passwordConfirmField(
+                          _userPassword, //Checker
+                          _userConfirmPassword,
+                          "Confirm Your Password",
+                          _visibleconfirmPassword,
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _visibleconfirmPassword =
+                                    !_visibleconfirmPassword;
+                              });
+                            },
+                            icon: _visibleconfirmPassword
+                                ? Icon(Icons.visibility_off_outlined)
+                                : Icon(Icons.visibility_outlined),
                           ),
-                          validator: (String? value) {
-                            if (value!.isEmpty) {
-                              return "Required field please Enter confirmed password";
-                            }
-                            if (value != _userPassword.text) {
-                              return "The passwords doesn't match";
-                            }
-                            return null;
-                          },
                         ),
+
                         // Sign UP Button
                         SizedBox(
                           width: double.infinity,
