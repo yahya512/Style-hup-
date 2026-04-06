@@ -3,12 +3,13 @@
 import 'package:dx/Authentication/Regestration/brand_complete_profile.dart';
 import 'package:dx/Authentication/Regestration/signup.dart';
 import 'package:dx/Authentication/Regestration/user_complete_profile.dart';
+import 'package:dx/Widgets/email_form_field.dart';
+import 'package:dx/Widgets/password_form_field.dart';
 import 'package:dx/cache/cache_helper.dart';
 import 'package:dx/core/api/endpoints.dart';
 import 'package:dx/core/errors/exceptions.dart';
 import 'package:dx/core/services/service_locator.dart';
 import 'package:dx/core/theme/appstyles.dart';
-import 'package:dx/core/validators/password_validator.dart';
 import 'package:dx/Authentication/models/loginmodel.dart';
 import 'package:dx/Authentication/models/user_date_model.dart';
 import 'package:dx/repositories/user_repository.dart';
@@ -115,66 +116,28 @@ class _LogInState extends State<LogIn> {
                       SizedBox(height: 20.h),
 
                       // email address
-                      TextFormField(
-                        onTapOutside: (event) {
-                          FocusManager.instance.primaryFocus?.unfocus();
-                        },
-                        controller: emailController,
-                        textInputAction: TextInputAction.next,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          label: Text(
-                            "Enter Your Email",
-                            style: AppStyles.labelTextStyle,
-                          ),
-                          enabledBorder: AppStyles.outlineInputBorderstyle,
-                          focusedBorder: AppStyles.foucasedoutlineInputBorder,
-                          errorBorder: AppStyles.errorBorder,
-                          focusedErrorBorder: AppStyles.errorBorder,
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Required field, please Enter your email";
-                          }
-                          return null;
-                        },
-                      ),
+                      emailFormField(emailController),
+
                       SizedBox(height: 20.h),
 
-                      // Password
-                      TextFormField(
-                        onTapOutside: (event) {
-                          FocusManager.instance.primaryFocus?.unfocus();
-                        },
-                        controller: passwordController,
-                        keyboardType: TextInputType.visiblePassword,
-                        obscureText: _visiblePassword,
-                        decoration: InputDecoration(
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _visiblePassword = !_visiblePassword;
-                              });
-                            },
-                            icon: _visiblePassword
-                                ? Icon(
-                                    Icons.visibility_off_outlined,
-                                    size: 24.r,
-                                  )
-                                : Icon(Icons.visibility_outlined, size: 24.r),
-                          ),
-                          label: Text(
-                            "Enter Your Password",
-                            style: AppStyles.labelTextStyle,
-                          ),
-                          enabledBorder: AppStyles.outlineInputBorderstyle,
-                          focusedBorder: AppStyles.foucasedoutlineInputBorder,
-                          errorBorder: AppStyles.errorBorder,
-                          focusedErrorBorder: AppStyles.errorBorder,
+                      // PassWord
+                      passwordField(
+                        passwordController,
+                        TextInputType.visiblePassword,
+                        "Enter Your Password",
+                        _visiblePassword,
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _visiblePassword = !_visiblePassword;
+                            });
+                          },
+                          icon: _visiblePassword
+                              ? Icon(Icons.visibility_off_outlined, size: 24.r)
+                              : Icon(Icons.visibility_outlined, size: 24.r),
                         ),
-                        validator: (value) =>
-                            PasswordValidator.passwordChecker(value!),
                       ),
+
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).push(
@@ -397,15 +360,3 @@ class _LogInState extends State<LogIn> {
     );
   }
 }
-
-// void saveTokensDate() {
-//   CacheHelper().saveData(
-//     key: ApiKey.accessToken,
-//     value: _userLogIn!.accessToken,
-//   );
-
-//   CacheHelper().saveData(
-//     key: ApiKey.refreshToken,
-//     value: _userLogIn!.refreshToken,
-//   );
-// }

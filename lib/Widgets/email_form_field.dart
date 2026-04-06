@@ -11,10 +11,7 @@ Widget emailFormField(TextEditingController emailController) {
     textInputAction: TextInputAction.next,
     keyboardType: TextInputType.emailAddress,
     decoration: InputDecoration(
-      label: Text(
-        "Enter Your email",
-        style: TextStyle(color: Colors.blueGrey[600]),
-      ),
+      label: Text("Enter Your email", style: AppStyles.labelTextStyle),
       enabledBorder: AppStyles.outlineInputBorderstyle,
       focusedBorder: AppStyles.foucasedoutlineInputBorder,
       errorBorder: AppStyles.errorBorder,
