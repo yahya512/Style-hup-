@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:dx/Authentication/models/brand_complete_profile_model.dart';
 import 'package:dx/Widgets/brand_information_filed.dart';
+import 'package:dx/Widgets/login_with_google.dart';
 import 'package:dx/core/errors/exceptions.dart';
 import 'package:dx/core/functions/upload_image_to_api.dart';
 import 'package:dx/core/services/service_locator.dart';
@@ -65,7 +66,7 @@ class _BrandCompelteProfileState extends State<BrandCompleteProfile> {
         actionsIconTheme: IconThemeData(color: Colors.white),
         actions: [
           Padding(
-            padding: EdgeInsetsGeometry.symmetric(horizontal: 20.w),
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Image.asset(
               width: 50.w,
               height: 50.h,
@@ -77,7 +78,7 @@ class _BrandCompelteProfileState extends State<BrandCompleteProfile> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsetsGeometry.all(20.dg),
+          padding: EdgeInsets.all(20.dg),
           child: Center(
             child: Form(
               key: _brandFormKey,
@@ -173,7 +174,7 @@ class _BrandCompelteProfileState extends State<BrandCompleteProfile> {
 
                   // confirm Button
                   Padding(
-                    padding: EdgeInsetsGeometry.symmetric(horizontal: 14.w),
+                    padding: EdgeInsets.symmetric(horizontal: 14.w),
                     child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -193,7 +194,7 @@ class _BrandCompelteProfileState extends State<BrandCompleteProfile> {
                               return;
                             }
                             try {
-                              await repository.imageupload(_selectedImage);
+                              //Complete profile API
                               final response = await repository
                                   .brandCompleteProfile(
                                     _brandUserName.text,
@@ -203,8 +204,11 @@ class _BrandCompelteProfileState extends State<BrandCompleteProfile> {
                                     _brandDescription.text,
                                   );
                               _brandCompleteProfile = response;
-                            } on ServerException catch (e) {
-                              if (context.mounted) {
+                              // Image API
+                              try {
+                                await repository.imageupload(_selectedImage);
+                              } on ServerException catch (e) {
+                                if (!context.mounted) return;
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     duration: Duration(seconds: 3),
@@ -214,18 +218,43 @@ class _BrandCompelteProfileState extends State<BrandCompleteProfile> {
                                     ),
                                   ),
                                 );
+                                return; // ← stops "Validated data" from showing
+                              } catch (e) {
+                                // non-ServerException upload failures (timeout, no internet, etc.)
+                                if (!context.mounted) return;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    duration: Duration(seconds: 1),
+                                    content: Text(
+                                      "Image upload failed. Please try again.",
+                                      style: AppStyles.snackBarStyle,
+                                    ),
+                                  ),
+                                );
+                                return; // ← stops "Validated data" from showing
                               }
-                            }
-                            if (!context.mounted) return;
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                duration: Duration(seconds: 1),
-                                content: Text(
-                                  "Validated data",
-                                  style: AppStyles.snackBarStyle,
+                              if (!context.mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  duration: Duration(seconds: 1),
+                                  content: Text(
+                                    "Validated data",
+                                    style: AppStyles.snackBarStyle,
+                                  ),
                                 ),
-                              ),
-                            );
+                              );
+                            } on ServerException catch (e) {
+                              if (!context.mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  duration: Duration(seconds: 3),
+                                  content: Text(
+                                    e.errormodel.message,
+                                    style: AppStyles.snackBarStyle,
+                                  ),
+                                ),
+                              );
+                            }
                           }
                         },
                         style: AppStyles.elevatedButtonStyle,
@@ -238,32 +267,7 @@ class _BrandCompelteProfileState extends State<BrandCompleteProfile> {
                   ),
 
                   // Login with Google
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 14.w),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton.icon(
-                              onPressed: () {},
-                              icon: Image.asset(
-                                "images/google logo.png",
-                                width: 30.w,
-                                height: 30.h,
-                              ),
-                              style: AppStyles.googleElevatedButtonStyle,
-                              label: Text(
-                                "Login with Google",
-                                style: AppStyles.greyTextButtonStyle,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  gooleLogIn(),
                   Container(height: 10.h),
                 ],
               ),

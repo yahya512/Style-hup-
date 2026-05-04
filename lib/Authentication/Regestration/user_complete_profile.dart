@@ -1,3 +1,4 @@
+import 'package:dx/Authentication/models/user_complete_profile_model.dart';
 import 'package:dx/Widgets/user_complete_profile_field.dart';
 import 'package:dx/core/errors/exceptions.dart';
 import 'package:dx/core/services/service_locator.dart';
@@ -28,6 +29,8 @@ class _UserProfileState extends State<UserCompleteProfile> {
 
   // API
   final repository = getIt<UserRepository>();
+  // ignore: unused_field
+  UserCompleteProfileModel? _userRespone;
   @override
   void initState() {
     super.initState();
@@ -55,7 +58,7 @@ class _UserProfileState extends State<UserCompleteProfile> {
         actionsIconTheme: IconThemeData(color: Colors.white),
         actions: [
           Padding(
-            padding: EdgeInsetsGeometry.symmetric(horizontal: 20.w),
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Image.asset(
               width: 50.w,
               height: 50.h,
@@ -153,7 +156,7 @@ class _UserProfileState extends State<UserCompleteProfile> {
                       if (userCompleteForm.currentState!.validate()) {
                         //we need a Token here to excute the API
                         try {
-                          repository.userCompleteProfile(
+                          final response = await repository.userCompleteProfile(
                             _userName.text,
                             _firstName.text,
                             _lastName.text,
@@ -161,25 +164,29 @@ class _UserProfileState extends State<UserCompleteProfile> {
                             _bio.text,
                             _selectgender!,
                           );
-                        } on ServerException catch (e) {
+                          _userRespone = response;
+                          if (!context.mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              duration: Duration(seconds: 3),
                               content: Text(
-                                e.errormodel.message,
+                                "Validated data",
                                 style: AppStyles.snackBarStyle,
                               ),
                             ),
                           );
+                        } on ServerException catch (e) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                duration: Duration(seconds: 3),
+                                content: Text(
+                                  e.errormodel.message,
+                                  style: AppStyles.snackBarStyle,
+                                ),
+                              ),
+                            );
+                          }
                         }
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              "Validated data",
-                              style: AppStyles.snackBarStyle,
-                            ),
-                          ),
-                        );
                       }
                     },
                     style: AppStyles.elevatedButtonStyle,

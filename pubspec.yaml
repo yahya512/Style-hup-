@@ -42,6 +42,7 @@ dependencies:
   jwt_decoder: ^2.0.1
   shared_preferences: ^2.5.4
   get_it: ^9.2.1
+  infinite_scroll_pagination: ^5.1.1
   
 
 dev_dependencies:

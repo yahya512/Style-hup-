@@ -97,7 +97,7 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
         actionsIconTheme: IconThemeData(color: Colors.white),
         actions: [
           Padding(
-            padding: EdgeInsetsGeometry.symmetric(horizontal: 20.w),
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Image.asset(
               width: 50.w,
               height: 50.h,
@@ -107,7 +107,7 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
           ),
         ],
         bottom: TabBar(
-          indicatorPadding: EdgeInsetsGeometry.symmetric(horizontal: 0.h),
+          indicatorPadding: EdgeInsets.symmetric(horizontal: 0.h),
           indicatorColor: Colors.black,
           onTap: (value) {},
           labelColor: Colors.white,

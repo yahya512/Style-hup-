@@ -1,0 +1,173 @@
+import 'package:dx/E-Commerce/checkout_screen.dart';
+import 'package:dx/core/theme/appstyles.dart';
+import 'package:dx/core/validators/text_validator.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+class AddCardScreen extends StatefulWidget {
+  const AddCardScreen({super.key});
+  @override
+  State<AddCardScreen> createState() {
+    return _AddCardState();
+  }
+}
+
+class _AddCardState extends State<AddCardScreen> {
+  //formkey
+  late GlobalKey<FormState> _addCardKey;
+  //controllers
+  late TextEditingController _cardHolder;
+  late TextEditingController _cardNumber;
+  late TextEditingController _cardCvv;
+  late TextEditingController _cardValid;
+  // bool
+  bool? _cardAdded;
+  @override
+  void initState() {
+    _addCardKey = GlobalKey();
+    _cardHolder = TextEditingController();
+    _cardNumber = TextEditingController();
+    _cardValid = TextEditingController();
+    _cardCvv = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _cardHolder.dispose();
+    _cardNumber.dispose();
+    _cardValid.dispose();
+    _cardCvv.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Add Your Card", style: AppStyles.mainTitleStyle),
+        centerTitle: true,
+      ),
+      body: Form(
+        key: _addCardKey,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(24.dg),
+            child: SizedBox(
+              child: Column(
+                spacing: 50.h,
+                children: [
+                  TextFormField(
+                    controller: _cardHolder,
+                    keyboardType: TextInputType.name,
+                    textInputAction: TextInputAction.next,
+                    decoration: InputDecoration(
+                      label: Text(
+                        "Card Holder",
+                        style: AppStyles.labelTextStyle,
+                      ),
+                      enabledBorder: AppStyles.outlineInputBorderstyle,
+                      focusedBorder: AppStyles.foucasedoutlineInputBorder,
+                      errorBorder: AppStyles.errorBorder,
+                      focusedErrorBorder: AppStyles.errorBorder,
+                    ),
+                    validator: (value) => TextValidation.textValidation(value!),
+                  ),
+
+                  TextFormField(
+                    maxLength: 16,
+                    controller: _cardNumber,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      label: Text(
+                        "Card Number",
+                        style: AppStyles.labelTextStyle,
+                      ),
+                      enabledBorder: AppStyles.outlineInputBorderstyle,
+                      focusedBorder: AppStyles.foucasedoutlineInputBorder,
+                      errorBorder: AppStyles.errorBorder,
+                      focusedErrorBorder: AppStyles.errorBorder,
+                    ),
+                    validator: (value) {
+                      if (value!.length < 16) {
+                        return "Card number is not completed";
+                      }
+                      TextValidation.textValidation(value);
+                      return null;
+                    },
+                  ),
+                  Row(
+                    spacing: 10.w,
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: _cardValid,
+                          keyboardType: TextInputType.datetime,
+                          textInputAction: TextInputAction.next,
+                          decoration: InputDecoration(
+                            label: Text(
+                              "00 / 00",
+                              style: AppStyles.labelTextStyle,
+                            ),
+                            enabledBorder: AppStyles.outlineInputBorderstyle,
+                            focusedBorder: AppStyles.foucasedoutlineInputBorder,
+                            errorBorder: AppStyles.errorBorder,
+                            focusedErrorBorder: AppStyles.errorBorder,
+                          ),
+                          validator: (value) =>
+                              TextValidation.textValidation(value!),
+                        ),
+                      ),
+
+                      Expanded(
+                        child: TextFormField(
+                          controller: _cardCvv,
+                          keyboardType: TextInputType.number,
+
+                          textInputAction: TextInputAction.next,
+                          decoration: InputDecoration(
+                            label: Text(
+                              "Card CVV",
+                              style: AppStyles.labelTextStyle,
+                            ),
+                            enabledBorder: AppStyles.outlineInputBorderstyle,
+                            focusedBorder: AppStyles.foucasedoutlineInputBorder,
+                            errorBorder: AppStyles.errorBorder,
+                            focusedErrorBorder: AppStyles.errorBorder,
+                          ),
+                          validator: (value) =>
+                              TextValidation.textValidation(value!),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  //button save changes
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_addCardKey.currentState!.validate()) {
+                        _cardAdded = true;
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                CheckoutScreen(data: _cardAdded),
+                          ),
+                        );
+                      }
+                    },
+                    style: AppStyles.commerceButton,
+                    child: Text(
+                      "Save Cahnges",
+                      style: AppStyles.whiteTextButtonStyle,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

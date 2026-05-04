@@ -4,7 +4,6 @@ import 'package:dx/Authentication/models/reset_password_model.dart';
 import 'package:dx/core/api/api_consumer.dart';
 import 'package:dx/core/api/endpoints.dart';
 import 'package:dx/Authentication/models/brand_complete_profile_model.dart';
-import 'package:dx/Authentication/models/imageupload_model.dart';
 import 'package:dx/Authentication/models/loginmodel.dart';
 import 'package:dx/Authentication/models/signupmodel.dart';
 import 'package:dx/Authentication/models/user_complete_profile_model.dart';
@@ -95,13 +94,12 @@ class UserRepository {
   }
 
   //Upload Image
-  Future<ImageuploadModel> imageupload(XFile? brandPhoto) async {
-    final response = await _api.post(
+  Future imageupload(XFile? brandPhoto) async {
+    await _api.post(
       isFormdata: true,
       Endpoints.brandProfileImage,
       data: {ApiKey.brandProfile: await uploadimageToApi(brandPhoto!)},
     );
-    return ImageuploadModel.fromJson(response);
   }
 
   //Refersh Token

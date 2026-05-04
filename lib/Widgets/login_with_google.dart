@@ -22,7 +22,7 @@ Widget gooleLogIn() {
               label: Text(
                 maxLines: 1,
                 "Login with Google",
-                style: AppStyles.greyTextButtonStyle,
+                style: AppStyles.googleTextButtonStyle,
               ),
             ),
           ),

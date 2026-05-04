@@ -10,7 +10,7 @@ class UserCompleteProfileModel {
   final String baseUserId;
   final String profileImageUrl;
   final String id;
-  final String isVerified;
+  final bool isVerified;
   final String status;
   final String createdAt;
   final String updatedAt;
@@ -42,7 +42,7 @@ class UserCompleteProfileModel {
       baseUserId: jsonData[ApiKey.baseUserId],
       profileImageUrl: jsonData[ApiKey.profileImageUrl] ?? "",
       id: jsonData[ApiKey.id],
-      isVerified: jsonData[ApiKey.isVerified],
+      isVerified: jsonData[ApiKey.isVerified] ?? true,
       status: jsonData[ApiKey.status],
       createdAt: jsonData[ApiKey.createdAt],
       updatedAt: jsonData[ApiKey.updatedAt],
