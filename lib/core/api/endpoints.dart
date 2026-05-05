@@ -11,6 +11,15 @@ class Endpoints {
   static String userCompleteProfile = "user/complete-profile";
   static String brandProfileImage = "brand/profile/image";
   static String userGetProfile = "user/profile";
+  static String userProfileImage = "user/profile/image";
+  static String userDeleteAccount = "user/account";
+  static String brandGetProfile = "brand/profile";
+  static String brandUpdateProfileImage = "brand/profile/image";
+  static String brandDeleteAccount = "brand/account";
+  static String createPost = "posts";
+  static String search = "search";
+  static String searchUser = "search/user";
+  static String searchBrand = "search/brand";
   static String refreshToken = "auth/refresh";
 }
 
