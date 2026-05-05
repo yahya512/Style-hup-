@@ -1,6 +1,7 @@
 import 'package:dx/Authentication/Regestration/brand_complete_profile.dart';
 import 'package:dx/Authentication/Regestration/signup.dart';
 import 'package:dx/Authentication/Regestration/user_complete_profile.dart';
+import 'package:dx/Social-Media/shared/screens/main_layout.dart';
 import 'package:dx/Widgets/email_form_field.dart';
 import 'package:dx/Widgets/login_with_google.dart';
 import 'package:dx/Widgets/password_form_field.dart';
@@ -209,37 +210,32 @@ class _LogInState extends State<LogIn> {
                                 }
 
                                 if (!context.mounted) return;
-                                if (userData?.isProfileComplete == false) {
-                                  if (userData?.role == "USER") {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            UserCompleteProfile(),
-                                      ),
-                                    );
-                                  } else {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            BrandCompleteProfile(),
-                                      ),
-                                    );
-                                  }
-                                }
-
                                 setState(() {
                                   _isloading = false;
                                 });
 
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    duration: Duration(seconds: 1),
-                                    content: Text(
-                                      "Validated data",
-                                      style: AppStyles.snackBarStyle,
+                                if (userData?.isProfileComplete == true) {
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                      builder: (context) => const MainLayout(),
                                     ),
-                                  ),
-                                );
+                                    (_) => false,
+                                  );
+                                } else if (userData?.role == "USER") {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          UserCompleteProfile(),
+                                    ),
+                                  );
+                                } else {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          BrandCompleteProfile(),
+                                    ),
+                                  );
+                                }
                               } on ServerException catch (e) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(

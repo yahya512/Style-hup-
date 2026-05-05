@@ -1,4 +1,4 @@
-import 'package:dx/E-Commerce/view_selected_item.dart';
+import 'package:dx/Authentication/Regestration/login.dart';
 import 'package:dx/cache/cache_helper.dart';
 import 'package:dx/core/navigation/navigation_service.dart';
 import 'package:dx/core/services/service_locator.dart';
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           navigatorKey: NavigationService.navigatorKey,
           debugShowCheckedModeBanner: false,
-          home: ViewSelectedItem(),
+          home: LogIn(),
         );
       },
     );
