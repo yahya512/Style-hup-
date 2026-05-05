@@ -1,0 +1,157 @@
+{
+  "home": {
+    "mostafa_mahmoud": "Mostafa Mahmoud",
+    "hello_mostafa": "Hello , Mostafa",
+    "search": "Search",
+    "clothing": "Clothing",
+    "see_all": "See All",
+    "dress": "Dress",
+    "pants": "Pants",
+    "scirts": "Scirts",
+    "shorts": "Shorts",
+    "hoodies": "Hoodies",
+    "polo_shirt": "PoloShirt",
+    "all_items": "All Items",
+    "red_dress": "Red Dress",
+    "shirts": "Shirts",
+    "black_hoodie": "Black Hoodie",
+    "modern_jackets": "Modern Jackets"
+  },
+  "login": {
+    "login": "Login",
+    "welcome_back": "Welcome back!",
+    "select_your_role": "select Your Role",
+    "user": "User",
+    "brand": "Brand",
+    "required_field_gender": "Required field Please select your gender ",
+    "forget_password": "Forget Password?",
+    "validated_data": "Validated data",
+    "dont_have_account": "Don't have an account?",
+    "signup": "Signup",
+    "or": "Or"
+  },
+  "signup": {
+    "signup": "Signup",
+    "sign_up": "Sign up",
+    "user": "User",
+    "brand": "Brand",
+    "or": "Or"
+  },
+  "settings": {
+    "settings": "Settings",
+    "language": "Language",
+    "dark_mode": "Dark Mode",
+    "user_name": "Mostafa Mahmoud",
+    "user_email": "mostafa.mahmoud@email.com"
+  },
+  "nav": {
+    "home": "Home",
+    "shop": "Shop",
+    "dashboard": "Dashboard",
+    "settings": "Settings"
+  },
+  "auth": {
+    "enter_email": "Enter Your email",
+    "email_required": "Required field please Enter Your Email",
+    "enter_password": "Enter Your password",
+    "password_required": "Required field please Enter Your Password",
+    "confirm_password": "Confirm Your Password",
+    "confirm_password_required": "Required field please Confirm Your Password",
+    "passwords_not_match": "Passwords do not match",
+    "login_google": "Log In With Google"
+  },
+  "product": {
+    "pants": "Pants",
+    "price": "Price",
+    "gender": "Gender",
+    "male": "Male",
+    "description": "Designed with smooth fabric that drapes beautifully, offering effortless sophistication for any occasion. Simple, classic, and forever chic.",
+    "sizes": "Sizes",
+    "color": "Color"
+  },
+  "intro": {
+    "title": "Your Online Store",
+    "get_started": "Let's Get Started"
+  },
+  "forget_password": {
+    "title": "Forget password ?",
+    "subtitle": "Please Enter your email to receive a confirmation code to reset your password",
+    "send_code": "Send Code",
+    "verify_code": "Verify Code",
+    "enter_code": "Enter Verification Code",
+    "reset_password": "Reset Password",
+    "new_password": "New Password",
+    "confirm_new_password": "Confirm New Password",
+    "enter_code_sent_to": "Enter the code that send to ",
+    "submit_code": "Submit Code",
+    "code_required": "Please enter the code that was sent",
+    "code_length": "code must be 6 character",
+    "enter_new_password": "Please Enter your New password",
+    "confirm": "Confirm"
+  },
+  "favourite": {
+    "title": "Favourite"
+  },
+  "cart": {
+    "title": "Cart",
+    "total": "Total",
+    "checkout": "Checkout",
+    "size": "Size",
+    "black_pants": "black Pants"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "shipping_address": "Shipping Address",
+    "country": "Country",
+    "egypt": "Egypt",
+    "address": "Address",
+    "postcode": "PostCode",
+    "save_changes": "Save Changes",
+    "contact_info": "Contact Information",
+    "email_address": "Email Address",
+    "phone_number": "Phone Number",
+    "items": "Items",
+    "shipping_options": "Shipping Options",
+    "standard": "Standard",
+    "standard_subtitle": "5 - 7 days",
+    "free": "FREE",
+    "express": "Express",
+    "express_subtitle": "1 - 2 days",
+    "payment_method": "Payment method",
+    "card": "Card",
+    "pay": "Pay",
+    "total": "Total"
+  },
+  "track_order": {
+    "to_receive": "To Receive",
+    "track_your_order": "Track Your Order",
+    "tracking_number": "Tracking Number",
+    "packed": "Packed",
+    "packed_subtitle": "Your parcel is packed and will be handed over to our delivery partner.",
+    "on_the_way": "On the Way to Logistic Facility",
+    "on_the_way_subtitle": "Your parcel is on the way",
+    "arrived": "Arrived at Logistic Facility",
+    "arrived_subtitle": "Your parcel is arrived",
+    "shipped": "Shipped",
+    "shipped_subtitle": "Your parcel is shipped",
+    "out_for_delivery": "Out for Delivery",
+    "out_for_delivery_subtitle": "Your parcel is out for delivery",
+    "delivered": "Delivered",
+    "delivered_subtitle": "Your parcel is delivered",
+    "continue_shopping": "Continue Shopping"
+  },
+  "card": {
+    "add_card_title": "Add Your Card",
+    "edit_card_title": "Edit Your Card",
+    "holder": "Card Holder",
+    "number": "Card Number",
+    "invalid_number": "Card number is not completed",
+    "expiry_hint": "00 / 00",
+    "cvv": "Card CVV",
+    "save_changes": "Save Changes"
+  },
+  "all_items": {
+    "title": "ALL Items",
+    "dresses": "Dresses"
+  }
+}

@@ -1,4 +1,5 @@
 import 'package:dx/core/theme/appstyles.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 Widget emailFormField(TextEditingController emailController) {
@@ -11,7 +12,7 @@ Widget emailFormField(TextEditingController emailController) {
     textInputAction: TextInputAction.next,
     keyboardType: TextInputType.emailAddress,
     decoration: InputDecoration(
-      label: Text("Enter Your email", style: AppStyles.labelTextStyle),
+      label: Text("auth.enter_email".tr(), style: AppStyles.labelTextStyle),
       enabledBorder: AppStyles.outlineInputBorderstyle,
       focusedBorder: AppStyles.foucasedoutlineInputBorder,
       errorBorder: AppStyles.errorBorder,
@@ -19,7 +20,7 @@ Widget emailFormField(TextEditingController emailController) {
     ),
     validator: (String? value) {
       if (value!.isEmpty) {
-        return "Required field please Enter Your Email";
+        return "auth.email_required".tr();
       }
       return null;
     },

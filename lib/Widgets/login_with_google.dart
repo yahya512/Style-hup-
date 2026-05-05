@@ -1,10 +1,11 @@
 import 'package:dx/core/theme/appstyles.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Widget gooleLogIn() {
   return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 20.w),
+    padding: EdgeInsetsDirectional.symmetric(horizontal: 20.w),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -21,7 +22,7 @@ Widget gooleLogIn() {
               style: AppStyles.googleElevatedButtonStyle,
               label: Text(
                 maxLines: 1,
-                "Login with Google",
+                "auth.login_google".tr(),
                 style: AppStyles.googleTextButtonStyle,
               ),
             ),

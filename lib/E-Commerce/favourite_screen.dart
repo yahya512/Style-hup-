@@ -1,5 +1,6 @@
 import 'package:dx/E-Commerce/cart_screen.dart';
 import 'package:dx/core/theme/appstyles.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -25,8 +26,8 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
             expandedHeight: 50.h,
             backgroundColor: Colors.white,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text("Favourite", style: AppStyles.mainTitleStyle),
-              titlePadding: EdgeInsets.only(left: 80.w, bottom: 10.h),
+              title: Text("favourite.title".tr(), style: AppStyles.mainTitleStyle),
+              titlePadding: EdgeInsetsDirectional.only(start: 80.w, bottom: 10.h),
             ),
             leading: IconButton(
               onPressed: () {

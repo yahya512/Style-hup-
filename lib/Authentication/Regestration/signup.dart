@@ -8,7 +8,7 @@ import 'package:dx/core/services/service_locator.dart';
 import 'package:dx/core/theme/appstyles.dart';
 import 'package:dx/Authentication/models/signupmodel.dart';
 import 'package:dx/repositories/user_repository.dart';
-import 'package:flutter/foundation.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 
@@ -97,7 +97,7 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
         actionsIconTheme: IconThemeData(color: Colors.white),
         actions: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            padding: EdgeInsetsDirectional.symmetric(horizontal: 20.w),
             child: Image.asset(
               width: 50.w,
               height: 50.h,
@@ -107,27 +107,31 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
           ),
         ],
         bottom: TabBar(
-          indicatorPadding: EdgeInsets.symmetric(horizontal: 0.h),
+          indicatorPadding: EdgeInsetsDirectional.symmetric(horizontal: 0.h),
           indicatorColor: Colors.black,
           onTap: (value) {},
           labelColor: Colors.white,
           controller: tabController,
           tabs: [
-            Tab(child: Text("User", style: AppStyles.mainTitleStyle)),
-            Tab(child: Text("Brand", style: AppStyles.mainTitleStyle)),
+            Tab(
+              child: Text("signup.user".tr(), style: AppStyles.mainTitleStyle),
+            ),
+            Tab(
+              child: Text("signup.brand".tr(), style: AppStyles.mainTitleStyle),
+            ),
           ],
         ),
       ),
 
       body: Container(
-        padding: EdgeInsets.all(10.dg),
+        padding: EdgeInsetsDirectional.all(10.dg),
         child: TabBarView(
           controller: tabController,
           children: [
             // User
             SingleChildScrollView(
               child: Container(
-                padding: EdgeInsets.all(20.dg),
+                padding: EdgeInsetsDirectional.all(20.dg),
                 child: Center(
                   child: Form(
                     //Form Key
@@ -135,7 +139,10 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
                     child: Column(
                       spacing: 50.h,
                       children: [
-                        Text("Sign up", style: AppStyles.subTitleStyle),
+                        Text(
+                          "signup.sign_up".tr(),
+                          style: AppStyles.subTitleStyle,
+                        ),
 
                         //Email Field
                         emailFormField(_signUpUserEmail),
@@ -193,9 +200,6 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
                                     setState(() {
                                       _isloading = true;
                                     });
-                                    // print("UserRoleType :$userType");
-                                    // print("Role : $_selectedRole");
-                                    // print("$_checkPassword \n $_confirmPassword");
                                     if (_singUpFormKeyNormalUser.currentState!
                                         .validate()) {
                                       try {
@@ -223,9 +227,6 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
                                             ),
                                           ),
                                         );
-                                        // print(
-                                        //   "***********  Before Navigator ************",
-                                        // );
                                         Navigator.of(
                                           context,
                                         ).pushAndRemoveUntil(
@@ -250,17 +251,6 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
                                         }
                                         setState(() {
                                           _isloading = false;
-                                          if (kDebugMode) {
-                                            print(
-                                              "message FromAPI  : ${e.errormodel.message}",
-                                            );
-                                            print(
-                                              "error FromAPI : ${e.errormodel.error}",
-                                            );
-                                            print(
-                                              "Status FromAPI : ${e.errormodel.status}",
-                                            );
-                                          }
                                         });
                                       }
                                     } else {
@@ -271,14 +261,16 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
                                   },
                                   style: AppStyles.elevatedButtonStyle,
                                   child: Text(
-                                    "Signup",
+                                    "signup.signup".tr(),
                                     style: AppStyles.whiteTextButtonStyle,
                                   ),
                                 ),
                         ),
 
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 14.w),
+                          padding: EdgeInsetsDirectional.symmetric(
+                            horizontal: 14.w,
+                          ),
                           child: Row(
                             children: [
                               Expanded(
@@ -288,9 +280,11 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                padding: EdgeInsetsDirectional.symmetric(
+                                  horizontal: 10.w,
+                                ),
                                 child: Text(
-                                  "Or",
+                                  "signup.or".tr(),
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -318,7 +312,7 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
             //OWNER INFO
             SingleChildScrollView(
               child: Container(
-                padding: EdgeInsets.all(20.dg),
+                padding: EdgeInsetsDirectional.all(20.dg),
                 child: Center(
                   child: Form(
                     //Form Key
@@ -326,7 +320,10 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
                     child: Column(
                       spacing: 50.h,
                       children: [
-                        Text("Sign up", style: AppStyles.subTitleStyle),
+                        Text(
+                          "signup.sign_up".tr(),
+                          style: AppStyles.subTitleStyle,
+                        ),
 
                         //Owner Email Field
                         emailFormField(_signUpOnwerEmail),
@@ -379,9 +376,6 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
                                 )
                               : ElevatedButton(
                                   onPressed: () async {
-                                    // print("BrandRoleType :$userType");
-                                    // print("Role : $_selectedRole");
-                                    // print("$_checkPassword \n $_confirmPassword");
                                     if (_ownerFormKey.currentState!
                                         .validate()) {
                                       try {
@@ -436,14 +430,16 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
                                   },
                                   style: AppStyles.elevatedButtonStyle,
                                   child: Text(
-                                    "Sign Up",
+                                    "signup.signup".tr(),
                                     style: AppStyles.whiteTextButtonStyle,
                                   ),
                                 ),
                         ),
 
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 14.w),
+                          padding: EdgeInsetsDirectional.symmetric(
+                            horizontal: 14.w,
+                          ),
                           child: Row(
                             children: [
                               Expanded(
@@ -453,9 +449,11 @@ class _SignupState extends State<Signup> with TickerProviderStateMixin {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                padding: EdgeInsetsDirectional.symmetric(
+                                  horizontal: 10.w,
+                                ),
                                 child: Text(
-                                  "Or",
+                                  "signup.or".tr(),
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ),

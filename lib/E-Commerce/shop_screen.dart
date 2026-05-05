@@ -1,7 +1,9 @@
 import 'package:dx/E-Commerce/cart_screen.dart';
 import 'package:dx/E-Commerce/favourite_screen.dart';
 import 'package:dx/E-Commerce/home_screen.dart';
+import 'package:dx/E-Commerce/setting_screen.dart';
 import 'package:dx/core/theme/appstyles.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -27,7 +29,7 @@ List<Map<String, String>> images = [
 class _ShopeScreenState extends State<ShopScreen> {
   late List<bool> cardFavourite;
 
-  int selectedIcon = 1;
+  int _selectedIcon = 1;
 
   @override
   void initState() {
@@ -48,8 +50,11 @@ class _ShopeScreenState extends State<ShopScreen> {
             expandedHeight: 50.h,
             backgroundColor: Colors.white,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text("Shop", style: AppStyles.mainTitleStyle),
-              titlePadding: EdgeInsets.only(left: 80.w, bottom: 10.h),
+              title: Text("nav.shop".tr(), style: AppStyles.mainTitleStyle),
+              titlePadding: EdgeInsetsDirectional.only(
+                start: 80.w,
+                bottom: 10.h,
+              ),
             ),
             leading: IconButton(
               onPressed: () {
@@ -83,10 +88,13 @@ class _ShopeScreenState extends State<ShopScreen> {
           SliverToBoxAdapter(
             child: Container(
               height: 48.h,
-              margin: EdgeInsets.symmetric(vertical: 30.h, horizontal: 20.w),
+              margin: EdgeInsetsDirectional.symmetric(
+                vertical: 30.h,
+                horizontal: 20.w,
+              ),
               decoration: BoxDecoration(
                 color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(30.r),
+                borderRadius: BorderRadiusDirectional.circular(30.r),
               ),
               child: InkWell(
                 onTap: () {
@@ -99,15 +107,17 @@ class _ShopeScreenState extends State<ShopScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 18.w),
+                            padding: EdgeInsetsDirectional.symmetric(
+                              horizontal: 18.w,
+                            ),
                             child: Text(
-                              "Search",
+                              "home.search".tr(),
                               style: AppStyles.labelTextStyle,
                             ),
                           ),
 
                           Padding(
-                            padding: const EdgeInsets.only(right: 10).w,
+                            padding: EdgeInsetsDirectional.only(end: 10.w),
                             child: Icon(Icons.search_outlined, size: 32.dg),
                           ),
                         ],
@@ -121,7 +131,7 @@ class _ShopeScreenState extends State<ShopScreen> {
 
           //Sliver Padding , Silver Grid
           SliverPadding(
-            padding: EdgeInsets.all(12.dg),
+            padding: EdgeInsetsDirectional.all(12.dg),
             sliver: SliverGrid.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
@@ -136,7 +146,7 @@ class _ShopeScreenState extends State<ShopScreen> {
                   onTap: () {},
                   child: Card(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadiusGeometry.circular(30.r),
+                      borderRadius: BorderRadiusDirectional.circular(30.r),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,14 +159,17 @@ class _ShopeScreenState extends State<ShopScreen> {
                                 child: AspectRatio(
                                   aspectRatio: 1,
                                   child: Padding(
-                                    padding: const EdgeInsets.only(top: 35).h,
+                                    padding: EdgeInsetsDirectional.only(
+                                      top: 35.h,
+                                    ),
                                     child: Column(
                                       spacing: 20.h,
                                       children: [
                                         ClipRRect(
-                                          borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(12.r),
-                                          ),
+                                          borderRadius:
+                                              BorderRadiusDirectional.vertical(
+                                                top: Radius.circular(12.r),
+                                              ),
                                           child: Image.asset(
                                             images[index]["image"]!,
                                             fit: BoxFit.contain,
@@ -215,31 +228,43 @@ class _ShopeScreenState extends State<ShopScreen> {
       ),
       // Bottom Icons
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: selectedIcon,
+        currentIndex: _selectedIcon,
         selectedItemColor: Color(0xFF32DBE6),
+        type: BottomNavigationBarType.fixed,
         onTap: (value) {
           setState(() {
-            selectedIcon = value;
-            if (selectedIcon == 0) {
+            _selectedIcon = value;
+            if (_selectedIcon == 0) {
               Navigator.of(
                 context,
               ).push(MaterialPageRoute(builder: (context) => HomeScreen()));
-            } else if (selectedIcon == 2) {
+            } else if (_selectedIcon == 2) {
               // Navigator.of(
               //   context,
               // ).push(MaterialPageRoute(builder: (context) => DashBoard()));
+            } else if (_selectedIcon == 3) {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => SettingEcommerce()),
+              );
             }
           });
         },
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: "Home"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_filled),
+            label: "nav.home".tr(),
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_bag),
-            label: "Shop",
+            label: "nav.shop".tr(),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.dashboard_rounded),
-            label: "Dashboard",
+            label: "nav.dashboard".tr(),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: "nav.settings".tr(),
           ),
         ],
       ),

@@ -1,5 +1,6 @@
 import 'package:dx/Authentication/ForgetPsssword/forgetpasswordthree.dart';
 import 'package:dx/core/theme/appstyles.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -29,17 +30,17 @@ class _ForgetpasswordTwoState extends State<ForgetpassordTwo> {
     return Scaffold(
       appBar: AppBar(),
       body: Container(
-        padding: EdgeInsets.all(30),
+        padding: EdgeInsetsDirectional.all(30),
         child: Column(
           spacing: 15.h,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Forget password ?", style: AppStyles.mainTitleStyle),
+            Text("forget_password.title".tr(), style: AppStyles.mainTitleStyle),
             RichText(
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: "Enter the code that send to ",
+                    text: "forget_password.enter_code_sent_to".tr(),
                     style: TextStyle(color: Colors.black, fontSize: 20.sp),
                   ),
                   TextSpan(
@@ -73,10 +74,10 @@ class _ForgetpasswordTwoState extends State<ForgetpassordTwo> {
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return "Please enter the code that was sent";
+                    return "forget_password.code_required".tr();
                   }
                   if (value.length < 6) {
-                    return "code must be 6 character";
+                    return "forget_password.code_length".tr();
                   }
 
                   return null;
@@ -99,7 +100,7 @@ class _ForgetpasswordTwoState extends State<ForgetpassordTwo> {
                   }
                 },
                 child: Text(
-                  "Submit Code",
+                  "forget_password.submit_code".tr(),
                   style: AppStyles.whiteTextButtonStyle,
                 ),
               ),

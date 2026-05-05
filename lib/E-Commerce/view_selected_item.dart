@@ -1,4 +1,5 @@
 import 'package:dx/core/theme/appstyles.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -25,8 +26,14 @@ class _ViewSelectedItem extends State<ViewSelectedItem> {
             expandedHeight: 50.h,
             backgroundColor: Colors.white,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text("Pants", style: AppStyles.mainTitleStyle),
-              titlePadding: EdgeInsets.only(bottom: 10.h, left: 80.w),
+              title: Text(
+                "product.pants".tr(),
+                style: AppStyles.mainTitleStyle,
+              ),
+              titlePadding: EdgeInsetsDirectional.only(
+                bottom: 10.h,
+                start: 80.w,
+              ),
             ),
             actions: [
               IconButton(
@@ -37,7 +44,7 @@ class _ViewSelectedItem extends State<ViewSelectedItem> {
           ),
 
           SliverPadding(
-            padding: EdgeInsets.all(24.dg),
+            padding: EdgeInsetsDirectional.all(24.dg),
             sliver: SliverToBoxAdapter(
               child: Column(
                 spacing: 30.h,
@@ -52,17 +59,26 @@ class _ViewSelectedItem extends State<ViewSelectedItem> {
                       ),
                     ),
                   ),
-                  Text("Price :30\$", style: AppStyles.normalTextStyle),
-                  Text("Gender : Male", style: AppStyles.normalTextStyle),
                   Text(
-                    "Designed with smooth fabric that drapes beautifully, offering effortless sophistication for any occasion. Simple, classic, and forever chic.",
+                    "${"product.price".tr()} : 30\$",
+                    style: AppStyles.normalTextStyle,
+                  ),
+                  Text(
+                    "${"product.gender".tr()} : ${"product.male".tr()}",
+                    style: AppStyles.normalTextStyle,
+                  ),
+                  Text(
+                    "product.description".tr(),
                     style: AppStyles.normalTextStyle,
                   ),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Sizes :", style: AppStyles.normalTextStyle),
+                      Text(
+                        "${"product.sizes".tr()} :",
+                        style: AppStyles.normalTextStyle,
+                      ),
                       Container(
                         height: 40.h,
                         width: 60.h,
@@ -138,7 +154,10 @@ class _ViewSelectedItem extends State<ViewSelectedItem> {
                     child: Row(
                       spacing: 30.w,
                       children: [
-                        Text("Color : ", style: AppStyles.normalTextStyle),
+                        Text(
+                          "${"product.color".tr()} : ",
+                          style: AppStyles.normalTextStyle,
+                        ),
                         Container(
                           height: 25.h,
                           width: 25.w,

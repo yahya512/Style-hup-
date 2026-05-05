@@ -7,6 +7,7 @@ import 'package:dx/core/errors/exceptions.dart';
 import 'package:dx/core/services/service_locator.dart';
 import 'package:dx/core/theme/appstyles.dart';
 import 'package:dx/repositories/user_repository.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -44,15 +45,15 @@ class _ForgetpasswordOneState extends State<ForgetpasswordOne> {
     return Scaffold(
       appBar: AppBar(),
       body: Container(
-        padding: EdgeInsets.all(30),
+        padding: EdgeInsetsDirectional.all(30),
         child: SingleChildScrollView(
           child: Column(
             spacing: 15,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Forget password ?", style: AppStyles.mainTitleStyle),
+              Text("forget_password.title".tr(), style: AppStyles.mainTitleStyle),
               Text(
-                "Please Enter your email to receive a confirmation code to reset your password",
+                "forget_password.subtitle".tr(),
                 style: AppStyles.subTitleStyle,
               ),
               SizedBox(height: 25.h),
@@ -108,7 +109,7 @@ class _ForgetpasswordOneState extends State<ForgetpasswordOne> {
                     }
                   },
                   child: Text(
-                    "Send Code",
+                    "forget_password.send_code".tr(),
                     style: AppStyles.whiteTextButtonStyle,
                   ),
                 ),

@@ -5,6 +5,7 @@ import 'package:dx/Widgets/card_payment_ui.dart';
 import 'package:dx/core/navigation/navigation_service.dart';
 import 'package:dx/core/theme/appstyles.dart';
 import 'package:dx/core/validators/text_validator.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -70,8 +71,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             expandedHeight: 50.h,
             backgroundColor: Colors.white,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text("Checkout", style: AppStyles.mainTitleStyle),
-              titlePadding: EdgeInsets.only(bottom: 10.h, left: 80.w),
+              title: Text("checkout.title".tr(), style: AppStyles.mainTitleStyle),
+              titlePadding: EdgeInsetsDirectional.only(bottom: 10.h, start: 80.w),
             ),
             leading: IconButton(
               onPressed: () {
@@ -83,13 +84,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
           // Shipping Address information
           SliverPadding(
-            padding: EdgeInsets.all(16.dg),
+            padding: EdgeInsetsDirectional.all(16.dg),
             sliver: SliverToBoxAdapter(
               child: Card(
                 color: Color(0XFFE8E8E8),
                 child: ListTile(
                   title: Text(
-                    "Shipping Address",
+                    "checkout.shipping_address".tr(),
                     style: AppStyles.subTitleStyle,
                   ),
                   // Editing Info
@@ -104,11 +105,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         _editShippingAddress.currentState!.showBottomSheet(
                           backgroundColor: Color(0XFFE8E8E8),
                           (context) => Container(
-                            margin: EdgeInsets.all(12.dg),
+                            margin: EdgeInsetsDirectional.all(12.dg),
                             height: MediaQuery.of(context).size.height * 0.5.h,
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.vertical(
+                              borderRadius: BorderRadiusDirectional.vertical(
                                 top: Radius.circular(30.r),
                               ),
                             ),
@@ -117,26 +118,26 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Shipining Address",
+                                  "checkout.shipping_address".tr(),
                                   style: AppStyles.subTitleStyle,
                                 ),
 
-                                Text("Country", style: AppStyles.subTitleStyle),
-                                Text("Egypt", style: AppStyles.labelTextStyle),
+                                Text("checkout.country".tr(), style: AppStyles.subTitleStyle),
+                                Text("checkout.egypt".tr(), style: AppStyles.labelTextStyle),
                                 Form(
                                   key: _dataShipining,
                                   child: Column(
                                     spacing: 12.h,
                                     children: [
                                       Padding(
-                                        padding: EdgeInsets.all(18.dg),
+                                        padding: EdgeInsetsDirectional.all(18.dg),
                                         child: TextFormField(
                                           textInputAction: TextInputAction.next,
                                           keyboardType: TextInputType.text,
                                           controller: _address,
                                           decoration: InputDecoration(
                                             label: Text(
-                                              "Address",
+                                              "checkout.address".tr(),
                                               style: AppStyles.labelTextStyle,
                                             ),
                                             enabledBorder: AppStyles
@@ -158,14 +159,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: EdgeInsets.all(18.dg),
+                                        padding: EdgeInsetsDirectional.all(18.dg),
                                         child: TextFormField(
                                           textInputAction: TextInputAction.next,
                                           keyboardType: TextInputType.number,
                                           controller: _postCode,
                                           decoration: InputDecoration(
                                             label: Text(
-                                              "PostCode",
+                                              "checkout.postcode".tr(),
                                               style: AppStyles.labelTextStyle,
                                             ),
                                             enabledBorder: AppStyles
@@ -198,7 +199,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                           }
                                         },
                                         child: Text(
-                                          "Save Changes",
+                                          "checkout.save_changes".tr(),
                                           style: AppStyles.whiteTextButtonStyle,
                                         ),
                                       ),
@@ -229,13 +230,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           ),
           // contact information
           SliverPadding(
-            padding: EdgeInsets.all(16.dg),
+            padding: EdgeInsetsDirectional.all(16.dg),
             sliver: SliverToBoxAdapter(
               child: Card(
                 color: Color(0XFFE8E8E8),
                 child: ListTile(
                   title: Text(
-                    "Contact Information",
+                    "checkout.contact_info".tr(),
                     style: AppStyles.subTitleStyle,
                   ),
                   // Editing Info
@@ -251,11 +252,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         _editShippingAddress.currentState!.showBottomSheet(
                           backgroundColor: Color(0XFFE8E8E8),
                           (context) => Container(
-                            margin: EdgeInsets.all(12.dg),
+                            margin: EdgeInsetsDirectional.all(12.dg),
                             height: MediaQuery.of(context).size.height * 0.5.h,
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.vertical(
+                              borderRadius: BorderRadiusDirectional.vertical(
                                 top: Radius.circular(30.r),
                               ),
                             ),
@@ -264,26 +265,26 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Contact Information",
+                                  "checkout.contact_info".tr(),
                                   style: AppStyles.subTitleStyle,
                                 ),
 
-                                Text("Country", style: AppStyles.subTitleStyle),
-                                Text("Egypt", style: AppStyles.labelTextStyle),
+                                Text("checkout.country".tr(), style: AppStyles.subTitleStyle),
+                                Text("checkout.egypt".tr(), style: AppStyles.labelTextStyle),
                                 Form(
                                   key: _dataContactInformation,
                                   child: Column(
                                     spacing: 12.h,
                                     children: [
                                       Padding(
-                                        padding: EdgeInsets.all(18.dg),
+                                        padding: EdgeInsetsDirectional.all(18.dg),
                                         child: TextFormField(
                                           textInputAction: TextInputAction.next,
                                           keyboardType: TextInputType.text,
                                           controller: _email,
                                           decoration: InputDecoration(
                                             label: Text(
-                                              "Email Address",
+                                              "checkout.email_address".tr(),
                                               style: AppStyles.labelTextStyle,
                                             ),
                                             enabledBorder: AppStyles
@@ -305,14 +306,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: EdgeInsets.all(18.dg),
+                                        padding: EdgeInsetsDirectional.all(18.dg),
                                         child: TextFormField(
                                           textInputAction: TextInputAction.next,
                                           keyboardType: TextInputType.number,
                                           controller: _phone,
                                           decoration: InputDecoration(
                                             label: Text(
-                                              "Phone Number",
+                                              "checkout.phone_number".tr(),
                                               style: AppStyles.labelTextStyle,
                                             ),
                                             enabledBorder: AppStyles
@@ -346,7 +347,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                           }
                                         },
                                         child: Text(
-                                          "Save Changes",
+                                          "checkout.save_changes".tr(),
                                           style: AppStyles.whiteTextButtonStyle,
                                         ),
                                       ),
@@ -378,7 +379,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
           // Items that will shipping
           SliverPadding(
-            padding: EdgeInsets.all(16.dg),
+            padding: EdgeInsetsDirectional.all(16.dg),
             sliver: SliverToBoxAdapter(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -388,7 +389,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   Row(
                     spacing: 10.w,
                     children: [
-                      Text("Items", style: AppStyles.subTitleStyle),
+                      Text("checkout.items".tr(), style: AppStyles.subTitleStyle),
                       ClipRRect(
                         child: Container(
                           height: 45.h,
@@ -420,8 +421,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                             ),
 
-                            Positioned(
-                              right: 0,
+                            PositionedDirectional(
+                              end: 0,
                               top: 0,
                               child: Container(
                                 height: 25.h,
@@ -465,8 +466,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                             ),
 
-                            Positioned(
-                              right: 0,
+                            PositionedDirectional(
+                              end: 0,
                               top: 0,
                               child: Container(
                                 height: 25.h,
@@ -510,8 +511,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                             ),
 
-                            Positioned(
-                              right: 0,
+                            PositionedDirectional(
+                              end: 0,
                               top: 0,
                               child: Container(
                                 height: 25.h,
@@ -552,7 +553,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Shipping Options",
+                          "checkout.shipping_options".tr(),
                           style: AppStyles.subTitleStyle,
                         ),
                         ListTile(
@@ -562,15 +563,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             activeColor: Color(0XFF32DBE6),
                           ),
                           title: Text(
-                            "Standad",
+                            "checkout.standard".tr(),
                             style: AppStyles.normalTextStyle,
                           ),
                           subtitle: Text(
-                            "5 - 7 days",
+                            "checkout.standard_subtitle".tr(),
                             style: AppStyles.normalTextStyle,
                           ),
                           trailing: Text(
-                            "FREE",
+                            "checkout.free".tr(),
                             style: AppStyles.normalTextStyle,
                           ),
                           onTap: () {
@@ -587,11 +588,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             activeColor: Color(0XFF32DBE6),
                           ),
                           title: Text(
-                            "Express",
+                            "checkout.express".tr(),
                             style: AppStyles.normalTextStyle,
                           ),
                           subtitle: Text(
-                            "1 - 2 days",
+                            "checkout.express_subtitle".tr(),
                             style: AppStyles.normalTextStyle,
                           ),
                           trailing: Text(
@@ -614,12 +615,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
           // payment Editing
           SliverPadding(
-            padding: EdgeInsets.all(16.dg),
+            padding: EdgeInsetsDirectional.all(16.dg),
             sliver: SliverToBoxAdapter(
               child: Card(
                 color: Color(0XFFE8E8E8),
                 child: ListTile(
-                  title: Text("Payment method", style: AppStyles.subTitleStyle),
+                  title: Text("checkout.payment_method".tr(), style: AppStyles.subTitleStyle),
                   // Editing Card Info
                   trailing: IconButton(
                     onPressed: () {
@@ -650,7 +651,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         child: MaterialButton(
                           textColor: Color(0XFF32DBE6),
                           child: Text(
-                            "Card",
+                            "checkout.card".tr(),
                             style: TextStyle(
                               fontSize: 22.sp,
                               fontWeight: FontWeight.bold,
@@ -735,15 +736,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
           // Button PAY
           SliverPadding(
-            padding: EdgeInsets.all(16.dg),
+            padding: EdgeInsetsDirectional.all(16.dg),
             sliver: SliverToBoxAdapter(
               child: Container(
-                padding: EdgeInsets.only(left: 12.w),
+                padding: EdgeInsetsDirectional.only(start: 12.w),
                 color: Color(0XFFE8E8E8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Total \$3000", style: AppStyles.normalTextStyle),
+                    Text("${"checkout.total".tr()} \$3000", style: AppStyles.normalTextStyle),
                     SizedBox(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -753,8 +754,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           ),
                           backgroundColor: Color(0XFF32DBE6),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.horizontal(
-                              left: Radius.circular(20.r),
+                            borderRadius: BorderRadiusDirectional.horizontal(
+                              start: Radius.circular(20.r),
                             ),
                           ),
                         ),
@@ -765,7 +766,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             ),
                           );
                         },
-                        child: Text("Pay", style: AppStyles.normalTextStyle),
+                        child: Text("checkout.pay".tr(), style: AppStyles.normalTextStyle),
                       ),
                     ),
                   ],

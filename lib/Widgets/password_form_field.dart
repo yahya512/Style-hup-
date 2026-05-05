@@ -1,5 +1,6 @@
 import 'package:dx/core/theme/appstyles.dart';
 import 'package:dx/core/validators/password_validator.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 Widget passwordField(
@@ -16,7 +17,7 @@ Widget passwordField(
     obscureText: visiable,
     textInputAction: TextInputAction.next,
     decoration: InputDecoration(
-      label: Text("Enter Your Password", style: AppStyles.labelTextStyle),
+      label: Text("auth.enter_password".tr(), style: AppStyles.labelTextStyle),
       suffixIcon: eyeicone,
       border: AppStyles.outlineInputBorderstyle,
       focusedBorder: AppStyles.foucasedoutlineInputBorder,

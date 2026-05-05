@@ -1,4 +1,5 @@
 import 'package:dx/core/theme/appstyles.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -16,20 +17,20 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
     return Scaffold(
       endDrawer: Drawer(
         child: Container(
-          margin: EdgeInsets.only(top: 50.h, left: 20.w),
+          margin: EdgeInsetsDirectional.only(top: 50.h, start: 20.w),
           child: SingleChildScrollView(
             // Filteration
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.all(24.dg),
+                  padding: EdgeInsetsDirectional.all(24.dg),
                   child: Column(
                     spacing: 10.h,
                     children: [
                       SizedBox(
                         child: ListTile(
                           title: Text(
-                            "Dresses",
+                            "all_items.dresses".tr(),
                             style: AppStyles.mainTitleStyle,
                           ),
                           trailing: Icon(Icons.navigate_next_sharp, size: 40),
@@ -39,7 +40,7 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
                       SizedBox(
                         child: ListTile(
                           title: Text(
-                            "Dresses",
+                            "all_items.dresses".tr(),
                             style: AppStyles.mainTitleStyle,
                           ),
                           trailing: Icon(Icons.navigate_next_sharp, size: 40),
@@ -49,7 +50,7 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
                       SizedBox(
                         child: ListTile(
                           title: Text(
-                            "Dresses",
+                            "all_items.dresses".tr(),
                             style: AppStyles.mainTitleStyle,
                           ),
                           trailing: Icon(Icons.navigate_next_sharp, size: 40),
@@ -59,7 +60,7 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
                       SizedBox(
                         child: ListTile(
                           title: Text(
-                            "Dresses",
+                            "all_items.dresses".tr(),
                             style: AppStyles.mainTitleStyle,
                           ),
                           trailing: Icon(Icons.navigate_next_sharp, size: 40),
@@ -69,7 +70,7 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
                       SizedBox(
                         child: ListTile(
                           title: Text(
-                            "Dresses",
+                            "all_items.dresses".tr(),
                             style: AppStyles.mainTitleStyle,
                           ),
                           trailing: Icon(Icons.navigate_next_sharp, size: 40),
@@ -79,7 +80,7 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
                       SizedBox(
                         child: ListTile(
                           title: Text(
-                            "Dresses",
+                            "all_items.dresses".tr(),
                             style: AppStyles.mainTitleStyle,
                           ),
                           trailing: Icon(Icons.navigate_next_sharp, size: 40),
@@ -98,8 +99,8 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
         slivers: [
           SliverAppBar(
             flexibleSpace: FlexibleSpaceBar(
-              title: Text("ALL Items", style: AppStyles.mainTitleStyle),
-              titlePadding: EdgeInsets.only(left: 80.w, bottom: 10.h),
+              title: Text("all_items.title".tr(), style: AppStyles.mainTitleStyle),
+              titlePadding: EdgeInsetsDirectional.only(start: 80.w, bottom: 10.h),
             ),
             leading: IconButton(
               onPressed: () {

@@ -2,6 +2,7 @@ import 'package:dx/E-Commerce/checkout_screen.dart';
 import 'package:dx/E-Commerce/favourite_screen.dart';
 import 'package:dx/E-Commerce/shop_screen.dart';
 import 'package:dx/core/theme/appstyles.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -31,8 +32,8 @@ class _CartScreenState extends State<CartScreen> {
             expandedHeight: 50.h,
             backgroundColor: Colors.white,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text("Cart", style: AppStyles.mainTitleStyle),
-              titlePadding: EdgeInsets.only(bottom: 10.h, left: 80.w),
+              title: Text("cart.title".tr(), style: AppStyles.mainTitleStyle),
+              titlePadding: EdgeInsetsDirectional.only(bottom: 10.h, start: 80.w),
             ),
             actions: [
               IconButton(
@@ -58,7 +59,7 @@ class _CartScreenState extends State<CartScreen> {
 
           // Cart info
           SliverPadding(
-            padding: EdgeInsets.all(16.dg),
+            padding: EdgeInsetsDirectional.all(16.dg),
             sliver: SliverList.builder(
               // in List view
               // shrinkWrap: true, // mange list size depend on items size
@@ -81,14 +82,14 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                     ),
                     title: Text(
-                      "black Pants",
+                      "cart.black_pants".tr(),
                       style: AppStyles.normalTextStyle,
                     ),
                     subtitle: Text(
-                      "Size L  ${images[index]["price"]}",
+                      "${"cart.size".tr()} L  ${images[index]["price"]}",
                       style: AppStyles.normalTextStyle,
                     ),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 5),
+                    contentPadding: EdgeInsetsDirectional.symmetric(horizontal: 5),
 
                     trailing: Row(
                       spacing: 8.w,
@@ -133,10 +134,10 @@ class _CartScreenState extends State<CartScreen> {
           ),
 
           SliverPadding(
-            padding: EdgeInsets.all(16.dg),
+            padding: EdgeInsetsDirectional.all(16.dg),
             sliver: SliverToBoxAdapter(
               child: Container(
-                margin: EdgeInsets.only(bottom: 20.h),
+                margin: EdgeInsetsDirectional.only(bottom: 20.h),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadiusDirectional.circular(30.r),
                   color: Color(0XFFE8E8E8),
@@ -145,7 +146,7 @@ class _CartScreenState extends State<CartScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Text("Total \$3000", style: AppStyles.normalTextStyle),
+                    Text("${"cart.total".tr()} \$3000", style: AppStyles.normalTextStyle),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0XFF32DBE6),
@@ -157,7 +158,7 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                         );
                       },
-                      child: Text("Checkout", style: AppStyles.normalTextStyle),
+                      child: Text("cart.checkout".tr(), style: AppStyles.normalTextStyle),
                     ),
                   ],
                 ),

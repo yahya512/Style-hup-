@@ -1,6 +1,7 @@
 import 'package:dx/E-Commerce/checkout_screen.dart';
 import 'package:dx/core/theme/appstyles.dart';
 import 'package:dx/core/validators/text_validator.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -45,14 +46,14 @@ class _AddCardState extends State<AddCardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Your Card", style: AppStyles.mainTitleStyle),
+        title: Text("card.add_card_title".tr(), style: AppStyles.mainTitleStyle),
         centerTitle: true,
       ),
       body: Form(
         key: _addCardKey,
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(24.dg),
+            padding: EdgeInsetsDirectional.all(24.dg),
             child: SizedBox(
               child: Column(
                 spacing: 50.h,
@@ -63,7 +64,7 @@ class _AddCardState extends State<AddCardScreen> {
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
                       label: Text(
-                        "Card Holder",
+                        "card.holder".tr(),
                         style: AppStyles.labelTextStyle,
                       ),
                       enabledBorder: AppStyles.outlineInputBorderstyle,
@@ -81,7 +82,7 @@ class _AddCardState extends State<AddCardScreen> {
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       label: Text(
-                        "Card Number",
+                        "card.number".tr(),
                         style: AppStyles.labelTextStyle,
                       ),
                       enabledBorder: AppStyles.outlineInputBorderstyle,
@@ -91,7 +92,7 @@ class _AddCardState extends State<AddCardScreen> {
                     ),
                     validator: (value) {
                       if (value!.length < 16) {
-                        return "Card number is not completed";
+                        return "card.invalid_number".tr();
                       }
                       TextValidation.textValidation(value);
                       return null;
@@ -107,7 +108,7 @@ class _AddCardState extends State<AddCardScreen> {
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
                             label: Text(
-                              "00 / 00",
+                              "card.expiry_hint".tr(),
                               style: AppStyles.labelTextStyle,
                             ),
                             enabledBorder: AppStyles.outlineInputBorderstyle,
@@ -128,7 +129,7 @@ class _AddCardState extends State<AddCardScreen> {
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
                             label: Text(
-                              "Card CVV",
+                              "card.cvv".tr(),
                               style: AppStyles.labelTextStyle,
                             ),
                             enabledBorder: AppStyles.outlineInputBorderstyle,
@@ -158,7 +159,7 @@ class _AddCardState extends State<AddCardScreen> {
                     },
                     style: AppStyles.commerceButton,
                     child: Text(
-                      "Save Cahnges",
+                      "card.save_changes".tr(),
                       style: AppStyles.whiteTextButtonStyle,
                     ),
                   ),

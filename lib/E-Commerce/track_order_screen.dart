@@ -2,6 +2,7 @@ import 'package:dx/E-Commerce/cart_screen.dart';
 import 'package:dx/E-Commerce/favourite_screen.dart';
 import 'package:dx/E-Commerce/home_screen.dart';
 import 'package:dx/core/theme/appstyles.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -26,8 +27,8 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
             snap: true, //It appears immediately, not gradually
             expandedHeight: 50.h,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text("To Receive", style: AppStyles.mainTitleStyle),
-              titlePadding: EdgeInsets.only(left: 80.w, bottom: 10.h),
+              title: Text("track_order.to_receive".tr(), style: AppStyles.mainTitleStyle),
+              titlePadding: EdgeInsetsDirectional.only(start: 80.w, bottom: 10.h),
             ),
             backgroundColor: Colors.white,
             leading: IconButton(
@@ -56,7 +57,7 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
             ],
           ),
           SliverPadding(
-            padding: EdgeInsets.all(16.dg),
+            padding: EdgeInsetsDirectional.all(16.dg),
             sliver: SliverToBoxAdapter(
               child: Column(
                 spacing: 30.h,
@@ -64,7 +65,7 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
                   Center(
                     heightFactor: 2,
                     child: Text(
-                      "Track Your Order",
+                      "track_order.track_your_order".tr(),
                       style: AppStyles.subTitleStyle,
                     ),
                   ),
@@ -80,7 +81,7 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
                     child: ListTile(
                       isThreeLine: true,
                       title: Text(
-                        "Tracking Number",
+                        "track_order.tracking_number".tr(),
                         style: AppStyles.normalTextStyle,
                       ),
                       subtitle: Text(
@@ -101,9 +102,9 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
                     ),
                     child: ListTile(
                       isThreeLine: true,
-                      title: Text("Packed", style: AppStyles.normalTextStyle),
+                      title: Text("track_order.packed".tr(), style: AppStyles.normalTextStyle),
                       subtitle: Text(
-                        "Your parcel is packed and will be handed over to our delivery partner.",
+                        "track_order.packed_subtitle".tr(),
                         style: AppStyles.normalTextStyle,
                       ),
                       trailing: Text("April,19 12:31"),
@@ -121,11 +122,11 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
                     child: ListTile(
                       isThreeLine: true,
                       title: Text(
-                        "On the Way to Logistic Facility",
+                        "track_order.on_the_way".tr(),
                         style: AppStyles.normalTextStyle,
                       ),
                       subtitle: Text(
-                        "Your parcel is on the way",
+                        "track_order.on_the_way_subtitle".tr(),
                         style: AppStyles.normalTextStyle,
                       ),
                       trailing: Text("April,19 12:31"),
@@ -143,11 +144,11 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
                     child: ListTile(
                       isThreeLine: true,
                       title: Text(
-                        "Arrived at Logistic Facility",
+                        "track_order.arrived".tr(),
                         style: AppStyles.normalTextStyle,
                       ),
                       subtitle: Text(
-                        "Your parcel is arrived",
+                        "track_order.arrived_subtitle".tr(),
                         style: AppStyles.normalTextStyle,
                       ),
                       trailing: Text("April,19 12:31"),
@@ -164,9 +165,9 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
                     ),
                     child: ListTile(
                       isThreeLine: true,
-                      title: Text("Shipped", style: AppStyles.normalTextStyle),
+                      title: Text("track_order.shipped".tr(), style: AppStyles.normalTextStyle),
                       subtitle: Text(
-                        "Your parcel is shipped",
+                        "track_order.shipped_subtitle".tr(),
                         style: AppStyles.normalTextStyle,
                       ),
                       trailing: Text("April,19 12:31"),
@@ -184,11 +185,11 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
                     child: ListTile(
                       isThreeLine: true,
                       title: Text(
-                        "Out for Delivery",
+                        "track_order.out_for_delivery".tr(),
                         style: AppStyles.normalTextStyle,
                       ),
                       subtitle: Text(
-                        "Your parcel is out for delivery",
+                        "track_order.out_for_delivery_subtitle".tr(),
                         style: AppStyles.normalTextStyle,
                       ),
                       trailing: Text("April,19 12:31"),
@@ -208,12 +209,12 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
                       title: Row(
                         spacing: 10.w,
                         children: [
-                          Text("Delivered", style: AppStyles.normalTextStyle),
+                          Text("track_order.delivered".tr(), style: AppStyles.normalTextStyle),
                           Icon(Icons.check_box, color: Color(0XFF32DBE6)),
                         ],
                       ),
                       subtitle: Text(
-                        "Your parcel is delivered",
+                        "track_order.delivered_subtitle".tr(),
                         style: AppStyles.normalTextStyle,
                       ),
                       trailing: Text("April,19 12:31"),
@@ -224,7 +225,7 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
                     child: ElevatedButton(
                       style: AppStyles.commerceButton,
                       child: Text(
-                        "Continue Shopping",
+                        "track_order.continue_shopping".tr(),
                         style: AppStyles.whiteTextButtonStyle,
                       ),
                       onPressed: () {

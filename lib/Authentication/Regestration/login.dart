@@ -13,6 +13,7 @@ import 'package:dx/core/theme/appstyles.dart';
 import 'package:dx/Authentication/models/loginmodel.dart';
 import 'package:dx/Authentication/models/user_date_model.dart';
 import 'package:dx/repositories/user_repository.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dx/Authentication/ForgetPsssword/forgetpasswordone.dart';
@@ -60,7 +61,7 @@ class _LogInState extends State<LogIn> {
       appBar: AppBar(
         actions: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            padding: EdgeInsetsDirectional.symmetric(horizontal: 20.w),
             child: Image.asset(
               width: 50.w,
               height: 50.h,
@@ -74,20 +75,20 @@ class _LogInState extends State<LogIn> {
         child: Center(
           child: Column(
             children: [
-              Text("Login", style: AppStyles.mainTitleStyle),
+              Text("login.login".tr(), style: AppStyles.mainTitleStyle),
               SizedBox(height: 10.h),
-              Text("Welcome back!", style: AppStyles.mainTitleStyle),
+              Text("login.welcome_back".tr(), style: AppStyles.mainTitleStyle),
               SizedBox(height: 10.h),
               Form(
                 key: _formKey,
                 child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 32.h),
-                  padding: EdgeInsets.all(15.r),
+                  margin: EdgeInsetsDirectional.symmetric(vertical: 32.h),
+                  padding: EdgeInsetsDirectional.all(15.r),
                   child: Column(
                     children: [
                       DropdownButtonFormField(
                         hint: Text(
-                          "select Your Role",
+                          "login.select_your_role".tr(),
                           style: AppStyles.labelTextStyle,
                         ),
                         decoration: InputDecoration(
@@ -98,10 +99,13 @@ class _LogInState extends State<LogIn> {
                         ),
                         initialValue: _selectRole,
                         items: [
-                          DropdownMenuItem(value: "USER", child: Text("User")),
+                          DropdownMenuItem(
+                            value: "USER",
+                            child: Text("login.user".tr()),
+                          ),
                           DropdownMenuItem(
                             value: "BRAND",
-                            child: Text("Brand"),
+                            child: Text("login.brand".tr()),
                           ),
                         ],
                         onChanged: (value) {
@@ -109,7 +113,7 @@ class _LogInState extends State<LogIn> {
                         },
                         validator: (value) {
                           if (value == null) {
-                            return "Required field Please select your gender ";
+                            return "login.required_field_gender".tr();
                           }
                           return null;
                         },
@@ -146,7 +150,7 @@ class _LogInState extends State<LogIn> {
                           );
                         },
                         child: Text(
-                          "Forget Password?",
+                          "login.forget_password".tr(),
                           style: AppStyles.normalTextStyle,
                         ),
                       ),
@@ -155,7 +159,7 @@ class _LogInState extends State<LogIn> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                padding: EdgeInsetsDirectional.symmetric(horizontal: 20.w),
                 child: SizedBox(
                   width: double.infinity,
                   child: _isloading
@@ -214,10 +218,19 @@ class _LogInState extends State<LogIn> {
                                   _isloading = false;
                                 });
 
+<<<<<<< HEAD
                                 if (userData?.isProfileComplete == true) {
                                   Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
                                       builder: (context) => const MainLayout(),
+=======
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    duration: Duration(seconds: 1),
+                                    content: Text(
+                                      "login.validated_data".tr(),
+                                      style: AppStyles.snackBarStyle,
+>>>>>>> 6d4e055 (Apply En - Ar language , add Setting screen in Ecommerce UI)
                                     ),
                                     (_) => false,
                                   );
@@ -264,24 +277,26 @@ class _LogInState extends State<LogIn> {
                           },
                           style: AppStyles.elevatedButtonStyle,
                           child: Text(
-                            "Login",
+                            "login.login".tr(),
                             style: AppStyles.whiteTextButtonStyle,
                           ),
                         ),
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 20.h),
+                margin: EdgeInsetsDirectional.symmetric(vertical: 20.h),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Don't have an account?",
+                      "login.dont_have_account".tr(),
                       style: TextStyle(fontSize: 15.sp),
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                        padding: EdgeInsets.symmetric(horizontal: 2.w),
+                        padding: EdgeInsetsDirectional.symmetric(
+                          horizontal: 2.w,
+                        ),
                         minimumSize: Size.zero,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
@@ -290,13 +305,19 @@ class _LogInState extends State<LogIn> {
                           MaterialPageRoute(builder: (context) => Signup()),
                         );
                       },
-                      child: Text("Signup", style: AppStyles.normalTextStyle),
+                      child: Text(
+                        "login.signup".tr(),
+                        style: AppStyles.normalTextStyle,
+                      ),
                     ),
                   ],
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
+                padding: EdgeInsetsDirectional.symmetric(
+                  horizontal: 20.w,
+                  vertical: 15.h,
+                ),
                 child: Row(
                   children: [
                     Expanded(
@@ -307,9 +328,11 @@ class _LogInState extends State<LogIn> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w),
+                      padding: EdgeInsetsDirectional.symmetric(
+                        horizontal: 10.w,
+                      ),
                       child: Text(
-                        "Or",
+                        "login.or".tr(),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14.sp,

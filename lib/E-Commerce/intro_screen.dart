@@ -1,5 +1,6 @@
 import 'package:dx/E-Commerce/home_screen.dart';
 import 'package:dx/core/theme/appstyles.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -17,13 +18,13 @@ class IntroEcommerce extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               color: Color(0xFF32DBE6),
-              borderRadius: BorderRadius.circular(80.r),
+              borderRadius: BorderRadiusDirectional.circular(80.r),
             ),
             child: Image.asset("images/DXlogo.png"),
           ),
-          Text("Your Online Store", style: AppStyles.normalTextStyle),
+          Text("intro.title".tr(), style: AppStyles.normalTextStyle),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            padding: EdgeInsetsDirectional.symmetric(horizontal: 20.w),
             child: ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pushAndRemoveUntil(
@@ -34,13 +35,13 @@ class IntroEcommerce extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 70.h),
                 backgroundColor: Color(0xFF32DBE6),
-                padding: EdgeInsets.all(10.dg),
+                padding: EdgeInsetsDirectional.all(10.dg),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadiusGeometry.circular(25.r),
+                  borderRadius: BorderRadiusDirectional.circular(25.r),
                 ),
               ),
               child: Text(
-                "Let's Get Started",
+                "intro.get_started".tr(),
                 style: AppStyles.whiteTextButtonStyle,
               ),
             ),

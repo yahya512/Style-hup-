@@ -1,0 +1,157 @@
+{
+  "home": {
+    "mostafa_mahmoud": "مصطفى محمود",
+    "hello_mostafa": "مرحباً ، مصطفى",
+    "search": "بحث",
+    "clothing": "الملابس",
+    "see_all": "عرض الكل",
+    "dress": "فستان",
+    "pants": "بناطيل",
+    "scirts": "تنانير",
+    "shorts": "شورتات",
+    "hoodies": "هوديز",
+    "polo_shirt": "قميص بولو",
+    "all_items": "كل الأصناف",
+    "red_dress": "فستان أحمر",
+    "shirts": "قمصان",
+    "black_hoodie": "هودي أسود",
+    "modern_jackets": "جاكيتات عصرية"
+  },
+  "login": {
+    "login": "تسجيل الدخول",
+    "welcome_back": "مرحباً بعودتك!",
+    "select_your_role": "اختر دورك",
+    "user": "مستخدم",
+    "brand": "علامة تجارية",
+    "required_field_gender": "حقل مطلوب يرجى اختيار جنسك",
+    "forget_password": "هل نسيت كلمة السر؟",
+    "validated_data": "بيانات صحيحة",
+    "dont_have_account": "ليس لديك حساب؟",
+    "signup": "سجل الآن",
+    "or": "أو"
+  },
+  "signup": {
+    "signup": "سجل الآن",
+    "sign_up": "تسجيل",
+    "user": "مستخدم",
+    "brand": "علامة تجارية",
+    "or": "أو"
+  },
+  "settings": {
+    "settings": "الإعدادات",
+    "language": "اللغة",
+    "dark_mode": "الوضع الليلي",
+    "user_name": "مصطفى محمود",
+    "user_email": "mostafa.mahmoud@email.com"
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "shop": "المتجر",
+    "dashboard": "لوحة التحكم",
+    "settings": "الإعدادات"
+  },
+  "auth": {
+    "enter_email": "أدخل بريدك الإلكتروني",
+    "email_required": "حقل مطلوب يرجى إدخال بريدك الإلكتروني",
+    "enter_password": "أدخل كلمة السر",
+    "password_required": "حقل مطلوب يرجى إدخال كلمة السر",
+    "confirm_password": "تأكيد كلمة السر",
+    "confirm_password_required": "حقل مطلوب يرجى تأكيد كلمة السر",
+    "passwords_not_match": "كلمات السر غير متطابقة",
+    "login_google": "تسجيل الدخول باستخدام جوجل"
+  },
+  "product": {
+    "pants": "بناطيل",
+    "price": "السعر",
+    "gender": "الجنس",
+    "male": "ذكر",
+    "description": "مصمم بقماش ناعم ينسدل بشكل جميل، مما يوفر رقيًا سهلاً لأي مناسبة. بسيط وكلاسيكي وأنيق للأبد.",
+    "sizes": "المقاسات",
+    "color": "اللون"
+  },
+  "intro": {
+    "title": "متجرك عبر الإنترنت",
+    "get_started": "لنبدأ الآن"
+  },
+  "forget_password": {
+    "title": "نسيت كلمة السر ؟",
+    "subtitle": "يرجى إدخال بريدك الإلكتروني لتلقي رمز تأكيد لإعادة تعيين كلمة السر الخاصة بك",
+    "send_code": "إرسال الرمز",
+    "verify_code": "تحقق من الرمز",
+    "enter_code": "أدخل رمز التحقق",
+    "reset_password": "إعادة تعيين كلمة السر",
+    "new_password": "كلمة سر جديدة",
+    "confirm_new_password": "تأكيد كلمة السر الجديدة",
+    "enter_code_sent_to": "أدخل الرمز المرسل إلى ",
+    "submit_code": "تأكيد الرمز",
+    "code_required": "يرجى إدخال الرمز الذي تم إرساله",
+    "code_length": "يجب أن يكون الرمز 6 أحرف",
+    "enter_new_password": "يرجى إدخال كلمة السر الجديدة",
+    "confirm": "تأكيد"
+  },
+  "favourite": {
+    "title": "المفضلة"
+  },
+  "cart": {
+    "title": "السلة",
+    "total": "الإجمالي",
+    "checkout": "الدفع",
+    "size": "المقاس",
+    "black_pants": "بنطال أسود"
+  },
+  "checkout": {
+    "title": "الدفع",
+    "shipping_address": "عنوان الشحن",
+    "country": "الدولة",
+    "egypt": "مصر",
+    "address": "العنوان",
+    "postcode": "الرمز البريدي",
+    "save_changes": "حفظ التغييرات",
+    "contact_info": "معلومات الاتصال",
+    "email_address": "البريد الإلكتروني",
+    "phone_number": "رقم الهاتف",
+    "items": "الأصناف",
+    "shipping_options": "خيارات الشحن",
+    "standard": "عادي",
+    "standard_subtitle": "5 - 7 أيام",
+    "free": "مجاني",
+    "express": "سريع",
+    "express_subtitle": "1 - 2 يوم",
+    "payment_method": "طريقة الدفع",
+    "card": "بطاقة",
+    "pay": "ادفع",
+    "total": "الإجمالي"
+  },
+  "track_order": {
+    "to_receive": "للاستلام",
+    "track_your_order": "تتبع طلبك",
+    "tracking_number": "رقم التتبع",
+    "packed": "تم التغليف",
+    "packed_subtitle": "تم تغليف طردك وسيتم تسليمه لشريك التوصيل لدينا.",
+    "on_the_way": "في الطريق إلى المنشأة اللوجستية",
+    "on_the_way_subtitle": "طردك في الطريق",
+    "arrived": "وصل إلى المنشأة اللوجستية",
+    "arrived_subtitle": "وصل طردك",
+    "shipped": "تم الشحن",
+    "shipped_subtitle": "تم شحن طردك",
+    "out_for_delivery": "خارج للتوصيل",
+    "out_for_delivery_subtitle": "طردك خارج للتوصيل",
+    "delivered": "تم التوصيل",
+    "delivered_subtitle": "تم توصيل طردك",
+    "continue_shopping": "مواصلة التسوق"
+  },
+  "card": {
+    "add_card_title": "إضافة بطاقتك",
+    "edit_card_title": "تعديل بطاقتك",
+    "holder": "صاحب البطاقة",
+    "number": "رقم البطاقة",
+    "invalid_number": "رقم البطاقة غير مكتمل",
+    "expiry_hint": "00 / 00",
+    "cvv": "رمز CVV",
+    "save_changes": "حفظ التغييرات"
+  },
+  "all_items": {
+    "title": "كل المنتجات",
+    "dresses": "فساتين"
+  }
+}

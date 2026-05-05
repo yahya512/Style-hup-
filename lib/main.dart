@@ -1,18 +1,39 @@
+<<<<<<< HEAD
 import 'package:dx/Authentication/Regestration/login.dart';
+=======
+import 'package:dx/E-Commerce/intro_screen.dart';
+>>>>>>> 6d4e055 (Apply En - Ar language , add Setting screen in Ecommerce UI)
 import 'package:dx/cache/cache_helper.dart';
 import 'package:dx/core/navigation/navigation_service.dart';
 import 'package:dx/core/services/service_locator.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:ui' as ui;
 
-void main() {
+void main() async {
   //setup for Shared_preferences
   WidgetsFlutterBinding.ensureInitialized();
-  CacheHelper().init();
+  await EasyLocalization.ensureInitialized();
+  await CacheHelper().init();
+
+  // Read saved language
+  final String? savedLang = CacheHelper.sharedPreferences.getString('lang');
+  final Locale startLocale = savedLang != null
+      ? Locale(savedLang)
+      : const Locale('en');
 
   //for Get_it package for singleton repository
   setupServiceLocator();
-  runApp(const MyApp());
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [Locale('en'), Locale('ar')],
+      path: 'lib/core/localization/assets/translations',
+      fallbackLocale: const Locale('en'),
+      startLocale: startLocale,
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -26,9 +47,24 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp(
+          locale: context.locale,
+          supportedLocales: context.supportedLocales,
+          localizationsDelegates: context.localizationDelegates,
           navigatorKey: NavigationService.navigatorKey,
           debugShowCheckedModeBanner: false,
+<<<<<<< HEAD
           home: LogIn(),
+=======
+          home: IntroEcommerce(),
+          builder: (context, child) {
+            return Directionality(
+              textDirection: context.locale.languageCode == 'ar'
+                  ? ui.TextDirection.rtl
+                  : ui.TextDirection.ltr,
+              child: child!,
+            );
+          },
+>>>>>>> 6d4e055 (Apply En - Ar language , add Setting screen in Ecommerce UI)
         );
       },
     );

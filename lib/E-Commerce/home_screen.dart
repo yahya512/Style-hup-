@@ -2,7 +2,9 @@ import 'package:dx/E-Commerce/all_items_screen.dart';
 import 'package:dx/E-Commerce/cart_screen.dart';
 import 'package:dx/E-Commerce/favourite_screen.dart';
 import 'package:dx/E-Commerce/shop_screen.dart';
+import 'package:dx/E-Commerce/setting_screen.dart';
 import 'package:dx/core/theme/appstyles.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -16,7 +18,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   // bottom icons
-  int selectedIcon = 0;
+  int _selectedIcon = 0;
   //boolean variables
   @override
   Widget build(BuildContext context) {
@@ -64,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     spacing: 10.w,
                     children: [
                       ClipRRect(
-                        borderRadius: BorderRadiusGeometry.circular(80.r),
+                        borderRadius: BorderRadiusDirectional.circular(80.r),
                         child: Image.asset(
                           height: 50.h,
                           width: 50.w,
@@ -72,16 +74,22 @@ class _HomeScreenState extends State<HomeScreen> {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      Text("Mostafa Mahmoud", style: AppStyles.subTitleStyle),
+                      Text(
+                        "home.mostafa_mahmoud".tr(),
+                        style: AppStyles.subTitleStyle,
+                      ),
                     ],
                   ),
-                  Text("Hello , Mostafa", style: AppStyles.subTitleStyle),
+                  Text(
+                    "home.hello_mostafa".tr(),
+                    style: AppStyles.subTitleStyle,
+                  ),
                   SizedBox(height: 30.h),
                   InkWell(
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(50.r),
+                        borderRadius: BorderRadiusDirectional.circular(50.r),
                       ),
                       child: Row(
                         children: [
@@ -89,16 +97,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width * 0.5.w,
                               child: Padding(
-                                padding: const EdgeInsets.all(10),
+                                padding: const EdgeInsetsDirectional.all(10),
                                 child: Text(
-                                  "Search",
+                                  "home.search".tr(),
                                   style: AppStyles.labelTextStyle,
                                 ),
                               ),
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 10),
+                            padding: const EdgeInsetsDirectional.only(end: 10),
                             child: Icon(Icons.search_outlined, size: 32.dg),
                           ),
                         ],
@@ -113,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.all(16.dg),
+            padding: EdgeInsetsDirectional.all(16.dg),
             sliver: SliverToBoxAdapter(
               child: Column(
                 spacing: 30.h,
@@ -122,10 +130,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Clothing", style: AppStyles.subTitleStyle),
+                      Text(
+                        "home.clothing".tr(),
+                        style: AppStyles.subTitleStyle,
+                      ),
                       TextButton(
-                        onPressed: () {},
-                        child: Text("See All", style: AppStyles.subTitleStyle),
+                        child: Text(
+                          "home.see_all".tr(),
+                          style: AppStyles.subTitleStyle,
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => AllItemsScreen(),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -136,14 +156,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       InkWell(
                         onTap: () {},
                         child: ClipRRect(
-                          borderRadius: BorderRadiusGeometry.circular(20.r),
+                          borderRadius: BorderRadiusDirectional.circular(20.r),
                           child: Column(
                             children: [
                               Image.asset(
                                 "images/Dress_2x.png",
                                 fit: BoxFit.contain,
                               ),
-                              Text("Dress", style: AppStyles.normalTextStyle),
+                              Text(
+                                "home.dress".tr(),
+                                style: AppStyles.normalTextStyle,
+                              ),
                             ],
                           ),
                         ),
@@ -151,14 +174,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       InkWell(
                         onTap: () {},
                         child: ClipRRect(
-                          borderRadius: BorderRadiusGeometry.circular(20.r),
+                          borderRadius: BorderRadiusDirectional.circular(20.r),
                           child: Column(
                             children: [
                               Image.asset(
                                 "images/Pants.png",
                                 fit: BoxFit.contain,
                               ),
-                              Text("Pants", style: AppStyles.normalTextStyle),
+                              Text(
+                                "home.pants".tr(),
+                                style: AppStyles.normalTextStyle,
+                              ),
                             ],
                           ),
                         ),
@@ -166,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       InkWell(
                         onTap: () {},
                         child: ClipRRect(
-                          borderRadius: BorderRadiusGeometry.vertical(
+                          borderRadius: BorderRadiusDirectional.vertical(
                             top: Radius.circular(20),
                             bottom: Radius.circular(20),
                           ),
@@ -176,7 +202,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 "images/Scirts.png",
                                 fit: BoxFit.contain,
                               ),
-                              Text("Scirts", style: AppStyles.normalTextStyle),
+                              Text(
+                                "home.scirts".tr(),
+                                style: AppStyles.normalTextStyle,
+                              ),
                             ],
                           ),
                         ),
@@ -184,14 +213,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       InkWell(
                         onTap: () {},
                         child: ClipRRect(
-                          borderRadius: BorderRadiusGeometry.circular(20.r),
+                          borderRadius: BorderRadiusDirectional.circular(20.r),
                           child: Column(
                             children: [
                               Image.asset(
                                 "images/Shorts.png",
                                 fit: BoxFit.contain,
                               ),
-                              Text("Shorts", style: AppStyles.normalTextStyle),
+                              Text(
+                                "home.shorts".tr(),
+                                style: AppStyles.normalTextStyle,
+                              ),
                             ],
                           ),
                         ),
@@ -199,14 +231,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       InkWell(
                         onTap: () {},
                         child: ClipRRect(
-                          borderRadius: BorderRadiusGeometry.circular(20.r),
+                          borderRadius: BorderRadiusDirectional.circular(20.r),
                           child: Column(
                             children: [
                               Image.asset(
                                 "images/Hoodies.png",
                                 fit: BoxFit.contain,
                               ),
-                              Text("Hoodies", style: AppStyles.normalTextStyle),
+                              Text(
+                                "home.hoodies".tr(),
+                                style: AppStyles.normalTextStyle,
+                              ),
                             ],
                           ),
                         ),
@@ -214,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       InkWell(
                         onTap: () {},
                         child: ClipRRect(
-                          borderRadius: BorderRadiusGeometry.circular(20.r),
+                          borderRadius: BorderRadiusDirectional.circular(20.r),
                           child: Column(
                             children: [
                               Image.asset(
@@ -222,7 +257,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 fit: BoxFit.contain,
                               ),
                               Text(
-                                "PoloShirt",
+                                "home.polo_shirt".tr(),
                                 style: AppStyles.normalTextStyle,
                               ),
                             ],
@@ -234,9 +269,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("All Items", style: AppStyles.subTitleStyle),
+                      Text(
+                        "home.all_items".tr(),
+                        style: AppStyles.subTitleStyle,
+                      ),
                       TextButton(
-                        child: Text("See All", style: AppStyles.subTitleStyle),
+                        child: Text(
+                          "home.see_all".tr(),
+                          style: AppStyles.subTitleStyle,
+                        ),
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -256,7 +297,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         InkWell(
                           onTap: () {},
                           child: ClipRRect(
-                            borderRadius: BorderRadiusGeometry.circular(20.r),
+                            borderRadius: BorderRadiusDirectional.circular(
+                              20.r,
+                            ),
                             child: Column(
                               children: [
                                 Image.asset(
@@ -264,7 +307,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fit: BoxFit.contain,
                                 ),
                                 Text(
-                                  "Red Dress",
+                                  "home.red_dress".tr(),
                                   style: AppStyles.normalTextStyle,
                                 ),
                                 Text("20\$", style: AppStyles.normalTextStyle),
@@ -275,7 +318,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         InkWell(
                           onTap: () {},
                           child: ClipRRect(
-                            borderRadius: BorderRadiusGeometry.circular(20.r),
+                            borderRadius: BorderRadiusDirectional.circular(
+                              20.r,
+                            ),
                             child: Column(
                               children: [
                                 Image.asset(
@@ -283,7 +328,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fit: BoxFit.contain,
                                 ),
                                 Text(
-                                  "Shirts",
+                                  "home.shirts".tr(),
                                   style: AppStyles.normalTextStyle,
                                 ),
                                 Text("20\$", style: AppStyles.normalTextStyle),
@@ -294,7 +339,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         InkWell(
                           onTap: () {},
                           child: ClipRRect(
-                            borderRadius: BorderRadiusGeometry.circular(20.r),
+                            borderRadius: BorderRadiusDirectional.circular(
+                              20.r,
+                            ),
                             child: Column(
                               children: [
                                 Image.asset(
@@ -302,7 +349,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fit: BoxFit.contain,
                                 ),
                                 Text(
-                                  "Black Hoodie",
+                                  "home.black_hoodie".tr(),
                                   style: AppStyles.normalTextStyle,
                                 ),
                                 Text("20\$", style: AppStyles.normalTextStyle),
@@ -313,7 +360,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         InkWell(
                           onTap: () {},
                           child: ClipRRect(
-                            borderRadius: BorderRadiusGeometry.circular(20.r),
+                            borderRadius: BorderRadiusDirectional.circular(
+                              20.r,
+                            ),
                             child: Column(
                               children: [
                                 Image.asset(
@@ -321,7 +370,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fit: BoxFit.contain,
                                 ),
                                 Text(
-                                  "Modern Jackets",
+                                  "home.modern_jackets".tr(),
                                   style: AppStyles.normalTextStyle,
                                 ),
                                 Text("20\$", style: AppStyles.normalTextStyle),
@@ -341,31 +390,43 @@ class _HomeScreenState extends State<HomeScreen> {
 
       // Bottom Icons
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: selectedIcon,
+        currentIndex: _selectedIcon,
         selectedItemColor: Color(0xFF32DBE6),
+        type: BottomNavigationBarType.fixed,
         onTap: (value) {
           setState(() {
-            selectedIcon = value;
-            if (selectedIcon == 1) {
+            _selectedIcon = value;
+            if (_selectedIcon == 1) {
               Navigator.of(
                 context,
               ).push(MaterialPageRoute(builder: (context) => ShopScreen()));
-            } else if (selectedIcon == 2) {
+            } else if (_selectedIcon == 2) {
               // Navigator.of(
               //   context,
               // ).push(MaterialPageRoute(builder: (context) => DashBoard()));
+            } else if (_selectedIcon == 3) {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => SettingEcommerce()),
+              );
             }
           });
         },
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: "Home"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_filled),
+            label: "nav.home".tr(),
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_bag),
-            label: "Shop",
+            label: "nav.shop".tr(),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.dashboard_rounded),
-            label: "Dashboard",
+            label: "nav.dashboard".tr(),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: "nav.settings".tr(),
           ),
         ],
       ),

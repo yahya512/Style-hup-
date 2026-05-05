@@ -1,4 +1,5 @@
 import 'package:dx/core/theme/appstyles.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ Widget passwordConfirmField(
     obscureText: visiable,
     textInputAction: TextInputAction.next,
     decoration: InputDecoration(
-      label: Text("Confirm Your Password", style: AppStyles.labelTextStyle),
+      label: Text("auth.confirm_password".tr(), style: AppStyles.labelTextStyle),
       suffixIcon: eyeicone,
       border: AppStyles.outlineInputBorderstyle,
       focusedBorder: AppStyles.foucasedoutlineInputBorder,
@@ -25,13 +26,13 @@ Widget passwordConfirmField(
     ),
     validator: (value) {
       if (value!.isEmpty) {
-        return "Required field,Please enter your Password";
+        return "auth.confirm_password_required".tr();
       }
       if (kDebugMode) {
         print("VALUE : $value\n PASSWORD : ${passwordController.text}");
       }
       if (value != passChecker.text) {
-        return "The passwords doesn't match";
+        return "auth.passwords_not_match".tr();
       }
       return null;
     },
