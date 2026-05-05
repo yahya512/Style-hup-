@@ -218,19 +218,10 @@ class _LogInState extends State<LogIn> {
                                   _isloading = false;
                                 });
 
-<<<<<<< HEAD
                                 if (userData?.isProfileComplete == true) {
                                   Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
                                       builder: (context) => const MainLayout(),
-=======
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    duration: Duration(seconds: 1),
-                                    content: Text(
-                                      "login.validated_data".tr(),
-                                      style: AppStyles.snackBarStyle,
->>>>>>> 6d4e055 (Apply En - Ar language , add Setting screen in Ecommerce UI)
                                     ),
                                     (_) => false,
                                   );

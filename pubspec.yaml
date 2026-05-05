@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.11.0
+  sdk: ">=3.3.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -43,13 +43,11 @@ dependencies:
   shared_preferences: ^2.5.4
   get_it: ^9.2.1
   infinite_scroll_pagination: ^5.1.1
-<<<<<<< HEAD
   flutter_bloc: ^9.1.1
   equatable: ^2.0.8
   video_player: ^2.11.1
-=======
   easy_localization: ^3.0.7
->>>>>>> 6d4e055 (Apply En - Ar language , add Setting screen in Ecommerce UI)
+
   
 
 dev_dependencies:

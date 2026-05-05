@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import 'package:dx/Authentication/Regestration/login.dart';
-=======
 import 'package:dx/E-Commerce/intro_screen.dart';
->>>>>>> 6d4e055 (Apply En - Ar language , add Setting screen in Ecommerce UI)
 import 'package:dx/cache/cache_helper.dart';
 import 'package:dx/core/navigation/navigation_service.dart';
 import 'package:dx/core/services/service_locator.dart';
@@ -19,9 +15,8 @@ void main() async {
 
   // Read saved language
   final String? savedLang = CacheHelper.sharedPreferences.getString('lang');
-  final Locale startLocale = savedLang != null
-      ? Locale(savedLang)
-      : const Locale('en');
+  final Locale startLocale =
+      savedLang != null ? Locale(savedLang) : const Locale('en');
 
   //for Get_it package for singleton repository
   setupServiceLocator();
@@ -52,9 +47,6 @@ class MyApp extends StatelessWidget {
           localizationsDelegates: context.localizationDelegates,
           navigatorKey: NavigationService.navigatorKey,
           debugShowCheckedModeBanner: false,
-<<<<<<< HEAD
-          home: LogIn(),
-=======
           home: IntroEcommerce(),
           builder: (context, child) {
             return Directionality(
@@ -64,7 +56,6 @@ class MyApp extends StatelessWidget {
               child: child!,
             );
           },
->>>>>>> 6d4e055 (Apply En - Ar language , add Setting screen in Ecommerce UI)
         );
       },
     );

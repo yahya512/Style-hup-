@@ -83,8 +83,8 @@ class _SearchScreenState extends State<SearchScreen> {
                   hintText: 'Search users and brands...',
                   hintStyle:
                       TextStyle(fontSize: 14.sp, color: Colors.grey[400]),
-                  prefixIcon: Icon(Icons.search,
-                      color: Colors.grey[400], size: 22.r),
+                  prefixIcon:
+                      Icon(Icons.search, color: Colors.grey[400], size: 22.r),
                   suffixIcon: state.status != SearchStatus.initial
                       ? IconButton(
                           icon: Icon(Icons.clear,
@@ -103,8 +103,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     borderSide: BorderSide.none,
                   ),
                 ),
-                onChanged: (q) =>
-                    context.read<SearchCubit>().onQueryChanged(q),
+                onChanged: (q) => context.read<SearchCubit>().onQueryChanged(q),
               ),
             ),
           ),
@@ -113,8 +112,7 @@ class _SearchScreenState extends State<SearchScreen> {
               builder: (context, state) => switch (state.status) {
                 SearchStatus.initial => const _EmptyPrompt(),
                 SearchStatus.loading => const Center(
-                    child: CircularProgressIndicator(
-                        color: Color(0xFF32DBE6)),
+                    child: CircularProgressIndicator(color: Color(0xFF32DBE6)),
                   ),
                 SearchStatus.failure => Center(
                     child: Padding(
@@ -122,8 +120,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       child: Text(
                         state.errorMessage ?? 'Search failed.',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 16.sp, color: Colors.grey[600]),
+                        style:
+                            TextStyle(fontSize: 16.sp, color: Colors.grey[600]),
                       ),
                     ),
                   ),
@@ -131,7 +129,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   _NoResults(query: state.query),
                 SearchStatus.success => ListView.separated(
                     itemCount: state.results.length,
-                    separatorBuilder: (_, _) =>
+                    separatorBuilder: (_, __) =>
                         Divider(height: 1, color: Colors.grey[100]),
                     itemBuilder: (context, index) => SearchResultTile(
                       result: state.results[index],

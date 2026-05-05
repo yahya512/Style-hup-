@@ -133,8 +133,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               style: TextStyle(fontSize: 16.sp, color: Colors.black),
               decoration: InputDecoration(
                 hintText: "What's on your mind?",
-                hintStyle:
-                    TextStyle(fontSize: 16.sp, color: Colors.grey[400]),
+                hintStyle: TextStyle(fontSize: 16.sp, color: Colors.grey[400]),
                 border: InputBorder.none,
               ),
             ),
@@ -145,7 +144,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemCount: _images.length,
-                  separatorBuilder: (_, _) => SizedBox(width: 8.w),
+                  separatorBuilder: (_, __) => SizedBox(width: 8.w),
                   itemBuilder: (context, index) => Stack(
                     children: [
                       ClipRRect(
@@ -192,8 +191,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 if (_images.length >= 5)
                   Text(
                     'Max 5 images',
-                    style:
-                        TextStyle(fontSize: 12.sp, color: Colors.grey[500]),
+                    style: TextStyle(fontSize: 12.sp, color: Colors.grey[500]),
                   ),
                 const Spacer(),
                 DropdownButton<String>(
