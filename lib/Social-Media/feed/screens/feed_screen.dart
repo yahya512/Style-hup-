@@ -6,6 +6,8 @@ import 'package:dx/core/services/service_locator.dart';
 import 'package:dx/Social-Media/feed/cubit/feed_cubit.dart';
 import 'package:dx/Social-Media/feed/cubit/feed_state.dart';
 import 'package:dx/Social-Media/feed/services/feed_service.dart';
+import 'package:dx/Social-Media/interactions/cubit/reaction_cubit.dart';
+import 'package:dx/Social-Media/interactions/services/interaction_service.dart';
 
 import '../widgets/post_card.dart';
 import '../widgets/empty_view.dart';
@@ -16,8 +18,17 @@ class FeedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => FeedCubit(feedService: getIt<FeedService>())..loadFeed(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) =>
+              FeedCubit(feedService: getIt<FeedService>())..loadFeed(),
+        ),
+        BlocProvider(
+          create: (_) =>
+              ReactionCubit(service: getIt<InteractionService>()),
+        ),
+      ],
       child: const FeedScreen(),
     );
   }
@@ -57,8 +68,29 @@ class _FeedScreenState extends State<FeedScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const StyleHubAppBar(), // Reusable App Bar injected here
-      body: BlocConsumer<FeedCubit, FeedState>(
+      appBar: const StyleHubAppBar(),
+      body: BlocListener<FeedCubit, FeedState>(
+        listenWhen: (prev, curr) =>
+            curr.status == FeedStatus.success && curr.items != prev.items,
+        listener: (context, state) {
+          final rxCubit = context.read<ReactionCubit>();
+          for (final item in state.items) {
+            final isNew =
+                !rxCubit.state.reacted.containsKey(item.post.id);
+            rxCubit.seedPost(
+              postId: item.post.id,
+              isReacted: item.post.isReactedByMe,
+              reactionCount: item.post.reactionsCount,
+              commentCount: item.post.commentsCount,
+            );
+            // Fetch real server-side reaction status for new posts only.
+            // Already-tracked posts are skipped to preserve user-toggled state.
+            if (isNew) {
+              rxCubit.fetchReactionStatus(item.post.id);
+            }
+          }
+        },
+        child: BlocConsumer<FeedCubit, FeedState>(
         listenWhen: (prev, curr) => curr.errorCount > prev.errorCount,
         listener: (context, state) {
           ScaffoldMessenger.of(context)
@@ -74,6 +106,7 @@ class _FeedScreenState extends State<FeedScreen> {
           _ => _buildListView(state),
         },
       ),
+        ),
     );
   }
 

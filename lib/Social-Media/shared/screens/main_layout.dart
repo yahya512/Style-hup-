@@ -2,6 +2,8 @@ import 'package:dx/Social-Media/ShopEntry/shop_tab.dart';
 import 'package:dx/Social-Media/search/screens/search_screen.dart';
 import 'package:dx/Social-Media/user/screens/user_profile_screen.dart'; // This is the Page/Screen
 import 'package:dx/Social-Media/brand/screens/brand_profile_screen.dart';
+import 'package:dx/Social-Media/profile_posts/cubit/my_posts_cubit.dart';
+import 'package:dx/Social-Media/profile_posts/services/my_posts_service.dart';
 import 'package:dx/Social-Media/user/cubit/user_profile_cubit.dart';
 import 'package:dx/Social-Media/user/cubit/user_profile_state.dart';
 import 'package:dx/Social-Media/user/services/user_profile_service.dart';
@@ -21,10 +23,19 @@ class MainLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Provide the Cubit here so the Bottom Nav Bar and all Profile widgets can see it.
-    return BlocProvider(
-      create: (context) => UserProfileCubit(
-        service: getIt<UserProfileService>(),
-      )..loadProfile(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => UserProfileCubit(
+            service: getIt<UserProfileService>(),
+          )..loadProfile(),
+        ),
+        BlocProvider(
+          create: (_) => MyPostsCubit(
+            service: getIt<MyPostsService>(),
+          )..loadPosts(),
+        ),
+      ],
       child: const _MainLayoutContent(),
     );
   }

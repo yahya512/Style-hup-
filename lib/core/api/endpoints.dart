@@ -21,6 +21,11 @@ class Endpoints {
   static String searchUser = "search/user";
   static String searchBrand = "search/brand";
   static String refreshToken = "auth/refresh";
+  static String reactions = "interactions/reactions";
+  static String reactionStatus(String postId) =>
+      "interactions/reactions/$postId/status";
+  static String comments = "interactions/comments";
+  static String myPosts = "posts/me";
 }
 
 class ApiKey {

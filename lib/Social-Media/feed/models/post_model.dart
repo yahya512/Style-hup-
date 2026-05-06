@@ -30,23 +30,48 @@ class FeedPostModel {
     required this.reactionsCount,
     required this.commentsCount,
     required this.createdAt,
+    this.isReactedByMe = false,
   });
 
-  factory FeedPostModel.fromJson(Map<String, dynamic> json) => FeedPostModel(
-        id: json['id'] as String,
-        content: json['content'] as String?,
-        images: List<String>.from(json['images'] as List? ?? const []),
-        videos: List<String>.from(json['videos'] as List? ?? const []),
-        authorId: json['authorId'] as String,
-        authorName: json['authorName'] as String? ?? '',
-        authorImage: json['authorImage'] as String?,
-        visibility: _visibilityFromString(
-          json['visibility'] as String? ?? 'PUBLIC',
-        ),
-        reactionsCount: (json['reactionsCount'] as num?)?.toInt() ?? 0,
-        commentsCount: (json['commentsCount'] as num?)?.toInt() ?? 0,
-        createdAt: DateTime.parse(json['createdAt'] as String),
-      );
+  factory FeedPostModel.fromJson(Map<String, dynamic> json) {
+    final author = json['author'] as Map<String, dynamic>?;
+    String authorName = '';
+    String? authorImage;
+
+    if (author != null) {
+      if (author['role'] == 'BRAND') {
+        final bp = author['brandProfile'] as Map<String, dynamic>?;
+        authorName = bp?['brandName'] as String? ?? '';
+        authorImage = bp?['profileImageUrl'] as String?;
+      } else {
+        final up = author['userProfile'] as Map<String, dynamic>?;
+        final first = up?['firstName'] as String? ?? '';
+        final last = up?['lastName'] as String? ?? '';
+        authorName = '$first $last'.trim();
+        authorImage = up?['profileImageUrl'] as String?;
+      }
+    } else {
+      authorName = json['authorName'] as String? ?? '';
+      authorImage = json['authorImage'] as String?;
+    }
+
+    return FeedPostModel(
+      id: json['id'] as String,
+      content: json['content'] as String?,
+      images: List<String>.from(json['images'] as List? ?? const []),
+      videos: List<String>.from(json['videos'] as List? ?? const []),
+      authorId: json['authorId'] as String,
+      authorName: authorName,
+      authorImage: authorImage,
+      visibility: _visibilityFromString(
+        json['visibility'] as String? ?? 'PUBLIC',
+      ),
+      reactionsCount: (json['reactionsCount'] as num?)?.toInt() ?? 0,
+      commentsCount: (json['commentsCount'] as num?)?.toInt() ?? 0,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      isReactedByMe: json['isReactedByMe'] as bool? ?? false,
+    );
+  }
 
   final String id;
   final String? content;
@@ -59,6 +84,27 @@ class FeedPostModel {
   final int reactionsCount;
   final int commentsCount;
   final DateTime createdAt;
+  final bool isReactedByMe;
+
+  FeedPostModel copyWith({
+    int? reactionsCount,
+    int? commentsCount,
+    bool? isReactedByMe,
+  }) =>
+      FeedPostModel(
+        id: id,
+        content: content,
+        images: images,
+        videos: videos,
+        authorId: authorId,
+        authorName: authorName,
+        authorImage: authorImage,
+        visibility: visibility,
+        reactionsCount: reactionsCount ?? this.reactionsCount,
+        commentsCount: commentsCount ?? this.commentsCount,
+        createdAt: createdAt,
+        isReactedByMe: isReactedByMe ?? this.isReactedByMe,
+      );
 }
 
 /// Maps to the backend `FeedItemResponseDto`.
