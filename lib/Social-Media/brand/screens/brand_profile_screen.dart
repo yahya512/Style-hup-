@@ -15,6 +15,8 @@ import 'package:dx/Social-Media/brand/services/brand_profile_service.dart';
 import 'package:dx/Social-Media/brand/widgets/brand_edit_bottom_sheet.dart';
 import 'package:dx/core/theme/appstyles.dart';
 import 'package:dx/Social-Media/feed/widgets/error_view.dart';
+import 'package:dx/Social-Media/profile_posts/cubit/my_posts_cubit.dart';
+import 'package:dx/Social-Media/profile_posts/cubit/my_posts_state.dart';
 import 'package:dx/Social-Media/user/widgets/post_card.dart';
 
 class BrandProfilePage extends StatelessWidget {
@@ -99,7 +101,10 @@ class _BrandProfileBody extends StatelessWidget {
         ),
         body: RefreshIndicator(
           color: const Color(0xFF32DBE6),
-          onRefresh: () => context.read<BrandProfileCubit>().loadProfile(),
+          onRefresh: () async {
+            context.read<BrandProfileCubit>().loadProfile();
+            await context.read<MyPostsCubit>().refreshPosts();
+          },
           child: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
               SliverToBoxAdapter(
@@ -132,11 +137,37 @@ class _BrandProfileBody extends StatelessWidget {
                 ),
               ),
             ],
-            body: const TabBarView(
+            body: TabBarView(
               children: [
-                ProfileEmptyState(
-                    icon: Icons.camera_alt_outlined, label: 'No Posts Yet'),
-                ProfileEmptyState(
+                BlocBuilder<MyPostsCubit, MyPostsState>(
+                  builder: (context, postsState) {
+                    if (postsState.status == MyPostsStatus.loading) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: Color(0xFF32DBE6),
+                        ),
+                      );
+                    }
+                    if (postsState.status == MyPostsStatus.failure &&
+                        postsState.posts.isEmpty) {
+                      return ErrorView(
+                        message: postsState.errorMessage ??
+                            'Failed to load posts.',
+                        onRetry: () =>
+                            context.read<MyPostsCubit>().loadPosts(),
+                      );
+                    }
+                    return ProfilePostsGrid(
+                      posts: postsState.posts,
+                      isLoadingMore:
+                          postsState.status == MyPostsStatus.loadingMore,
+                      hasMore: postsState.hasMore,
+                      onLoadMore: () =>
+                          context.read<MyPostsCubit>().loadMorePosts(),
+                    );
+                  },
+                ),
+                const ProfileEmptyState(
                     icon: Icons.shopping_bag_outlined,
                     label: 'No Products Yet'),
               ],

@@ -25,10 +25,6 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       centerTitle: true,
       surfaceTintColor: Colors.transparent,
-      leading: IconButton(
-        icon: Icon(Icons.add_box_outlined, color: Colors.black, size: 26.r),
-        onPressed: () {},
-      ),
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

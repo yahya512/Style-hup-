@@ -1,16 +1,33 @@
+import 'package:dx/Social-Media/feed/models/post_model.dart';
+import 'package:dx/Social-Media/profile_posts/screens/post_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProfilePostsGrid extends StatelessWidget {
-  final List<Map<String, dynamic>> posts;
+  const ProfilePostsGrid({
+    super.key,
+    required this.posts,
+    this.isLoadingMore = false,
+    this.hasMore = false,
+    this.onLoadMore,
+  });
 
-  const ProfilePostsGrid({super.key, required this.posts});
+  final List<FeedPostModel> posts;
+  final bool isLoadingMore;
+  final bool hasMore;
+  final VoidCallback? onLoadMore;
 
   @override
   Widget build(BuildContext context) {
     if (posts.isEmpty) {
-      return const ProfileEmptyState(icon: Icons.camera_alt_outlined, label: "No Posts Yet");
+      return const ProfileEmptyState(
+        icon: Icons.camera_alt_outlined,
+        label: 'No Posts Yet',
+      );
     }
+
+    // Extra item at the end when there are more pages to load.
+    final itemCount = posts.length + (hasMore ? 1 : 0);
 
     return GridView.builder(
       padding: const EdgeInsets.all(1),
@@ -19,14 +36,69 @@ class ProfilePostsGrid extends StatelessWidget {
         crossAxisSpacing: 1.5,
         mainAxisSpacing: 1.5,
       ),
-      itemCount: posts.length,
+      itemCount: itemCount,
       itemBuilder: (context, index) {
-        final imageUrl = (posts[index]['images'] as List?)?.firstOrNull;
-        return Container(
+        // Sentinel item — triggers load-more when it scrolls into view.
+        if (index == posts.length) {
+          if (!isLoadingMore && onLoadMore != null) {
+            onLoadMore!();
+          }
+          return Container(
+            color: Colors.grey[100],
+            child: const Center(
+              child: SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: Color(0xFF32DBE6),
+                ),
+              ),
+            ),
+          );
+        }
+
+        final post = posts[index];
+        final imageUrl = post.images.firstOrNull;
+        final hasVideo = post.videos.isNotEmpty;
+
+        return GestureDetector(
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => PostDetailScreen(post: post),
+            ),
+          ),
+          child: Container(
           color: Colors.grey[100],
-          child: imageUrl != null 
-              ? Image.network(imageUrl, fit: BoxFit.cover) 
-              : const SizedBox.shrink(),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              if (imageUrl != null)
+                Image.network(imageUrl, fit: BoxFit.cover)
+              else
+                Center(
+                  child: Icon(
+                    hasVideo
+                        ? Icons.videocam_outlined
+                        : Icons.image_outlined,
+                    size: 28.r,
+                    color: Colors.grey[400],
+                  ),
+                ),
+              if (hasVideo && imageUrl != null)
+                Positioned(
+                  top: 4,
+                  right: 4,
+                  child: Icon(
+                    Icons.videocam,
+                    size: 16.r,
+                    color: Colors.white,
+                    shadows: const [Shadow(blurRadius: 4)],
+                  ),
+                ),
+            ],
+          ),
+        ),
         );
       },
     );

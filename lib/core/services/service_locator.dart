@@ -4,13 +4,14 @@ import 'package:dx/repositories/user_repository.dart';
 import 'package:dx/Social-Media/feed/services/feed_service.dart';
 import 'package:dx/Social-Media/user/services/user_profile_service.dart';
 import 'package:dx/Social-Media/brand/services/brand_profile_service.dart';
+import 'package:dx/Social-Media/interactions/services/interaction_service.dart';
 import 'package:dx/Social-Media/search/services/search_service.dart';
+import 'package:dx/Social-Media/profile_posts/services/my_posts_service.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
 
 void setupServiceLocator() {
-  //registerLazySingleton => create just one when it needed
   getIt.registerLazySingleton(() => Dio());
 
   getIt.registerLazySingleton(() => DioConsumer(dio: getIt<Dio>()));
@@ -24,4 +25,12 @@ void setupServiceLocator() {
   getIt.registerLazySingleton(() => BrandProfileService());
 
   getIt.registerLazySingleton(() => SearchService());
+
+  getIt.registerLazySingleton(() => InteractionService());
+
+  getIt.registerLazySingleton(() => MyPostsService());
+
+  // Force DioConsumer to initialize now so the shared Dio instance gets
+  // baseUrl and ApiInterceptors configured before any API call is made.
+  getIt<DioConsumer>();
 }

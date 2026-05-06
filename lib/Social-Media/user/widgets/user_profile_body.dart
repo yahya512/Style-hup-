@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'package:dx/Social-Media/feed/widgets/error_view.dart';
+import 'package:dx/Social-Media/profile_posts/cubit/my_posts_cubit.dart';
+import 'package:dx/Social-Media/profile_posts/cubit/my_posts_state.dart';
 import 'package:dx/Social-Media/shared/widgets/profile_tab_delegate.dart';
 import 'package:dx/Social-Media/user/cubit/user_profile_cubit.dart';
 import 'package:dx/Social-Media/user/widgets/profile_app_bar.dart';
@@ -80,7 +83,41 @@ class UserProfileBody extends StatelessWidget {
           ],
           body: TabBarView(
             children: [
-              ProfilePostsGrid(posts: profile.posts),
+              BlocBuilder<MyPostsCubit, MyPostsState>(
+                builder: (context, postsState) {
+                  if (postsState.status == MyPostsStatus.loading) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: Color(0xFF32DBE6),
+                      ),
+                    );
+                  }
+                  if (postsState.status == MyPostsStatus.failure &&
+                      postsState.posts.isEmpty) {
+                    return ErrorView(
+                      message: postsState.errorMessage ??
+                          'Failed to load posts.',
+                      onRetry: () =>
+                          context.read<MyPostsCubit>().loadPosts(),
+                    );
+                  }
+                  return RefreshIndicator(
+                    color: const Color(0xFF32DBE6),
+                    onRefresh: () async {
+                      context.read<UserProfileCubit>().loadProfile();
+                      await context.read<MyPostsCubit>().refreshPosts();
+                    },
+                    child: ProfilePostsGrid(
+                      posts: postsState.posts,
+                      isLoadingMore:
+                          postsState.status == MyPostsStatus.loadingMore,
+                      hasMore: postsState.hasMore,
+                      onLoadMore: () =>
+                          context.read<MyPostsCubit>().loadMorePosts(),
+                    ),
+                  );
+                },
+              ),
               const ProfileEmptyState(
                   icon: Icons.slow_motion_video_rounded,
                   label: 'No Reels Yet'),
