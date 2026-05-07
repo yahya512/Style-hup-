@@ -211,6 +211,10 @@ class _LogInState extends State<LogIn> {
                                     key: ApiKey.email,
                                     value: userData!.email,
                                   );
+                                  CacheHelper().saveData(
+                                    key: ApiKey.userId,
+                                    value: userData!.id,
+                                  );
                                 }
 
                                 if (!context.mounted) return;

@@ -87,19 +87,21 @@ class FeedPostModel {
   final bool isReactedByMe;
 
   FeedPostModel copyWith({
+    String? content,
+    PostVisibility? visibility,
     int? reactionsCount,
     int? commentsCount,
     bool? isReactedByMe,
   }) =>
       FeedPostModel(
         id: id,
-        content: content,
+        content: content ?? this.content,
         images: images,
         videos: videos,
         authorId: authorId,
         authorName: authorName,
         authorImage: authorImage,
-        visibility: visibility,
+        visibility: visibility ?? this.visibility,
         reactionsCount: reactionsCount ?? this.reactionsCount,
         commentsCount: commentsCount ?? this.commentsCount,
         createdAt: createdAt,

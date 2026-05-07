@@ -60,6 +60,18 @@ class UserProfileCubit extends Cubit<UserProfileState> {
     }
   }
 
+  /// Refreshes profile data (e.g. post count) without showing a loading spinner.
+  Future<void> silentRefresh() async {
+    try {
+      final profile = await _service.getProfile();
+      if (!isClosed) {
+        emit(state.copyWith(status: UserProfileStatus.success, profile: profile));
+      }
+    } catch (_) {
+      // Best-effort — ignore errors so the UI is not disrupted.
+    }
+  }
+
   void _emitError(String message) {
     emit(state.copyWith(
       status: state.profile != null

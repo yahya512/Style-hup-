@@ -5,9 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dx/core/services/service_locator.dart';
 import 'package:dx/Social-Media/feed/cubit/feed_cubit.dart';
 import 'package:dx/Social-Media/feed/cubit/feed_state.dart';
+import 'package:dx/Social-Media/feed/models/post_model.dart';
 import 'package:dx/Social-Media/feed/services/feed_service.dart';
 import 'package:dx/Social-Media/interactions/cubit/reaction_cubit.dart';
 import 'package:dx/Social-Media/interactions/services/interaction_service.dart';
+import 'package:dx/Social-Media/profile_posts/cubit/my_posts_cubit.dart';
+import 'package:dx/Social-Media/user/cubit/user_profile_cubit.dart';
 
 import '../widgets/post_card.dart';
 import '../widgets/empty_view.dart';
@@ -131,7 +134,27 @@ class _FeedScreenState extends State<FeedScreen> {
               child: const Center(child: CircularProgressIndicator(color: Color(0xFF32DBE6))),
             );
           }
-          return PostCard(item: state.items[index]);
+          final postId = state.items[index].post.id;
+          return PostCard(
+            item: state.items[index],
+            onDelete: () {
+              context.read<FeedCubit>().removePost(postId);
+              context.read<MyPostsCubit>().removePost(postId);
+              context.read<UserProfileCubit>().silentRefresh();
+            },
+            onEdit: (String? content, PostVisibility visibility) {
+              context.read<FeedCubit>().editPost(
+                    postId,
+                    content: content,
+                    visibility: visibility,
+                  );
+              context.read<MyPostsCubit>().editPost(
+                    postId,
+                    content: content,
+                    visibility: visibility,
+                  );
+            },
+          );
         },
       ),
     );

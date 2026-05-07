@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:dx/core/services/service_locator.dart';
 import 'package:dx/core/theme/appstyles.dart';
 import 'package:dx/Social-Media/feed/services/feed_service.dart';
@@ -15,12 +15,12 @@ class CreatePostScreen extends StatefulWidget {
 
 class _CreatePostScreenState extends State<CreatePostScreen> {
   final TextEditingController _contentCtrl = TextEditingController();
-  final ImagePicker _picker = ImagePicker();
 
-  final List<File> _images = [];
+  final List<AssetEntity> _assets = [];
   String _visibility = 'PUBLIC';
   bool _isLoading = false;
 
+  static const int _maxAssets = 9;
   static const _visibilityOptions = ['PUBLIC', 'FOLLOWERS', 'PRIVATE'];
 
   @override
@@ -29,39 +29,59 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     super.dispose();
   }
 
-  Future<void> _pickImages() async {
-    final remaining = 5 - _images.length;
-    if (remaining <= 0) return;
+  Future<void> _pickMedia() async {
+    if (_assets.length >= _maxAssets) return;
 
-    final picked = await _picker.pickMultiImage();
-    if (picked.isEmpty) return;
+    final picked = await AssetPicker.pickAssets(
+      context,
+      pickerConfig: AssetPickerConfig(
+        requestType: RequestType.common,
+        maxAssets: _maxAssets,
+        selectedAssets: List<AssetEntity>.from(_assets),
+      ),
+    );
+    if (picked == null || !mounted) return;
 
     setState(() {
-      for (final x in picked) {
-        if (_images.length < 5) _images.add(File(x.path));
-      }
+      _assets
+        ..clear()
+        ..addAll(picked);
     });
   }
 
-  void _removeImage(int index) {
-    setState(() => _images.removeAt(index));
+  void _removeAsset(int index) {
+    setState(() => _assets.removeAt(index));
   }
 
   Future<void> _submit() async {
     final content = _contentCtrl.text.trim();
-    if (content.isEmpty && _images.isEmpty) {
+    if (content.isEmpty && _assets.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Add some text or images to post.')),
+        const SnackBar(content: Text('Add some text or media to post.')),
       );
       return;
     }
 
     setState(() => _isLoading = true);
     try {
+      final images = <File>[];
+      final videos = <File>[];
+
+      for (final asset in _assets) {
+        final file = await asset.originFile;
+        if (file == null) continue;
+        if (asset.type == AssetType.video) {
+          videos.add(file);
+        } else {
+          images.add(file);
+        }
+      }
+
       await getIt<FeedService>().createPost(
         content: content.isEmpty ? null : content,
         visibility: _visibility,
-        images: _images,
+        images: images,
+        videos: videos,
       );
       if (mounted) Navigator.of(context).pop(true);
     } on Exception catch (e) {
@@ -137,43 +157,67 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 border: InputBorder.none,
               ),
             ),
-            if (_images.isNotEmpty) ...[
+            if (_assets.isNotEmpty) ...[
               SizedBox(height: 12.h),
               SizedBox(
                 height: 100.h,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
-                  itemCount: _images.length,
+                  itemCount: _assets.length,
                   separatorBuilder: (_, __) => SizedBox(width: 8.w),
-                  itemBuilder: (context, index) => Stack(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8.r),
-                        child: Image.file(
-                          _images[index],
-                          width: 100.w,
-                          height: 100.h,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Positioned(
-                        top: 4,
-                        right: 4,
-                        child: GestureDetector(
-                          onTap: () => _removeImage(index),
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: Colors.black54,
-                              shape: BoxShape.circle,
-                            ),
-                            padding: EdgeInsets.all(2.r),
-                            child: Icon(Icons.close,
-                                color: Colors.white, size: 14.r),
+                  itemBuilder: (context, index) {
+                    final asset = _assets[index];
+                    return Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8.r),
+                          child: AssetEntityImage(
+                            asset,
+                            isOriginal: false,
+                            width: 100.w,
+                            height: 100.h,
+                            fit: BoxFit.cover,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
+                        if (asset.type == AssetType.video)
+                          Positioned.fill(
+                            child: Center(
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  color: Colors.black38,
+                                  shape: BoxShape.circle,
+                                ),
+                                padding: EdgeInsets.all(6.r),
+                                child: Icon(
+                                  Icons.play_arrow,
+                                  color: Colors.white,
+                                  size: 20.r,
+                                ),
+                              ),
+                            ),
+                          ),
+                        Positioned(
+                          top: 4,
+                          right: 4,
+                          child: GestureDetector(
+                            onTap: () => _removeAsset(index),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color: Colors.black54,
+                                shape: BoxShape.circle,
+                              ),
+                              padding: EdgeInsets.all(2.r),
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.white,
+                                size: 14.r,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
             ],
@@ -183,15 +227,19 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.photo_library_outlined,
-                      color: Colors.black87, size: 26.r),
-                  onPressed: _images.length < 5 ? _pickImages : null,
-                  tooltip: 'Add images (max 5)',
+                  icon: Icon(
+                    Icons.photo_library_outlined,
+                    color: Colors.black87,
+                    size: 26.r,
+                  ),
+                  onPressed: _assets.length < _maxAssets ? _pickMedia : null,
+                  tooltip: 'Add photos & videos (max $_maxAssets)',
                 ),
-                if (_images.length >= 5)
+                if (_assets.length >= _maxAssets)
                   Text(
-                    'Max 5 images',
-                    style: TextStyle(fontSize: 12.sp, color: Colors.grey[500]),
+                    'Max $_maxAssets items',
+                    style:
+                        TextStyle(fontSize: 12.sp, color: Colors.grey[500]),
                   ),
                 const Spacer(),
                 DropdownButton<String>(
@@ -208,8 +256,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           value: v,
                           child: Row(
                             children: [
-                              Icon(_visibilityIcon(v),
-                                  size: 16.r, color: Colors.black54),
+                              Icon(
+                                _visibilityIcon(v),
+                                size: 16.r,
+                                color: Colors.black54,
+                              ),
                               SizedBox(width: 4.w),
                               Text(v),
                             ],

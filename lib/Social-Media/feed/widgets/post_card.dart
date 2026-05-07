@@ -1,17 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:dx/cache/cache_helper.dart';
+import 'package:dx/core/api/endpoints.dart';
 import 'package:dx/core/theme/appstyles.dart';
 import 'package:dx/Social-Media/feed/models/post_model.dart';
+import 'package:dx/Social-Media/feed/widgets/edit_post_bottom_sheet.dart';
 import 'package:dx/Social-Media/interactions/cubit/reaction_cubit.dart';
 import 'package:dx/Social-Media/interactions/cubit/reaction_state.dart';
 import 'package:dx/Social-Media/interactions/widgets/comment_bottom_sheet.dart';
 import 'post_media_carousel.dart';
 
 class PostCard extends StatelessWidget {
-  const PostCard({super.key, required this.item});
+  const PostCard({
+    super.key,
+    required this.item,
+    this.onDelete,
+    this.onEdit,
+  });
 
   final FeedItemModel item;
+  final VoidCallback? onDelete;
+  final void Function(String? content, PostVisibility visibility)? onEdit;
 
   String _relativeTime(DateTime date) {
     final diff = DateTime.now().difference(date);
@@ -50,7 +60,7 @@ class PostCard extends StatelessWidget {
                 Expanded(
                   child: Text(post.authorName, style: AppStyles.normalTextStyle, overflow: TextOverflow.ellipsis),
                 ),
-                Icon(Icons.more_horiz, size: 20.r, color: Colors.grey[600]),
+                _PostMenuButton(post: post, onDelete: onDelete, onEdit: onEdit),
               ],
             ),
           ),
@@ -116,6 +126,106 @@ class PostCard extends StatelessWidget {
             child: Text(_relativeTime(item.createdAt), style: AppStyles.labelTextStyle.copyWith(fontSize: 12.sp)),
           ),
           Divider(height: 1.h, color: Colors.grey[200]),
+        ],
+      ),
+    );
+  }
+}
+
+/// Shows the "..." icon. If the current user owns the post, tapping it opens
+/// a bottom sheet with Edit and Delete options.
+class _PostMenuButton extends StatelessWidget {
+  const _PostMenuButton({
+    required this.post,
+    this.onDelete,
+    this.onEdit,
+  });
+
+  final FeedPostModel post;
+  final VoidCallback? onDelete;
+  final void Function(String? content, PostVisibility visibility)? onEdit;
+
+  @override
+  Widget build(BuildContext context) {
+    final currentUserId =
+        CacheHelper().getData(key: ApiKey.userId) as String?;
+    final isOwner = currentUserId != null && currentUserId == post.authorId;
+
+    return GestureDetector(
+      onTap: isOwner ? () => _showMenu(context) : null,
+      child: Icon(
+        Icons.more_horiz,
+        size: 20.r,
+        color: Colors.grey[600],
+      ),
+    );
+  }
+
+  void _showMenu(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.edit_outlined),
+              title: const Text('Edit Post'),
+              onTap: () {
+                Navigator.of(ctx).pop();
+                if (onEdit != null) {
+                  showModalBottomSheet<void>(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(16.r)),
+                    ),
+                    builder: (_) => EditPostBottomSheet(
+                      post: post,
+                      onSave: onEdit!,
+                    ),
+                  );
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete_outline, color: Colors.red),
+              title: const Text('Delete Post',
+                  style: TextStyle(color: Colors.red)),
+              onTap: () {
+                Navigator.of(ctx).pop();
+                _confirmDelete(context);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _confirmDelete(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Delete Post'),
+        content: const Text('Are you sure you want to delete this post?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              onDelete?.call();
+            },
+            child: const Text('Delete',
+                style: TextStyle(color: Colors.red)),
+          ),
         ],
       ),
     );

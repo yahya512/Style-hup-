@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dx/Authentication/models/brand_complete_profile_model.dart';
+import 'package:dx/Social-Media/shared/screens/main_layout.dart';
 import 'package:dx/Widgets/brand_information_filed.dart';
 import 'package:dx/Widgets/login_with_google.dart';
 import 'package:dx/core/errors/exceptions.dart';
@@ -234,14 +235,11 @@ class _BrandCompelteProfileState extends State<BrandCompleteProfile> {
                                 return; // ← stops "Validated data" from showing
                               }
                               if (!context.mounted) return;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  duration: Duration(seconds: 1),
-                                  content: Text(
-                                    "Validated data",
-                                    style: AppStyles.snackBarStyle,
-                                  ),
+                              Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                  builder: (_) => const MainLayout(),
                                 ),
+                                (route) => false,
                               );
                             } on ServerException catch (e) {
                               if (!context.mounted) return;

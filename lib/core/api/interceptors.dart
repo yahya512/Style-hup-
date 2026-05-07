@@ -58,7 +58,20 @@ class ApiInterceptors extends QueuedInterceptor {
               ),
             );
           }
-        } catch (_) {
+        } catch (e) {
+          // Only clear session and redirect to login when the refresh endpoint
+          // explicitly rejects the token (4xx response). A network/timeout
+          // error during refresh is a transient failure — let it surface as a
+          // regular network error instead of logging the user out.
+          if (_isNetworkError(e)) {
+            return handler.reject(
+              DioException(
+                requestOptions: options,
+                type: e is DioException ? e.type : DioExceptionType.unknown,
+                error: 'Network error',
+              ),
+            );
+          }
           await CacheHelper().removeData(key: ApiKey.accessToken);
           await CacheHelper().removeData(key: ApiKey.refreshToken);
           _navigateToLogin();
@@ -151,13 +164,31 @@ class ApiInterceptors extends QueuedInterceptor {
             'Bearer $newAccessToken';
         final retryResponse = await retryDio.fetch(err.requestOptions);
         return handler.resolve(retryResponse);
-      } catch (_) {
+      } catch (e) {
+        if (_isNetworkError(e)) {
+          return handler.next(
+            DioException(
+              requestOptions: err.requestOptions,
+              type: e is DioException ? e.type : DioExceptionType.unknown,
+              error: 'Network error',
+            ),
+          );
+        }
         _handleSessionExpired(handler, err);
         return;
       }
     }
 
     return handler.next(err);
+  }
+
+  bool _isNetworkError(Object? e) {
+    if (e is! DioException) return false;
+    return e.type == DioExceptionType.connectionError ||
+        e.type == DioExceptionType.connectionTimeout ||
+        e.type == DioExceptionType.receiveTimeout ||
+        e.type == DioExceptionType.sendTimeout ||
+        e.response == null;
   }
 
   void _navigateToLogin() {

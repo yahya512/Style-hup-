@@ -26,6 +26,7 @@ class Endpoints {
       "interactions/reactions/$postId/status";
   static String comments = "interactions/comments";
   static String myPosts = "posts/me";
+  static String postById(String id) => "posts/$id";
 }
 
 class ApiKey {
@@ -57,6 +58,7 @@ class ApiKey {
   static const String userprogfile = "file";
   static const String brandProfile = "file";
   static const String phoneNumber = "phoneNumber";
+  static const String userId = "userId";
   static const String isVerified = "isVerified";
   static const String status = "status";
   static const String createdAt = "createdAt";

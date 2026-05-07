@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dx/Social-Media/feed/cubit/feed_state.dart';
+import 'package:dx/Social-Media/feed/models/post_model.dart';
 import 'package:dx/Social-Media/feed/services/feed_service.dart';
 
 class FeedCubit extends Cubit<FeedState> {
@@ -70,6 +71,59 @@ class FeedCubit extends Cubit<FeedState> {
       );
     } catch (_) {
       _handleError('Something went wrong. Please try again.', append: append);
+    }
+  }
+
+  /// Optimistically removes the post from the feed, then calls the API.
+  /// Reverts on failure.
+  Future<void> removePost(String postId) async {
+    final previous = state.items;
+    final updated = previous.where((i) => i.post.id != postId).toList();
+    emit(state.copyWith(items: updated));
+    try {
+      await _feedService.deletePost(postId);
+    } catch (_) {
+      emit(state.copyWith(
+        items: previous,
+        errorMessage: 'Failed to delete post.',
+        errorCount: state.errorCount + 1,
+      ));
+    }
+  }
+
+  /// Optimistically updates content/visibility in the feed, then calls the API.
+  /// Reverts on failure.
+  Future<void> editPost(
+    String postId, {
+    String? content,
+    PostVisibility? visibility,
+  }) async {
+    final previous = state.items;
+    final index = previous.indexWhere((i) => i.post.id == postId);
+    if (index == -1) return;
+
+    final oldItem = previous[index];
+    final updatedPost = oldItem.post.copyWith(
+      content: content,
+      visibility: visibility,
+    );
+    final updatedItem = FeedItemModel(
+      id: oldItem.id,
+      type: oldItem.type,
+      createdAt: oldItem.createdAt,
+      post: updatedPost,
+    );
+    final updated = List<FeedItemModel>.from(previous)..[index] = updatedItem;
+    emit(state.copyWith(items: updated));
+
+    try {
+      await _feedService.updatePost(postId, content: content, visibility: visibility);
+    } catch (_) {
+      emit(state.copyWith(
+        items: previous,
+        errorMessage: 'Failed to update post.',
+        errorCount: state.errorCount + 1,
+      ));
     }
   }
 

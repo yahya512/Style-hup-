@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dx/Social-Media/feed/models/post_model.dart';
 import 'package:dx/Social-Media/profile_posts/cubit/my_posts_state.dart';
 import 'package:dx/Social-Media/profile_posts/services/my_posts_service.dart';
 
@@ -71,6 +72,31 @@ class MyPostsCubit extends Cubit<MyPostsState> {
     } catch (_) {
       _handleError('Something went wrong. Please try again.', append: append);
     }
+  }
+
+  /// Removes the post from local state only (no API call).
+  /// Call this after [FeedCubit.removePost] has already made the DELETE request.
+  void removePost(String postId) {
+    final updated = state.posts.where((p) => p.id != postId).toList();
+    emit(state.copyWith(
+      posts: updated,
+      offset: (state.offset - 1).clamp(0, state.offset),
+    ));
+  }
+
+  /// Updates content/visibility in local state only (no API call).
+  /// Call this after [FeedCubit.editPost] has already made the PATCH request.
+  void editPost(
+    String postId, {
+    String? content,
+    PostVisibility? visibility,
+  }) {
+    final posts = state.posts;
+    final index = posts.indexWhere((p) => p.id == postId);
+    if (index == -1) return;
+    final updated = List<FeedPostModel>.from(posts)
+      ..[index] = posts[index].copyWith(content: content, visibility: visibility);
+    emit(state.copyWith(posts: updated));
   }
 
   /// Pagination errors keep the existing list visible (stay in success).

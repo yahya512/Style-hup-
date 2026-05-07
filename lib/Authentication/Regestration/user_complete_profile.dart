@@ -1,4 +1,5 @@
 import 'package:dx/Authentication/models/user_complete_profile_model.dart';
+import 'package:dx/Social-Media/shared/screens/main_layout.dart';
 import 'package:dx/Widgets/user_complete_profile_field.dart';
 import 'package:dx/core/errors/exceptions.dart';
 import 'package:dx/core/services/service_locator.dart';
@@ -166,13 +167,11 @@ class _UserProfileState extends State<UserCompleteProfile> {
                           );
                           _userRespone = response;
                           if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                "Validated data",
-                                style: AppStyles.snackBarStyle,
-                              ),
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (_) => const MainLayout(),
                             ),
+                            (route) => false,
                           );
                         } on ServerException catch (e) {
                           if (context.mounted) {

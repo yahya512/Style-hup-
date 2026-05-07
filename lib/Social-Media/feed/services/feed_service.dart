@@ -78,4 +78,22 @@ class FeedService {
       options: Options(contentType: 'multipart/form-data'),
     );
   }
+
+  Future<void> deletePost(String postId) async {
+    await ApiClient.instance.delete<dynamic>(Endpoints.postById(postId));
+  }
+
+  Future<void> updatePost(
+    String postId, {
+    String? content,
+    PostVisibility? visibility,
+  }) async {
+    final data = <String, dynamic>{};
+    if (content != null) data['content'] = content;
+    if (visibility != null) data['visibility'] = visibility.name.toUpperCase();
+    await ApiClient.instance.patch<dynamic>(
+      Endpoints.postById(postId),
+      data: data,
+    );
+  }
 }
