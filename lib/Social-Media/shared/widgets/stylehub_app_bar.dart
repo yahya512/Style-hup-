@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dx/Social-Media/feed/screens/create_post_screen.dart';
 import 'package:dx/Social-Media/feed/cubit/feed_cubit.dart';
+import 'package:dx/Social-Media/notifications/widgets/notification_bell.dart';
 import 'package:dx/Social-Media/profile_posts/cubit/my_posts_cubit.dart';
 import 'package:dx/Social-Media/user/cubit/user_profile_cubit.dart';
 
@@ -13,10 +14,11 @@ class StyleHubAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFF800020),
+      surfaceTintColor: Colors.transparent,
       centerTitle: true,
       leading: IconButton(
-        icon: Icon(Icons.add, color: Colors.black, size: 28.r),
+        icon: Icon(Icons.add, color: Colors.white, size: 28.r),
         onPressed: () async {
           final posted = await Navigator.of(context).push<bool>(
             MaterialPageRoute(builder: (_) => const CreatePostScreen()),
@@ -31,22 +33,13 @@ class StyleHubAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         'StyleHub',
         style: TextStyle(
-          color: Colors.black,
+          color: Colors.white,
           fontSize: 20.sp,
           fontWeight: FontWeight.bold,
         ),
       ),
       actions: [
-        IconButton(
-          icon: Badge(
-            label: const Text('3'),
-            backgroundColor: Colors.red,
-            child: Icon(Icons.favorite_border, color: Colors.black, size: 26.r),
-          ),
-          onPressed: () {
-            // TODO: Navigate to Notifications/Activity Screen
-          },
-        ),
+        const NotificationBell(),
         SizedBox(width: 8.w),
       ],
     );

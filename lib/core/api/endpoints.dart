@@ -27,6 +27,24 @@ class Endpoints {
   static String comments = "interactions/comments";
   static String myPosts = "posts/me";
   static String postById(String id) => "posts/$id";
+  static String otherUserProfile(String userId) => "user/$userId/profile";
+  static String otherBrandProfile(String userId) => "brand/$userId/profile";
+  static String searchAccount(String id) => "search/account/$id";
+
+  // Notification endpoints
+  static const String notifications = 'notifications';
+  static const String notificationsUnreadCount = 'notifications/unread-count';
+  static String notificationRead(String id) => 'notifications/$id/read';
+  static const String notificationsReadAll = 'notifications/read-all';
+
+  // Follow endpoints
+  static String followStatus(String userId) => "follow/status/$userId";
+  static const String follow = "follow";
+  static String unfollow(String followingId) => "follow/$followingId";
+  static const String myFollowers = "follow/followers";
+  static const String myFollowing = "follow/following";
+  static String userFollowers(String userId) => "follow/$userId/followers";
+  static String userFollowing(String userId) => "follow/$userId/following";
 }
 
 class ApiKey {

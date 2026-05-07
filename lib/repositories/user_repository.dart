@@ -120,6 +120,11 @@ class UserRepository {
     return ForgetPasswordModel.fromJson(response);
   }
 
+  // Logout
+  Future<void> logout() async {
+    await _api.post(Endpoints.logout, data: {});
+  }
+
   // reset password
 
   Future<ResetPasswordModel> resetPassword(

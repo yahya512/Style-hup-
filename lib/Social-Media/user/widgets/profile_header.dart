@@ -11,6 +11,8 @@ class ProfileHeaderSection extends StatelessWidget {
     required this.followers,
     required this.following,
     this.onAddImage,
+    this.onFollowersTap,
+    this.onFollowingTap,
   });
 
   final String? profileImageUrl;
@@ -18,6 +20,8 @@ class ProfileHeaderSection extends StatelessWidget {
   final int followers;
   final int following;
   final VoidCallback? onAddImage;
+  final VoidCallback? onFollowersTap;
+  final VoidCallback? onFollowingTap;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +35,14 @@ class ProfileHeaderSection extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ProfileStatItem(count: posts, label: 'Posts'),
-                ProfileStatItem(count: followers, label: 'Followers'),
-                ProfileStatItem(count: following, label: 'Following'),
+                GestureDetector(
+                  onTap: onFollowersTap,
+                  child: ProfileStatItem(count: followers, label: 'Followers'),
+                ),
+                GestureDetector(
+                  onTap: onFollowingTap,
+                  child: ProfileStatItem(count: following, label: 'Following'),
+                ),
               ],
             ),
           ),

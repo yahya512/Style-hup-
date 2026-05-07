@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:dx/Social-Media/feed/widgets/error_view.dart';
+import 'package:dx/Social-Media/follow/cubit/follow_list_cubit.dart';
+import 'package:dx/Social-Media/follow/screens/follow_list_screen.dart';
 import 'package:dx/Social-Media/profile_posts/cubit/my_posts_cubit.dart';
 import 'package:dx/Social-Media/profile_posts/cubit/my_posts_state.dart';
 import 'package:dx/Social-Media/shared/widgets/profile_tab_delegate.dart';
@@ -51,6 +53,24 @@ class UserProfileBody extends StatelessWidget {
                     posts: profile.numberOfPosts,
                     followers: profile.numberOfFollowers,
                     following: profile.numberOfFollowing,
+                    onFollowersTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => FollowListScreen(
+                          userId: profile.id,
+                          isOwn: true,
+                          initialTab: FollowTab.followers,
+                        ),
+                      ),
+                    ),
+                    onFollowingTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => FollowListScreen(
+                          userId: profile.id,
+                          isOwn: true,
+                          initialTab: FollowTab.following,
+                        ),
+                      ),
+                    ),
                     onAddImage: () async {
                       final picked = await ImagePicker().pickImage(
                         source: ImageSource.gallery,

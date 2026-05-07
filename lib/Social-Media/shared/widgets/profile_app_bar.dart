@@ -1,3 +1,7 @@
+import 'package:dx/Authentication/Regestration/login.dart';
+import 'package:dx/cache/cache_helper.dart';
+import 'package:dx/core/services/service_locator.dart';
+import 'package:dx/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -18,10 +22,60 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// When true, replaces the edit icon with a progress indicator.
   final bool isUpdating;
 
+  void _showMenu(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+      ),
+      builder: (_) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(height: 8.h),
+            Container(
+              width: 40.w,
+              height: 4.h,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(2.r),
+              ),
+            ),
+            SizedBox(height: 8.h),
+            ListTile(
+              leading: const Icon(Icons.logout, color: Colors.red),
+              title: Text(
+                'Logout',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              onTap: () async {
+                Navigator.of(context).pop();
+                try {
+                  await getIt<UserRepository>().logout();
+                } catch (_) {}
+                await CacheHelper.sharedPreferences.clear();
+                if (!context.mounted) return;
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (_) => const LogIn()),
+                  (route) => false,
+                );
+              },
+            ),
+            SizedBox(height: 8.h),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFF800020),
       elevation: 0,
       centerTitle: true,
       surfaceTintColor: Colors.transparent,
@@ -31,13 +85,13 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
           Text(
             username,
             style: TextStyle(
-              color: Colors.black,
+              color: Colors.white,
               fontSize: 18.sp,
               fontWeight: FontWeight.bold,
             ),
           ),
           Icon(Icons.keyboard_arrow_down_rounded,
-              color: Colors.black, size: 20.r),
+              color: Colors.white70, size: 20.r),
         ],
       ),
       actions: [
@@ -49,18 +103,18 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
               height: 20,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
-                color: Color(0xFF32DBE6),
+                color: Colors.white,
               ),
             ),
           )
         else
           IconButton(
-            icon: Icon(Icons.edit_outlined, color: Colors.black, size: 22.r),
+            icon: Icon(Icons.edit_outlined, color: Colors.white, size: 22.r),
             onPressed: onEdit,
           ),
         IconButton(
-          icon: Icon(Icons.menu, color: Colors.black, size: 26.r),
-          onPressed: () {},
+          icon: Icon(Icons.menu, color: Colors.white, size: 26.r),
+          onPressed: () => _showMenu(context),
         ),
       ],
     );

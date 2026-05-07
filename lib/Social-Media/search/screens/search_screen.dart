@@ -7,12 +7,7 @@ import 'package:dx/Social-Media/search/cubit/search_state.dart';
 import 'package:dx/Social-Media/search/services/search_service.dart';
 import 'package:dx/Social-Media/search/models/search_result_model.dart';
 import 'package:dx/Social-Media/search/widgets/search_result_tile.dart';
-import 'package:dx/Social-Media/user/screens/user_profile_screen.dart';
-import 'package:dx/Social-Media/user/cubit/user_profile_cubit.dart';
-import 'package:dx/Social-Media/user/services/user_profile_service.dart';
-import 'package:dx/Social-Media/brand/screens/brand_profile_screen.dart';
-import 'package:dx/Social-Media/profile_posts/cubit/my_posts_cubit.dart';
-import 'package:dx/Social-Media/profile_posts/services/my_posts_service.dart';
+import 'package:dx/Social-Media/user/screens/other_user_profile_screen.dart';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({super.key});
@@ -44,23 +39,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   void _onTap(BuildContext context, SearchResultModel result) {
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (_) => result.type == AccountType.brand
-          ? const BrandProfilePage()
-          : MultiBlocProvider(
-              providers: [
-                BlocProvider(
-                  create: (_) => UserProfileCubit(
-                    service: getIt<UserProfileService>(),
-                  )..loadProfile(),
-                ),
-                BlocProvider(
-                  create: (_) => MyPostsCubit(
-                    service: getIt<MyPostsService>(),
-                  )..loadPosts(),
-                ),
-              ],
-              child: const UserProfileScreen(),
-            ),
+      builder: (_) => OtherUserProfilePage(userId: result.id),
     ));
   }
 
