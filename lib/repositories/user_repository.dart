@@ -18,10 +18,10 @@ class UserRepository {
   UserRepository({required ApiConsumer api}) : _api = api;
 
   // Log IN
-  Future<LoginModel> login(String? role, String email, String password) async {
+  Future<LoginModel> login(String email, String password) async {
     final response = await _api.post(
       Endpoints.logIn,
-      data: {ApiKey.role: role, ApiKey.email: email, ApiKey.password: password},
+      data: {ApiKey.email: email, ApiKey.password: password},
     );
     return LoginModel.fromJson(response);
   }

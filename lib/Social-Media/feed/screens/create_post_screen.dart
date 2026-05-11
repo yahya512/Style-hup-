@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:dx/core/services/service_locator.dart';
-import 'package:dx/core/theme/appstyles.dart';
 import 'package:dx/Social-Media/feed/services/feed_service.dart';
 
 class CreatePostScreen extends StatefulWidget {
@@ -112,7 +111,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           icon: const Icon(Icons.close, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text('New Post', style: AppStyles.normalTextStyle),
+        title: Text(
+          'New Post',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 17.sp,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 12.w),
@@ -123,7 +129,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       height: 20,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        color: Color(0xFF32DBE6),
+                        color: Colors.black,
                       ),
                     ),
                   )
@@ -132,7 +138,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     child: Text(
                       'Post',
                       style: TextStyle(
-                        color: const Color(0xFF32DBE6),
+                        color: Colors.black,
                         fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
                       ),

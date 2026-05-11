@@ -35,6 +35,7 @@ class Endpoints {
   static String otherUserProfile(String userId) => "user/$userId/profile";
   static String otherBrandProfile(String userId) => "brand/$userId/profile";
   static String searchAccount(String id) => "search/account/$id";
+  static String postsByUser(String userId) => "posts/user/$userId";
 
   // Notification endpoints
   static const String notifications = 'notifications';
@@ -50,6 +51,14 @@ class Endpoints {
   static const String myFollowing = "follow/following";
   static String userFollowers(String userId) => "follow/$userId/followers";
   static String userFollowing(String userId) => "follow/$userId/following";
+
+  // Chat endpoints
+  static const String chatMessages = "chat/messages";
+  static const String chatConversations = "chat/conversations";
+  static String conversationMessages(String id) =>
+      "chat/conversations/$id/messages";
+  static String markConversationSeen(String id) =>
+      "chat/conversations/$id/seen";
 
   static String getAllProductsByBrandId(String id) {
     return "customer/brands/$id/products";

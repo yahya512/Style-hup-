@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dx/Social-Media/notifications/cubit/notification_cubit.dart';
 import 'package:dx/Social-Media/notifications/cubit/notification_state.dart';
 import 'package:dx/Social-Media/notifications/models/notification_model.dart';
+import 'package:dx/core/navigation/tab_notifier.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -56,7 +57,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => appTabNotifier.value = 0,
         ),
         actions: [
           BlocBuilder<NotificationCubit, NotificationState>(

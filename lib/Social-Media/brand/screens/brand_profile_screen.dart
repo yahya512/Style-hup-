@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dx/core/services/service_locator.dart';
+import 'package:dx/Social-Media/follow/cubit/follow_list_cubit.dart';
+import 'package:dx/Social-Media/follow/screens/follow_list_screen.dart';
 import 'package:dx/Social-Media/shared/widgets/profile_app_bar.dart';
 import 'package:dx/Social-Media/shared/widgets/profile_avatar.dart';
 import 'package:dx/Social-Media/shared/widgets/profile_stat_item.dart';
@@ -164,6 +166,11 @@ class _BrandProfileBody extends StatelessWidget {
                       hasMore: postsState.hasMore,
                       onLoadMore: () =>
                           context.read<MyPostsCubit>().loadMorePosts(),
+                      onPostDelete: (postId) =>
+                          context.read<MyPostsCubit>().deletePostWithApi(postId),
+                      onPostEdit: (postId, content, visibility) => context
+                          .read<MyPostsCubit>()
+                          .editPostWithApi(postId, content: content, visibility: visibility),
                     );
                   },
                 ),
@@ -207,10 +214,36 @@ class _BrandHeaderSection extends StatelessWidget {
                     count: profile.numberOfPosts,
                     label: 'Posts',
                     formatted: true),
-                ProfileStatItem(
-                    count: profile.numberOfFollowers,
-                    label: 'Followers',
-                    formatted: true),
+                GestureDetector(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => FollowListScreen(
+                        userId: profile.id,
+                        isOwn: true,
+                        initialTab: FollowTab.followers,
+                      ),
+                    ),
+                  ),
+                  child: ProfileStatItem(
+                      count: profile.numberOfFollowers,
+                      label: 'Followers',
+                      formatted: true),
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => FollowListScreen(
+                        userId: profile.id,
+                        isOwn: true,
+                        initialTab: FollowTab.following,
+                      ),
+                    ),
+                  ),
+                  child: ProfileStatItem(
+                      count: profile.numberOfFollowing,
+                      label: 'Following',
+                      formatted: true),
+                ),
               ],
             ),
           ),

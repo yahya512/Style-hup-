@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dx/Social-Media/feed/screens/create_post_screen.dart';
 import 'package:dx/Social-Media/feed/cubit/feed_cubit.dart';
+import 'package:dx/Social-Media/notifications/widgets/notification_bell.dart';
 import 'package:dx/Social-Media/profile_posts/cubit/my_posts_cubit.dart';
 import 'package:dx/Social-Media/user/cubit/user_profile_cubit.dart';
 
@@ -38,16 +39,7 @@ class StyleHubAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       actions: [
-        IconButton(
-          icon: Badge(
-            label: const Text('3'),
-            backgroundColor: Colors.red,
-            child: Icon(Icons.favorite_border, color: Colors.black, size: 26.r),
-          ),
-          onPressed: () {
-            //  Navigate to Notifications/Activity Screen
-          },
-        ),
+        const NotificationBell(),
         SizedBox(width: 8.w),
       ],
     );

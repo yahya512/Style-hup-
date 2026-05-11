@@ -26,6 +26,7 @@ class FeedPostModel {
     required this.authorId,
     required this.authorName,
     this.authorImage,
+    this.authorRole,
     required this.visibility,
     required this.reactionsCount,
     required this.commentsCount,
@@ -55,6 +56,8 @@ class FeedPostModel {
       authorImage = json['authorImage'] as String?;
     }
 
+    final authorRoleStr = author?['role'] as String?;
+
     return FeedPostModel(
       id: json['id'] as String,
       content: json['content'] as String?,
@@ -63,6 +66,7 @@ class FeedPostModel {
       authorId: json['authorId'] as String,
       authorName: authorName,
       authorImage: authorImage,
+      authorRole: authorRoleStr,
       visibility: _visibilityFromString(
         json['visibility'] as String? ?? 'PUBLIC',
       ),
@@ -80,6 +84,7 @@ class FeedPostModel {
   final String authorId;
   final String authorName;
   final String? authorImage;
+  final String? authorRole;
   final PostVisibility visibility;
   final int reactionsCount;
   final int commentsCount;
@@ -101,6 +106,7 @@ class FeedPostModel {
         authorId: authorId,
         authorName: authorName,
         authorImage: authorImage,
+        authorRole: authorRole,
         visibility: visibility ?? this.visibility,
         reactionsCount: reactionsCount ?? this.reactionsCount,
         commentsCount: commentsCount ?? this.commentsCount,

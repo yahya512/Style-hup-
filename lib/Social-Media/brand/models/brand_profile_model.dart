@@ -4,6 +4,7 @@ class BrandProfileModel {
     required this.brandName,
     required this.username,
     required this.numberOfFollowers,
+    required this.numberOfFollowing,
     required this.numberOfPosts,
     this.websiteUrl,
     this.bio,
@@ -21,6 +22,7 @@ class BrandProfileModel {
         profileImageUrl: json['profileImageUrl'] as String?,
         phoneNumber: json['phoneNumber'] as String?,
         numberOfFollowers: (json['numberOfFollowers'] as num?)?.toInt() ?? 0,
+        numberOfFollowing: (json['numberOfFollowing'] as num?)?.toInt() ?? 0,
         numberOfPosts: (json['numberOfPosts'] as num?)?.toInt() ?? 0,
       );
 
@@ -32,5 +34,6 @@ class BrandProfileModel {
   final String? profileImageUrl;
   final String? phoneNumber;
   final int numberOfFollowers;
+  final int numberOfFollowing;
   final int numberOfPosts;
 }

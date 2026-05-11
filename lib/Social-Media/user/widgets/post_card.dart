@@ -10,12 +10,16 @@ class ProfilePostsGrid extends StatelessWidget {
     this.isLoadingMore = false,
     this.hasMore = false,
     this.onLoadMore,
+    this.onPostDelete,
+    this.onPostEdit,
   });
 
   final List<FeedPostModel> posts;
   final bool isLoadingMore;
   final bool hasMore;
   final VoidCallback? onLoadMore;
+  final void Function(String postId)? onPostDelete;
+  final void Function(String postId, String? content, PostVisibility visibility)? onPostEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +69,13 @@ class ProfilePostsGrid extends StatelessWidget {
         return GestureDetector(
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => PostDetailScreen(post: post),
+              builder: (_) => PostDetailScreen(
+                post: post,
+                onDelete: onPostDelete != null ? () => onPostDelete!(post.id) : null,
+                onEdit: onPostEdit != null
+                    ? (content, vis) => onPostEdit!(post.id, content, vis)
+                    : null,
+              ),
             ),
           ),
           child: Container(

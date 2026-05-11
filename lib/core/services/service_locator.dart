@@ -9,6 +9,7 @@ import 'package:dx/Social-Media/interactions/services/interaction_service.dart';
 import 'package:dx/Social-Media/search/services/search_service.dart';
 import 'package:dx/Social-Media/profile_posts/services/my_posts_service.dart';
 import 'package:dx/Social-Media/follow/services/follow_service.dart';
+import 'package:dx/Social-Media/chat/services/chat_service.dart';
 import 'package:dx/Social-Media/notifications/cubit/notification_cubit.dart';
 import 'package:dx/Social-Media/notifications/services/notification_service.dart';
 import 'package:dx/Social-Media/notifications/services/socket_service.dart';
@@ -39,6 +40,8 @@ void setupServiceLocator() {
   getIt.registerLazySingleton(() => FollowService());
 
   getIt.registerLazySingleton(() => OtherUserProfileService());
+
+  getIt.registerLazySingleton(() => ChatService());
 
   getIt.registerLazySingleton(() => NotificationService());
 

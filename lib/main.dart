@@ -1,7 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:dx/Authentication/Regestration/login.dart';
-import 'package:dx/E-Commerce/Screens/intro_screen.dart';
-import 'package:dx/E-Commerce/Screens/view_selected_item.dart';
 import 'package:dx/Social-Media/shared/screens/main_layout.dart';
 import 'package:dx/cache/cache_helper.dart';
 import 'package:dx/core/api/endpoints.dart';
@@ -103,8 +101,8 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           home: CacheHelper.sharedPreferences.getString(ApiKey.accessToken) !=
                   null
-              ? const IntroEcommerce()
-              : const ViewSelectedItem(),
+              ? const MainLayout()
+              : const LogIn(),
           builder: (context, child) {
             return Directionality(
               textDirection: context.locale.languageCode == 'ar'

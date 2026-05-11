@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dx/Social-Media/notifications/cubit/notification_cubit.dart';
 import 'package:dx/Social-Media/notifications/cubit/notification_state.dart';
-import 'package:dx/Social-Media/notifications/screens/notifications_screen.dart';
+import 'package:dx/core/navigation/tab_notifier.dart';
 
 class NotificationBell extends StatelessWidget {
   const NotificationBell({super.key});
@@ -25,16 +25,7 @@ class NotificationBell extends StatelessWidget {
               size: 26.r,
             ),
           ),
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => BlocProvider.value(
-                  value: context.read<NotificationCubit>(),
-                  child: const NotificationsScreen(),
-                ),
-              ),
-            );
-          },
+          onPressed: () => appTabNotifier.value = 5,
         );
       },
     );

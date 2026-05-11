@@ -45,6 +45,32 @@ class MyPostsService {
     );
   }
 
+  Future<MyPostsPage> getPostsByUser(
+    String userId, {
+    int offset = 0,
+    int limit = defaultLimit,
+  }) async {
+    final Response<Map<String, dynamic>> response =
+        await ApiClient.instance.get<Map<String, dynamic>>(
+      Endpoints.postsByUser(userId),
+      queryParameters: {'limit': limit, 'offset': offset},
+    );
+
+    final body = response.data!;
+    final List<dynamic> raw = body['items'] as List<dynamic>? ?? const [];
+    final meta = body['meta'] as Map<String, dynamic>?;
+    final int total = (meta?['total'] as num?)?.toInt() ?? raw.length;
+
+    final items = raw
+        .map((e) => FeedPostModel.fromJson(e as Map<String, dynamic>))
+        .toList();
+
+    return MyPostsPage(
+      items: items,
+      hasMore: offset + items.length < total,
+    );
+  }
+
   Future<void> deletePost(String postId) async {
     await ApiClient.instance.delete<dynamic>(Endpoints.postById(postId));
   }

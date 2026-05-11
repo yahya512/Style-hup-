@@ -9,6 +9,7 @@ import 'package:dx/Social-Media/feed/widgets/edit_post_bottom_sheet.dart';
 import 'package:dx/Social-Media/interactions/cubit/reaction_cubit.dart';
 import 'package:dx/Social-Media/interactions/cubit/reaction_state.dart';
 import 'package:dx/Social-Media/interactions/widgets/comment_bottom_sheet.dart';
+import 'package:dx/Social-Media/user/screens/other_user_profile_screen.dart';
 import 'post_media_carousel.dart';
 
 class PostCard extends StatelessWidget {
@@ -46,20 +47,37 @@ class PostCard extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
             child: Row(
               children: [
-                CircleAvatar(
-                  radius: 20.r,
-                  backgroundColor: Colors.grey[200],
-                  backgroundImage: post.authorImage != null
-                      ? NetworkImage(post.authorImage!)
-                      : null,
-                  child: post.authorImage == null
-                      ? Icon(Icons.person, size: 22.r, color: Colors.grey[500])
-                      : null,
+                GestureDetector(
+                  onTap: () {
+                    final currentUserId =
+                        CacheHelper().getData(key: ApiKey.userId) as String?;
+                    if (currentUserId == post.authorId) return;
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) =>
+                          OtherUserProfilePage(userId: post.authorId),
+                    ));
+                  },
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 20.r,
+                        backgroundColor: Colors.grey[200],
+                        backgroundImage: post.authorImage != null
+                            ? NetworkImage(post.authorImage!)
+                            : null,
+                        child: post.authorImage == null
+                            ? Icon(Icons.person,
+                                size: 22.r, color: Colors.grey[500])
+                            : null,
+                      ),
+                      SizedBox(width: 10.w),
+                      Text(post.authorName,
+                          style: AppStyles.normalTextStyle,
+                          overflow: TextOverflow.ellipsis),
+                    ],
+                  ),
                 ),
-                SizedBox(width: 10.w),
-                Expanded(
-                  child: Text(post.authorName, style: AppStyles.normalTextStyle, overflow: TextOverflow.ellipsis),
-                ),
+                const Spacer(),
                 _PostMenuButton(post: post, onDelete: onDelete, onEdit: onEdit),
               ],
             ),

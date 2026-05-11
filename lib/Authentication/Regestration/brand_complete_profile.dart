@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:dx/Authentication/models/brand_complete_profile_model.dart';
 import 'package:dx/Social-Media/shared/screens/main_layout.dart';
 import 'package:dx/Widgets/brand_information_filed.dart';
-import 'package:dx/Widgets/login_with_google.dart';
 import 'package:dx/cache/cache_helper.dart';
 import 'package:dx/core/api/endpoints.dart';
 import 'package:dx/core/errors/exceptions.dart';
@@ -65,128 +64,180 @@ class _BrandCompelteProfileState extends State<BrandCompleteProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actionsIconTheme: IconThemeData(color: Colors.white),
-        actions: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Image.asset(
-              width: 50.w,
-              height: 50.h,
-              "images/Dx_logo.png",
-              fit: BoxFit.cover,
-            ),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(20.dg),
-          child: Center(
-            child: Form(
-              key: _brandFormKey,
+      backgroundColor: const Color(0xFF800020),
+      body: Column(
+        children: [
+          // ── Dark header ──
+          SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: EdgeInsetsDirectional.symmetric(vertical: 24.h),
               child: Column(
-                spacing: 30.h,
                 children: [
-                  Text(
-                    "Brand Complete Profile",
-                    style: AppStyles.subTitleStyle,
+                  Image.asset(
+                    "images/Dx_logo.png",
+                    width: 56.w,
+                    height: 56.h,
+                    fit: BoxFit.contain,
                   ),
-                  // Photo upload
-                  GestureDetector(
-                    onTap: () async {
-                      _selectedImage = await pickImage(context);
-                      setState(() {
-                        // _selectedImage;
-                      });
-                    },
-                    child: Container(
-                      height: 150.h,
-                      width: 150.w,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12.r),
-                      ),
-                      child: _selectedImage == null
-                          // if no photo selected
-                          ? Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.image,
-                                    size: 40,
-                                    color: Colors.grey,
-                                  ),
-                                  SizedBox(height: 8.h),
-                                  Text(
-                                    "Enter to Choose Photo",
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            )
-                          //if there photo selected
-                          : ClipRRect(
-                              borderRadius: BorderRadius.circular(12.r),
-                              child: Image.file(
-                                File(_selectedImage!.path),
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: double.infinity,
-                              ),
-                            ),
+                  SizedBox(height: 10.h),
+                  Text(
+                    "StyleHub",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 2,
                     ),
                   ),
-
-                  //brand user Name
-                  brandInfo(
-                    _brandUserName,
-                    "Enter Your user name",
-                    keyboardType: TextInputType.name,
+                  SizedBox(height: 4.h),
+                  Text(
+                    "Complete Your Brand Profile",
+                    style: TextStyle(color: Colors.grey[400], fontSize: 13.sp),
                   ),
+                ],
+              ),
+            ),
+          ),
 
-                  //phone number
-                  brandInfo(
-                    _brandphone,
-                    "Enter your phone number",
-                    keyboardType: TextInputType.phone,
-                  ),
+          // ── White form card ──
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(32.r),
+                  topRight: Radius.circular(32.r),
+                ),
+              ),
+              child: SingleChildScrollView(
+                padding: EdgeInsetsDirectional.symmetric(
+                  horizontal: 24.w,
+                  vertical: 28.h,
+                ),
+                child: Form(
+                  key: _brandFormKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Brand Profile",
+                        style: TextStyle(
+                          fontSize: 22.sp,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF800020),
+                        ),
+                      ),
+                      SizedBox(height: 4.h),
+                      Text(
+                        "Set up your brand presence",
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          color: Colors.grey[500],
+                        ),
+                      ),
+                      SizedBox(height: 24.h),
 
-                  // Brand Name
-                  brandInfo(
-                    _brandName,
-                    "Enter Your Brand name",
-                    keyboardType: TextInputType.name,
-                  ),
+                      // ── Photo picker ──
+                      Center(
+                        child: GestureDetector(
+                          onTap: () async {
+                            _selectedImage = await pickImage(context);
+                            setState(() {});
+                          },
+                          child: Container(
+                            width: 110.w,
+                            height: 110.w,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF5F5F5),
+                              borderRadius: BorderRadius.circular(20.r),
+                              border: Border.all(
+                                color: Colors.grey[300]!,
+                                width: 1.5,
+                              ),
+                            ),
+                            child: _selectedImage == null
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.add_a_photo_outlined,
+                                        size: 32.r,
+                                        color: Colors.grey[400],
+                                      ),
+                                      SizedBox(height: 6.h),
+                                      Text(
+                                        "Add Logo",
+                                        style: TextStyle(
+                                          fontSize: 12.sp,
+                                          color: Colors.grey[400],
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : ClipRRect(
+                                    borderRadius: BorderRadius.circular(18.r),
+                                    child: Image.file(
+                                      File(_selectedImage!.path),
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                    ),
+                                  ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 24.h),
 
-                  //Brand Domain
-                  brandInfo(
-                    _brandDomain,
-                    "Enter Your Brand Domain",
-                    keyboardType: TextInputType.name,
-                  ),
+                      brandInfo(
+                        _brandUserName,
+                        "Username",
+                        keyboardType: TextInputType.name,
+                        prefixIconData: Icons.alternate_email,
+                      ),
+                      SizedBox(height: 16.h),
 
-                  //Brand Description
-                  brandInfo(
-                    _brandDescription,
-                    "Enter Your Description",
-                    keyboardType: TextInputType.text,
-                    maxLines: 2,
-                  ),
+                      brandInfo(
+                        _brandphone,
+                        "Phone number",
+                        keyboardType: TextInputType.phone,
+                        prefixIconData: Icons.phone_outlined,
+                      ),
+                      SizedBox(height: 16.h),
 
-                  // confirm Button
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 14.w),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
+                      brandInfo(
+                        _brandName,
+                        "Brand name",
+                        keyboardType: TextInputType.name,
+                        prefixIconData: Icons.storefront_outlined,
+                      ),
+                      SizedBox(height: 16.h),
+
+                      brandInfo(
+                        _brandDomain,
+                        "Brand domain",
+                        keyboardType: TextInputType.name,
+                        prefixIconData: Icons.language_outlined,
+                      ),
+                      SizedBox(height: 16.h),
+
+                      brandInfo(
+                        _brandDescription,
+                        "Brand description",
+                        keyboardType: TextInputType.text,
+                        prefixIconData: Icons.notes_outlined,
+                        maxLines: 3,
+                      ),
+                      SizedBox(height: 28.h),
+
+                      // ── Confirm button ──
+                      ElevatedButton(
                         onPressed: () async {
                           if (_brandFormKey.currentState!.validate()) {
                             if (_selectedImage == null) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  duration: Duration(seconds: 2),
+                                  duration: const Duration(seconds: 2),
                                   dismissDirection: DismissDirection.horizontal,
                                   content: Text(
                                     "You Must Choose a Photo to Complete Info",
@@ -197,7 +248,6 @@ class _BrandCompelteProfileState extends State<BrandCompleteProfile> {
                               return;
                             }
                             try {
-                              //Complete profile API
                               final response =
                                   await repository.brandCompleteProfile(
                                 _brandUserName.text,
@@ -207,39 +257,38 @@ class _BrandCompelteProfileState extends State<BrandCompleteProfile> {
                                 _brandDescription.text,
                               );
                               _brandCompleteProfile = response;
-                              // Image API
                               try {
                                 await repository.imageupload(_selectedImage);
                               } on ServerException catch (e) {
                                 if (!context.mounted) return;
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    duration: Duration(seconds: 3),
+                                    duration: const Duration(seconds: 3),
                                     content: Text(
                                       e.errormodel.message,
                                       style: AppStyles.snackBarStyle,
                                     ),
                                   ),
                                 );
-                                return; // ← stops "Validated data" from showing
+                                return;
                               } catch (e) {
-                                // non-ServerException upload failures (timeout, no internet, etc.)
                                 if (!context.mounted) return;
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    duration: Duration(seconds: 1),
+                                    duration: const Duration(seconds: 1),
                                     content: Text(
                                       "Image upload failed. Please try again.",
                                       style: AppStyles.snackBarStyle,
                                     ),
                                   ),
                                 );
-                                return; // ← stops "Validated data" from showing
+                                return;
                               }
                               if (!context.mounted) return;
                               CacheHelper().saveData(
-                                  key: ApiKey.id,
-                                  value: _brandCompleteProfile!.baseUserId);
+                                key: ApiKey.id,
+                                value: _brandCompleteProfile!.baseUserId,
+                              );
                               Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
                                   builder: (_) => const MainLayout(),
@@ -250,7 +299,7 @@ class _BrandCompelteProfileState extends State<BrandCompleteProfile> {
                               if (!context.mounted) return;
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  duration: Duration(seconds: 3),
+                                  duration: const Duration(seconds: 3),
                                   content: Text(
                                     e.errormodel.message,
                                     style: AppStyles.snackBarStyle,
@@ -260,23 +309,31 @@ class _BrandCompelteProfileState extends State<BrandCompleteProfile> {
                             }
                           }
                         },
-                        style: AppStyles.elevatedButtonStyle,
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(double.infinity, 56.h),
+                          backgroundColor: const Color(0xFF800020),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14.r),
+                          ),
+                          elevation: 0,
+                        ),
                         child: Text(
                           "Confirm",
-                          style: AppStyles.whiteTextButtonStyle,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
+                      SizedBox(height: 16.h),
+                    ],
                   ),
-
-                  // Login with Google
-                  gooleLogIn(),
-                  Container(height: 10.h),
-                ],
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

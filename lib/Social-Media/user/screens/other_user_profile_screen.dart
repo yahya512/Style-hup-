@@ -4,18 +4,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dx/cache/cache_helper.dart';
 import 'package:dx/core/api/endpoints.dart';
 import 'package:dx/core/services/service_locator.dart';
+import 'package:dx/Social-Media/feed/models/post_model.dart';
 import 'package:dx/Social-Media/feed/widgets/error_view.dart';
 import 'package:dx/Social-Media/follow/cubit/follow_button_cubit.dart';
 import 'package:dx/Social-Media/follow/cubit/follow_list_cubit.dart';
 import 'package:dx/Social-Media/follow/screens/follow_list_screen.dart';
 import 'package:dx/Social-Media/follow/services/follow_service.dart';
 import 'package:dx/Social-Media/follow/widgets/follow_button.dart';
+import 'package:dx/Social-Media/profile_posts/services/my_posts_service.dart';
 import 'package:dx/Social-Media/shared/widgets/profile_avatar.dart';
 import 'package:dx/Social-Media/shared/widgets/profile_stat_item.dart';
 import 'package:dx/Social-Media/user/cubit/other_user_profile_cubit.dart';
 import 'package:dx/Social-Media/user/cubit/other_user_profile_state.dart';
 import 'package:dx/Social-Media/user/models/user_profile_model.dart';
 import 'package:dx/Social-Media/user/services/other_user_profile_service.dart';
+import 'package:dx/Social-Media/user/widgets/post_card.dart';
 
 /// Entry point — provides both cubits and passes userId down.
 class OtherUserProfilePage extends StatelessWidget {
@@ -160,22 +163,45 @@ class _OtherUserProfileBody extends StatelessWidget {
             _BioSection(profile: profile),
             SizedBox(height: 16.h),
             const Divider(height: 1),
-            Center(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 48.h),
-                child: Column(
-                  children: [
-                    Icon(Icons.grid_on_rounded,
-                        size: 48.r, color: Colors.grey[300]),
-                    SizedBox(height: 12.h),
-                    Text(
-                      'No Posts Yet',
-                      style:
-                          TextStyle(fontSize: 14.sp, color: Colors.grey[500]),
+            FutureBuilder<List<FeedPostModel>>(
+              future: getIt<MyPostsService>()
+                  .getPostsByUser(userId, limit: 30)
+                  .then((page) => page.items),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 48),
+                    child: Center(
+                      child: CircularProgressIndicator(
+                          color: Color(0xFF32DBE6)),
                     ),
-                  ],
-                ),
-              ),
+                  );
+                }
+                final posts = snapshot.data ?? [];
+                if (posts.isEmpty) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(vertical: 48.h),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Icon(Icons.grid_on_rounded,
+                              size: 48.r, color: Colors.grey[300]),
+                          SizedBox(height: 12.h),
+                          Text(
+                            'No Posts Yet',
+                            style: TextStyle(
+                                fontSize: 14.sp, color: Colors.grey[500]),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+                return SizedBox(
+                  height: 400.h,
+                  child: ProfilePostsGrid(posts: posts),
+                );
+              },
             ),
           ],
         ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dx/Social-Media/feed/models/post_model.dart';
-import 'package:dx/core/theme/appstyles.dart';
 
 class EditPostBottomSheet extends StatefulWidget {
   const EditPostBottomSheet({
@@ -69,8 +68,11 @@ class _EditPostBottomSheetState extends State<EditPostBottomSheet> {
             children: [
               Text(
                 'Edit Post',
-                style: AppStyles.normalTextStyle
-                    .copyWith(fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 17.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
               const Spacer(),
               TextButton(
@@ -78,7 +80,7 @@ class _EditPostBottomSheetState extends State<EditPostBottomSheet> {
                 child: Text(
                   'Save',
                   style: TextStyle(
-                    color: const Color(0xFF32DBE6),
+                    color: Colors.black,
                     fontSize: 15.sp,
                     fontWeight: FontWeight.bold,
                   ),
@@ -95,21 +97,31 @@ class _EditPostBottomSheetState extends State<EditPostBottomSheet> {
             decoration: InputDecoration(
               hintText: "What's on your mind?",
               hintStyle: TextStyle(fontSize: 15.sp, color: Colors.grey[400]),
+              filled: true,
+              fillColor: const Color(0xFFF5F5F5),
+              contentPadding:
+                  EdgeInsetsDirectional.symmetric(horizontal: 16.w, vertical: 14.h),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.r),
-                borderSide: BorderSide(color: Colors.grey[300]!),
+                borderRadius: BorderRadius.circular(14.r),
+                borderSide: BorderSide.none,
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.r),
-                borderSide: BorderSide(color: Colors.grey[300]!),
+                borderRadius: BorderRadius.circular(14.r),
+                borderSide: BorderSide.none,
               ),
-              contentPadding: EdgeInsets.all(12.r),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14.r),
+                borderSide: BorderSide(color: Colors.black, width: 1.5.w),
+              ),
             ),
           ),
           SizedBox(height: 12.h),
           Row(
             children: [
-              Text('Visibility', style: AppStyles.labelTextStyle),
+              Text(
+                'Visibility',
+                style: TextStyle(color: Colors.grey[600], fontSize: 14.sp),
+              ),
               const Spacer(),
               DropdownButton<PostVisibility>(
                 value: _visibility,

@@ -28,6 +28,8 @@ class _UserProfileState extends State<UserCompleteProfile> {
   //gender
   String? _selectgender;
 
+  bool _isLoading = false;
+
   // API
   final repository = getIt<UserRepository>();
   // ignore: unused_field
@@ -52,153 +54,267 @@ class _UserProfileState extends State<UserCompleteProfile> {
     _bio.dispose();
   }
 
+  InputDecoration _dropdownDecoration() {
+    return InputDecoration(
+      hintText: "Select your gender",
+      hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14.sp),
+      prefixIcon: Icon(Icons.wc_outlined, color: Colors.grey[500], size: 20.r),
+      filled: true,
+      fillColor: const Color(0xFFF5F5F5),
+      contentPadding: EdgeInsetsDirectional.symmetric(
+        horizontal: 16.w,
+        vertical: 16.h,
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14.r),
+        borderSide: BorderSide.none,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14.r),
+        borderSide: BorderSide.none,
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14.r),
+        borderSide: BorderSide(color: const Color(0xFF800020), width: 1.5.w),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14.r),
+        borderSide: BorderSide(color: Colors.red, width: 1.5.w),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14.r),
+        borderSide: BorderSide(color: Colors.red, width: 1.5.w),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actionsIconTheme: IconThemeData(color: Colors.white),
-        actions: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Image.asset(
-              width: 50.w,
-              height: 50.h,
-              "images/Dx_logo.png",
-              fit: BoxFit.cover,
-            ),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(20.dg),
-          child: Center(
-            child: Form(
-              key: userCompleteForm,
+      backgroundColor: const Color(0xFF800020),
+      body: Column(
+        children: [
+          // ── Dark header ──
+          SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: EdgeInsetsDirectional.symmetric(vertical: 24.h),
               child: Column(
-                spacing: 30.h,
                 children: [
-                  Text("User Complete Profile", style: AppStyles.subTitleStyle),
-
-                  // userName
-                  userCompleteProfile(
-                    "User name ",
-                    TextInputType.name,
-                    _userName,
+                  Image.asset(
+                    "images/Dx_logo.png",
+                    width: 56.w,
+                    height: 56.h,
+                    fit: BoxFit.contain,
                   ),
-
-                  //  FirstName
-                  userCompleteProfile(
-                    "First name",
-                    TextInputType.name,
-                    _firstName,
-                  ),
-
-                  //Last Name
-                  userCompleteProfile(
-                    "Last name",
-                    TextInputType.name,
-                    _lastName,
-                  ),
-
-                  //phone
-                  userCompleteProfile(
-                    "Phone number",
-                    TextInputType.number,
-                    _phone,
-                  ),
-
-                  //bio
-                  userCompleteProfile("Bio", TextInputType.text, _bio),
-                  // Select Gender
-                  //  DropdownButtonFormField
-                  SizedBox(
-                    width:
-                        MediaQuery.of(context).size.width *
-                        0.99, //99% of screen
-                    child: DropdownButtonFormField<String>(
-                      hint: Text(
-                        "Select Your gender",
-                        style: AppStyles.labelTextStyle,
-                      ),
-                      decoration: InputDecoration(
-                        border: AppStyles.outlineInputBorderstyle,
-                        focusedBorder: AppStyles.foucasedoutlineInputBorder,
-                        errorBorder: AppStyles.errorBorder,
-                        focusedErrorBorder: AppStyles.errorBorder,
-                      ),
-                      initialValue: _selectgender,
-                      items: [
-                        DropdownMenuItem<String>(
-                          value: "MALE",
-                          child: Text("Male"),
-                        ),
-                        DropdownMenuItem<String>(
-                          value: "FEMALE",
-                          child: Text("Female"),
-                        ),
-                      ],
-                      onChanged: (newvalue) {
-                        setState(() {
-                          _selectgender = newvalue;
-                        });
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return "Required field Please select your gender ";
-                        }
-                        return null;
-                      },
+                  SizedBox(height: 10.h),
+                  Text(
+                    "StyleHub",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 2,
                     ),
                   ),
-
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (userCompleteForm.currentState!.validate()) {
-                        //we need a Token here to excute the API
-                        try {
-                          final response = await repository.userCompleteProfile(
-                            _userName.text,
-                            _firstName.text,
-                            _lastName.text,
-                            _phone.text,
-                            _bio.text,
-                            _selectgender!,
-                          );
-                          _userRespone = response;
-                          if (!context.mounted) return;
-                          Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                              builder: (_) => const MainLayout(),
-                            ),
-                            (route) => false,
-                          );
-                        } on ServerException catch (e) {
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                duration: Duration(seconds: 3),
-                                content: Text(
-                                  e.errormodel.message,
-                                  style: AppStyles.snackBarStyle,
-                                ),
-                              ),
-                            );
-                          }
-                        }
-                      }
-                    },
-                    style: AppStyles.elevatedButtonStyle,
-                    child: Text(
-                      "Confirm",
-                      style: AppStyles.whiteTextButtonStyle,
-                    ),
+                  SizedBox(height: 4.h),
+                  Text(
+                    "Complete Your Profile",
+                    style: TextStyle(color: Colors.grey[400], fontSize: 13.sp),
                   ),
                 ],
               ),
             ),
           ),
-        ),
+
+          // ── White form card ──
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(32.r),
+                  topRight: Radius.circular(32.r),
+                ),
+              ),
+              child: SingleChildScrollView(
+                padding: EdgeInsetsDirectional.symmetric(
+                  horizontal: 24.w,
+                  vertical: 28.h,
+                ),
+                child: Form(
+                  key: userCompleteForm,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "User Profile",
+                        style: TextStyle(
+                          fontSize: 22.sp,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF800020),
+                        ),
+                      ),
+                      SizedBox(height: 4.h),
+                      Text(
+                        "Tell us a bit about yourself",
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          color: Colors.grey[500],
+                        ),
+                      ),
+                      SizedBox(height: 24.h),
+
+                      userCompleteProfile(
+                        "Username",
+                        TextInputType.name,
+                        _userName,
+                        prefixIconData: Icons.alternate_email,
+                      ),
+                      SizedBox(height: 16.h),
+
+                      userCompleteProfile(
+                        "First name",
+                        TextInputType.name,
+                        _firstName,
+                        prefixIconData: Icons.person_outline,
+                      ),
+                      SizedBox(height: 16.h),
+
+                      userCompleteProfile(
+                        "Last name",
+                        TextInputType.name,
+                        _lastName,
+                        prefixIconData: Icons.person_outline,
+                      ),
+                      SizedBox(height: 16.h),
+
+                      userCompleteProfile(
+                        "Phone number",
+                        TextInputType.phone,
+                        _phone,
+                        prefixIconData: Icons.phone_outlined,
+                      ),
+                      SizedBox(height: 16.h),
+
+                      userCompleteProfile(
+                        "Bio",
+                        TextInputType.text,
+                        _bio,
+                        prefixIconData: Icons.notes_outlined,
+                        maxLines: 3,
+                      ),
+                      SizedBox(height: 16.h),
+
+                      DropdownButtonFormField<String>(
+                        hint: Text(
+                          "Select your gender",
+                          style: TextStyle(
+                            color: Colors.grey[400],
+                            fontSize: 14.sp,
+                          ),
+                        ),
+                        decoration: _dropdownDecoration(),
+                        initialValue: _selectgender,
+                        icon: Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          color: Colors.grey[500],
+                        ),
+                        borderRadius: BorderRadius.circular(14.r),
+                        items: const [
+                          DropdownMenuItem<String>(
+                            value: "MALE",
+                            child: Text("Male"),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: "FEMALE",
+                            child: Text("Female"),
+                          ),
+                        ],
+                        onChanged: (newvalue) {
+                          setState(() => _selectgender = newvalue);
+                        },
+                        validator: (value) {
+                          if (value == null) {
+                            return "Please select your gender";
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 28.h),
+
+                      _isLoading
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: Color(0xFF800020),
+                                strokeWidth: 3,
+                              ),
+                            )
+                          : ElevatedButton(
+                              onPressed: () async {
+                                if (userCompleteForm.currentState!.validate()) {
+                                  setState(() => _isLoading = true);
+                                  try {
+                                    final response =
+                                        await repository.userCompleteProfile(
+                                      _userName.text,
+                                      _firstName.text,
+                                      _lastName.text,
+                                      _phone.text,
+                                      _bio.text,
+                                      _selectgender!,
+                                    );
+                                    _userRespone = response;
+                                    if (!context.mounted) return;
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                        builder: (_) => const MainLayout(),
+                                      ),
+                                      (route) => false,
+                                    );
+                                  } on ServerException catch (e) {
+                                    setState(() => _isLoading = false);
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          duration: const Duration(seconds: 3),
+                                          content: Text(
+                                            e.errormodel.message,
+                                            style: AppStyles.snackBarStyle,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  }
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: Size(double.infinity, 56.h),
+                                backgroundColor: const Color(0xFF800020),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14.r),
+                                ),
+                                elevation: 0,
+                              ),
+                              child: Text(
+                                "Confirm",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                      SizedBox(height: 16.h),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

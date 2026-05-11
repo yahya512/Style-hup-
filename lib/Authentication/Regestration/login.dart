@@ -1,9 +1,9 @@
 import 'package:dx/Authentication/Regestration/brand_complete_profile.dart';
 import 'package:dx/Authentication/Regestration/signup.dart';
+
 import 'package:dx/Authentication/Regestration/user_complete_profile.dart';
 import 'package:dx/Social-Media/shared/screens/main_layout.dart';
 import 'package:dx/Widgets/email_form_field.dart';
-import 'package:dx/Widgets/login_with_google.dart';
 import 'package:dx/Widgets/password_form_field.dart';
 import 'package:dx/cache/cache_helper.dart';
 import 'package:dx/core/api/endpoints.dart';
@@ -34,9 +34,8 @@ class _LogInState extends State<LogIn> {
   final repository = getIt<UserRepository>();
   LoginModel? _userLogIn; // receive the response
 
-  // receive userdata[role , email , id , isProfileComplete]
+  // receive userdata[email , id , isProfileComplete]
   Usermodel? userData;
-  String? _selectRole;
   bool _visiblePassword = false;
   bool _isloading = false;
 
@@ -58,74 +57,88 @@ class _LogInState extends State<LogIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          Padding(
-            padding: EdgeInsetsDirectional.symmetric(horizontal: 20.w),
-            child: Image.asset(
-              width: 50.w,
-              height: 50.h,
-              "images/Dx_logo.png",
-              fit: BoxFit.cover,
+      backgroundColor: const Color(0xFF800020),
+      body: Column(
+        children: [
+          // ── Dark header ──
+          SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: EdgeInsetsDirectional.symmetric(vertical: 32.h),
+              child: Column(
+                children: [
+                  Image.asset(
+                    "images/Dx_logo.png",
+                    width: 64.w,
+                    height: 64.h,
+                    fit: BoxFit.contain,
+                  ),
+                  SizedBox(height: 12.h),
+                  Text(
+                    "StyleHub",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 26.sp,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 2,
+                    ),
+                  ),
+                  SizedBox(height: 4.h),
+                  Text(
+                    "login.welcome_back".tr(),
+                    style: TextStyle(
+                      color: Colors.grey[400],
+                      fontSize: 13.sp,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              Text("login.login".tr(), style: AppStyles.mainTitleStyle),
-              SizedBox(height: 10.h),
-              Text("login.welcome_back".tr(), style: AppStyles.mainTitleStyle),
-              SizedBox(height: 10.h),
-              Form(
-                key: _formKey,
-                child: Container(
-                  margin: EdgeInsetsDirectional.symmetric(vertical: 32.h),
-                  padding: EdgeInsetsDirectional.all(15.r),
+
+          // ── White form card ──
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(32.r),
+                  topRight: Radius.circular(32.r),
+                ),
+              ),
+              child: SingleChildScrollView(
+                padding: EdgeInsetsDirectional.symmetric(
+                  horizontal: 24.w,
+                  vertical: 32.h,
+                ),
+                child: Form(
+                  key: _formKey,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      DropdownButtonFormField(
-                        hint: Text(
-                          "login.select_your_role".tr(),
-                          style: AppStyles.labelTextStyle,
+                      Text(
+                        "login.login".tr(),
+                        style: TextStyle(
+                          fontSize: 24.sp,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF800020),
                         ),
-                        decoration: InputDecoration(
-                          border: AppStyles.outlineInputBorderstyle,
-                          focusedBorder: AppStyles.foucasedoutlineInputBorder,
-                          errorBorder: AppStyles.errorBorder,
-                          focusedErrorBorder: AppStyles.errorBorder,
-                        ),
-                        initialValue: _selectRole,
-                        items: [
-                          DropdownMenuItem(
-                            value: "USER",
-                            child: Text("login.user".tr()),
-                          ),
-                          DropdownMenuItem(
-                            value: "BRAND",
-                            child: Text("login.brand".tr()),
-                          ),
-                        ],
-                        onChanged: (value) {
-                          _selectRole = value;
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return "login.required_field_gender".tr();
-                          }
-                          return null;
-                        },
                       ),
-                      SizedBox(height: 20.h),
+                      SizedBox(height: 4.h),
+                      Text(
+                        "login.dont_have_account".tr(),
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          color: Colors.grey[500],
+                        ),
+                      ),
+                      SizedBox(height: 28.h),
 
-                      // email address
+                      // Email
                       emailFormField(emailController),
+                      SizedBox(height: 16.h),
 
-                      SizedBox(height: 20.h),
-
-                      // PassWord
+                      // Password
                       passwordField(
                         passwordController,
                         _visiblePassword,
@@ -135,217 +148,202 @@ class _LogInState extends State<LogIn> {
                               _visiblePassword = !_visiblePassword;
                             });
                           },
-                          icon: _visiblePassword
-                              ? Icon(Icons.visibility_off_outlined, size: 24.r)
-                              : Icon(Icons.visibility_outlined, size: 24.r),
+                          icon: Icon(
+                            _visiblePassword
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
+                            size: 20.r,
+                            color: Colors.grey[500],
+                          ),
                         ),
                       ),
 
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => ForgetpasswordOne(),
+                      // Forgot password
+                      Align(
+                        alignment: AlignmentDirectional.centerEnd,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ForgetpasswordOne(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            "login.forget_password".tr(),
+                            style: TextStyle(
+                              fontSize: 13.sp,
+                              color: const Color(0xFF800020),
+                              fontWeight: FontWeight.w600,
                             ),
-                          );
-                        },
-                        child: Text(
-                          "login.forget_password".tr(),
-                          style: AppStyles.normalTextStyle,
+                          ),
                         ),
+                      ),
+                      SizedBox(height: 8.h),
+
+                      // Login button
+                      _isloading
+                          ? Center(
+                              child: SizedBox(
+                                width: 40.w,
+                                height: 40.h,
+                                child: const CircularProgressIndicator(
+                                  strokeWidth: 3,
+                                  color: Color(0xFF800020),
+                                ),
+                              ),
+                            )
+                          : ElevatedButton(
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  setState(() => _isloading = true);
+                                  try {
+                                    final response = await repository.login(
+                                      emailController.text,
+                                      passwordController.text,
+                                    );
+                                    _userLogIn = response;
+
+                                    CacheHelper().saveData(
+                                      key: ApiKey.accessToken,
+                                      value: _userLogIn!.accessToken,
+                                    );
+                                    CacheHelper().saveData(
+                                      key: ApiKey.refreshToken,
+                                      value: _userLogIn!.refreshToken,
+                                    );
+
+                                    userData = Usermodel.fromJson(
+                                      _userLogIn?.user ?? {},
+                                    );
+                                    if (userData != null) {
+                                      CacheHelper().saveData(
+                                        key: ApiKey.role,
+                                        value: userData!.role,
+                                      );
+                                      CacheHelper().saveData(
+                                        key: ApiKey.email,
+                                        value: userData!.email,
+                                      );
+                                      CacheHelper().saveData(
+                                        key: ApiKey.userId,
+                                        value: userData!.id,
+                                      );
+                                    }
+
+                                    if (!context.mounted) return;
+                                    setState(() => _isloading = false);
+
+                                    if (userData?.isProfileComplete == true) {
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const MainLayout(),
+                                        ),
+                                        (_) => false,
+                                      );
+                                    } else if (userData?.role == "USER") {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              UserCompleteProfile(),
+                                        ),
+                                      );
+                                    } else {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              BrandCompleteProfile(),
+                                        ),
+                                      );
+                                    }
+                                  } on ServerException catch (e) {
+                                    if (!context.mounted) return;
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          e.errormodel.message,
+                                          style: AppStyles.snackBarStyle,
+                                        ),
+                                      ),
+                                    );
+                                    setState(() {
+                                      _isloading = false;
+                                      if (kDebugMode) {
+                                        print(
+                                          "message: ${e.errormodel.message}",
+                                        );
+                                        print("error: ${e.errormodel.error}");
+                                        print("status: ${e.errormodel.status}");
+                                      }
+                                    });
+                                  }
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: Size(double.infinity, 56.h),
+                                backgroundColor: const Color(0xFF800020),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14.r),
+                                ),
+                                elevation: 0,
+                              ),
+                              child: Text(
+                                "login.login".tr(),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+
+                      SizedBox(height: 24.h),
+
+                      // Sign up row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "login.dont_have_account".tr(),
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsetsDirectional.symmetric(
+                                horizontal: 4.w,
+                              ),
+                              minimumSize: Size.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => Signup(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              "login.signup".tr(),
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                color: const Color(0xFF800020),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsetsDirectional.symmetric(horizontal: 20.w),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: _isloading
-                      ? Center(
-                          child: SizedBox(
-                            width: 40.w,
-                            height: 40.h,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 3,
-                              color: Colors.blue,
-                            ),
-                          ),
-                        )
-                      : ElevatedButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              setState(() {
-                                _isloading = true;
-                              });
-
-                              // API Log in
-                              try {
-                                final response = await repository.login(
-                                  _selectRole,
-                                  emailController.text,
-                                  passwordController.text,
-                                );
-                                _userLogIn = response;
-
-                                CacheHelper().saveData(
-                                  key: ApiKey.accessToken,
-                                  value: _userLogIn!.accessToken,
-                                );
-                                CacheHelper().saveData(
-                                  key: ApiKey.refreshToken,
-                                  value: _userLogIn!.refreshToken,
-                                );
-
-                                // receive userinfo
-                                userData = Usermodel.fromJson(
-                                  _userLogIn?.user ?? {},
-                                );
-                                if (userData != null) {
-                                  CacheHelper().saveData(
-                                    key: ApiKey.role,
-                                    value: userData!.role,
-                                  );
-                                  CacheHelper().saveData(
-                                    key: ApiKey.email,
-                                    value: userData!.email,
-                                  );
-                                  CacheHelper().saveData(
-                                    key: ApiKey.userId,
-                                    value: userData!.id,
-                                  );
-                                }
-
-                                if (!context.mounted) return;
-                                setState(() {
-                                  _isloading = false;
-                                });
-
-                                if (userData?.isProfileComplete == true) {
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                      builder: (context) => const MainLayout(),
-                                    ),
-                                    (_) => false,
-                                  );
-                                } else if (userData?.role == "USER") {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          UserCompleteProfile(),
-                                    ),
-                                  );
-                                } else {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          BrandCompleteProfile(),
-                                    ),
-                                  );
-                                }
-                              } on ServerException catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      e.errormodel.message,
-                                      style: AppStyles.snackBarStyle,
-                                    ),
-                                  ),
-                                );
-                                setState(() {
-                                  _isloading = false;
-                                  if (kDebugMode) {
-                                    print(
-                                      "message FromAPI  : ${e.errormodel.message}",
-                                    );
-                                    print(
-                                      "error FromAPI : ${e.errormodel.error}",
-                                    );
-                                    print(
-                                      "Status FromAPI : ${e.errormodel.status}",
-                                    );
-                                  }
-                                });
-                              }
-                            }
-                          },
-                          style: AppStyles.elevatedButtonStyle,
-                          child: Text(
-                            "login.login".tr(),
-                            style: AppStyles.whiteTextButtonStyle,
-                          ),
-                        ),
-                ),
-              ),
-              Container(
-                margin: EdgeInsetsDirectional.symmetric(vertical: 20.h),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "login.dont_have_account".tr(),
-                      style: TextStyle(fontSize: 15.sp),
-                    ),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsetsDirectional.symmetric(
-                          horizontal: 2.w,
-                        ),
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => Signup()),
-                        );
-                      },
-                      child: Text(
-                        "login.signup".tr(),
-                        style: AppStyles.normalTextStyle,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.symmetric(
-                  horizontal: 20.w,
-                  vertical: 15.h,
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        color: Colors.black,
-                        thickness: 1.h,
-                        height: 60.h,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.symmetric(
-                        horizontal: 10.w,
-                      ),
-                      child: Text(
-                        "login.or".tr(),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14.sp,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Divider(color: Colors.black, thickness: 1.h),
-                    ),
-                  ],
-                ),
-              ),
-
-              // Login with Google
-              gooleLogIn(),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

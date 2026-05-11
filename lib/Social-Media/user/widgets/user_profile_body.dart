@@ -134,6 +134,11 @@ class UserProfileBody extends StatelessWidget {
                       hasMore: postsState.hasMore,
                       onLoadMore: () =>
                           context.read<MyPostsCubit>().loadMorePosts(),
+                      onPostDelete: (postId) =>
+                          context.read<MyPostsCubit>().deletePostWithApi(postId),
+                      onPostEdit: (postId, content, visibility) => context
+                          .read<MyPostsCubit>()
+                          .editPostWithApi(postId, content: content, visibility: visibility),
                     ),
                   );
                 },

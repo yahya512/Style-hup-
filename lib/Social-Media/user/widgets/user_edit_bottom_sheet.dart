@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dx/Social-Media/user/cubit/user_profile_cubit.dart';
 import 'package:dx/Social-Media/user/models/user_profile_model.dart';
-import 'package:dx/core/theme/appstyles.dart';
 
 class UserEditBottomSheet extends StatefulWidget {
   const UserEditBottomSheet({super.key, required this.profile});
@@ -96,26 +95,54 @@ class _UserEditBottomSheetState extends State<UserEditBottomSheet> {
               ),
             ),
             SizedBox(height: 16.h),
-            Text('Edit Profile', style: AppStyles.mainTitleStyle),
+            Text(
+              'Edit Profile',
+              style: TextStyle(
+                fontSize: 20.sp,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
             SizedBox(height: 20.h),
-            _field('Username', _usernameCtrl),
+            _field('Username', _usernameCtrl,
+                prefixIcon: Icons.alternate_email),
             SizedBox(height: 12.h),
-            _field('First Name', _firstNameCtrl),
+            _field('First Name', _firstNameCtrl,
+                prefixIcon: Icons.person_outline),
             SizedBox(height: 12.h),
-            _field('Last Name', _lastNameCtrl),
+            _field('Last Name', _lastNameCtrl,
+                prefixIcon: Icons.person_outline),
             SizedBox(height: 12.h),
-            _field('Bio', _bioCtrl, maxLines: 3),
+            _field('Bio', _bioCtrl,
+                maxLines: 3, prefixIcon: Icons.notes_outlined),
             SizedBox(height: 12.h),
             _field('Phone Number', _phoneCtrl,
-                keyboardType: TextInputType.phone),
+                keyboardType: TextInputType.phone,
+                prefixIcon: Icons.phone_outlined),
             SizedBox(height: 12.h),
             DropdownButtonFormField<String>(
               initialValue: _selectedGender,
+              icon: Icon(Icons.keyboard_arrow_down_rounded,
+                  color: Colors.grey[500]),
+              borderRadius: BorderRadius.circular(14.r),
               decoration: InputDecoration(
-                labelText: 'Gender',
-                labelStyle: AppStyles.labelTextStyle,
-                border: AppStyles.outlineInputBorderstyle,
-                focusedBorder: AppStyles.foucasedoutlineInputBorder,
+                hintText: 'Gender',
+                hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14.sp),
+                prefixIcon:
+                    Icon(Icons.wc_outlined, color: Colors.grey[500], size: 20.r),
+                filled: true,
+                fillColor: const Color(0xFFF5F5F5),
+                contentPadding: EdgeInsetsDirectional.symmetric(
+                    horizontal: 16.w, vertical: 16.h),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14.r),
+                    borderSide: BorderSide.none),
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14.r),
+                    borderSide: BorderSide.none),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14.r),
+                    borderSide: BorderSide(color: Colors.black, width: 1.5.w)),
               ),
               items: _genders
                   .map((g) => DropdownMenuItem(value: g, child: Text(g)))
@@ -123,12 +150,21 @@ class _UserEditBottomSheetState extends State<UserEditBottomSheet> {
               onChanged: (v) => setState(() => _selectedGender = v),
             ),
             SizedBox(height: 20.h),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _submit,
-                style: AppStyles.elevatedButtonStyle,
-                child: Text('Save', style: AppStyles.whiteTextButtonStyle),
+            ElevatedButton(
+              onPressed: _submit,
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(double.infinity, 52.h),
+                backgroundColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14.r)),
+                elevation: 0,
+              ),
+              child: Text(
+                'Save',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ],
@@ -142,16 +178,29 @@ class _UserEditBottomSheetState extends State<UserEditBottomSheet> {
     TextEditingController ctrl, {
     int maxLines = 1,
     TextInputType keyboardType = TextInputType.text,
+    IconData prefixIcon = Icons.edit_outlined,
   }) {
     return TextField(
       controller: ctrl,
       maxLines: maxLines,
       keyboardType: keyboardType,
       decoration: InputDecoration(
-        labelText: label,
-        labelStyle: AppStyles.labelTextStyle,
-        border: AppStyles.outlineInputBorderstyle,
-        focusedBorder: AppStyles.foucasedoutlineInputBorder,
+        hintText: label,
+        hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14.sp),
+        prefixIcon: Icon(prefixIcon, color: Colors.grey[500], size: 20.r),
+        filled: true,
+        fillColor: const Color(0xFFF5F5F5),
+        contentPadding:
+            EdgeInsetsDirectional.symmetric(horizontal: 16.w, vertical: 16.h),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14.r),
+            borderSide: BorderSide.none),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14.r),
+            borderSide: BorderSide.none),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14.r),
+            borderSide: BorderSide(color: Colors.black, width: 1.5.w)),
       ),
     );
   }

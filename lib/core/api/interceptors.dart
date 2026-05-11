@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:dx/Authentication/Regestration/login.dart';
+import 'package:dx/Social-Media/notifications/services/socket_service.dart';
 import 'package:dx/cache/cache_helper.dart';
 import 'package:dx/core/api/endpoints.dart';
 import 'package:dx/core/api/jwt_helper.dart';
 import 'package:dx/core/navigation/navigation_service.dart';
+import 'package:dx/core/services/service_locator.dart';
 import 'package:flutter/material.dart';
 
 class ApiInterceptors extends QueuedInterceptor {
@@ -72,8 +74,7 @@ class ApiInterceptors extends QueuedInterceptor {
               ),
             );
           }
-          await CacheHelper().removeData(key: ApiKey.accessToken);
-          await CacheHelper().removeData(key: ApiKey.refreshToken);
+          await _clearSession();
           _navigateToLogin();
           return handler.reject(
             DioException(
@@ -191,6 +192,22 @@ class ApiInterceptors extends QueuedInterceptor {
         e.response == null;
   }
 
+  /// Clears all user session data from cache and disconnects the socket.
+  Future<void> _clearSession() async {
+    final cache = CacheHelper();
+    await Future.wait([
+      cache.removeData(key: ApiKey.accessToken),
+      cache.removeData(key: ApiKey.refreshToken),
+      cache.removeData(key: ApiKey.userId),
+      cache.removeData(key: ApiKey.role),
+      cache.removeData(key: ApiKey.email),
+      cache.removeData(key: ApiKey.isProfileComplete),
+    ]);
+    if (getIt.isRegistered<SocketService>()) {
+      getIt<SocketService>().disconnect();
+    }
+  }
+
   void _navigateToLogin() {
     NavigationService.navigatorKey.currentState?.pushAndRemoveUntil(
       MaterialPageRoute(builder: (_) => LogIn()),
@@ -202,9 +219,7 @@ class ApiInterceptors extends QueuedInterceptor {
     ErrorInterceptorHandler handler,
     DioException err,
   ) {
-    CacheHelper().removeData(key: ApiKey.accessToken);
-    CacheHelper().removeData(key: ApiKey.refreshToken);
-    _navigateToLogin();
+    _clearSession().then((_) => _navigateToLogin());
     handler.next(err);
   }
 }

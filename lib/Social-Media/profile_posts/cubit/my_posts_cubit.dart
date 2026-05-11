@@ -74,6 +74,38 @@ class MyPostsCubit extends Cubit<MyPostsState> {
     }
   }
 
+  /// Deletes the post via the API, then removes it from local state.
+  /// Use this from the profile page where no [FeedCubit] is available.
+  Future<void> deletePostWithApi(String postId) async {
+    try {
+      await _service.deletePost(postId);
+      removePost(postId);
+    } catch (_) {
+      emit(state.copyWith(
+        errorMessage: 'Failed to delete post.',
+        errorCount: state.errorCount + 1,
+      ));
+    }
+  }
+
+  /// Updates the post via the API, then patches local state.
+  /// Use this from the profile page where no [FeedCubit] is available.
+  Future<void> editPostWithApi(
+    String postId, {
+    String? content,
+    PostVisibility? visibility,
+  }) async {
+    try {
+      await _service.updatePost(postId, content: content, visibility: visibility);
+      editPost(postId, content: content, visibility: visibility);
+    } catch (_) {
+      emit(state.copyWith(
+        errorMessage: 'Failed to update post.',
+        errorCount: state.errorCount + 1,
+      ));
+    }
+  }
+
   /// Removes the post from local state only (no API call).
   /// Call this after [FeedCubit.removePost] has already made the DELETE request.
   void removePost(String postId) {

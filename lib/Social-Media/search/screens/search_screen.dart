@@ -6,6 +6,7 @@ import 'package:dx/Social-Media/search/cubit/search_cubit.dart';
 import 'package:dx/Social-Media/search/cubit/search_state.dart';
 import 'package:dx/Social-Media/search/services/search_service.dart';
 import 'package:dx/Social-Media/search/models/search_result_model.dart';
+import 'package:dx/Social-Media/brand/screens/other_brand_profile_screen.dart';
 import 'package:dx/Social-Media/search/widgets/search_result_tile.dart';
 import 'package:dx/Social-Media/user/screens/other_user_profile_screen.dart';
 
@@ -38,9 +39,10 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void _onTap(BuildContext context, SearchResultModel result) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (_) => OtherUserProfilePage(userId: result.id),
-    ));
+    final page = result.type == AccountType.brand
+        ? OtherBrandProfilePage(userId: result.id)
+        : OtherUserProfilePage(userId: result.id);
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => page));
   }
 
   @override

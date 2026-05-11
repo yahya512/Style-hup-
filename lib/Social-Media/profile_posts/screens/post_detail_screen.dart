@@ -7,9 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PostDetailScreen extends StatelessWidget {
-  const PostDetailScreen({super.key, required this.post});
+  const PostDetailScreen({
+    super.key,
+    required this.post,
+    this.onDelete,
+    this.onEdit,
+  });
 
   final FeedPostModel post;
+  final VoidCallback? onDelete;
+  final void Function(String? content, PostVisibility visibility)? onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +55,7 @@ class PostDetailScreen extends StatelessWidget {
           centerTitle: true,
         ),
         body: SingleChildScrollView(
-          child: PostCard(item: item),
+          child: PostCard(item: item, onDelete: onDelete, onEdit: onEdit),
         ),
       ),
     );

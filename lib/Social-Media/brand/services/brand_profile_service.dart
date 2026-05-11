@@ -12,6 +12,13 @@ class BrandProfileService {
     return BrandProfileModel.fromJson(response.data!);
   }
 
+  Future<BrandProfileModel> getOtherBrandProfile(String userId) async {
+    final response = await ApiClient.instance.get<Map<String, dynamic>>(
+      Endpoints.searchAccount(userId),
+    );
+    return BrandProfileModel.fromJson(response.data!);
+  }
+
   Future<BrandProfileModel> updateProfile(Map<String, dynamic> updates) async {
     final response = await ApiClient.instance.patch<Map<String, dynamic>>(
       Endpoints.brandGetProfile,
