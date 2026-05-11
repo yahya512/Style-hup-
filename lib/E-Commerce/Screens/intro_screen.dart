@@ -1,4 +1,4 @@
-import 'package:dx/E-Commerce/home_screen.dart';
+import 'package:dx/E-Commerce/Screens/home_screen.dart';
 import 'package:dx/core/theme/appstyles.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';

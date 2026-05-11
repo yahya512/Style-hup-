@@ -1,6 +1,6 @@
-import 'package:dx/E-Commerce/add_card_screen.dart';
-import 'package:dx/E-Commerce/edit_card_info.dart';
-import 'package:dx/E-Commerce/track_order_screen.dart';
+import 'package:dx/E-Commerce/Screens/add_card_screen.dart';
+import 'package:dx/E-Commerce/Screens/edit_card_info.dart';
+import 'package:dx/E-Commerce/Screens/track_order_screen.dart';
 import 'package:dx/Widgets/card_payment_ui.dart';
 import 'package:dx/core/navigation/navigation_service.dart';
 import 'package:dx/core/theme/appstyles.dart';
@@ -71,8 +71,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             expandedHeight: 50.h,
             backgroundColor: Colors.white,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text("checkout.title".tr(), style: AppStyles.mainTitleStyle),
-              titlePadding: EdgeInsetsDirectional.only(bottom: 10.h, start: 80.w),
+              title:
+                  Text("checkout.title".tr(), style: AppStyles.mainTitleStyle),
+              titlePadding:
+                  EdgeInsetsDirectional.only(bottom: 10.h, start: 80.w),
             ),
             leading: IconButton(
               onPressed: () {
@@ -121,16 +123,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   "checkout.shipping_address".tr(),
                                   style: AppStyles.subTitleStyle,
                                 ),
-
-                                Text("checkout.country".tr(), style: AppStyles.subTitleStyle),
-                                Text("checkout.egypt".tr(), style: AppStyles.labelTextStyle),
+                                Text("checkout.country".tr(),
+                                    style: AppStyles.subTitleStyle),
+                                Text("checkout.egypt".tr(),
+                                    style: AppStyles.labelTextStyle),
                                 Form(
                                   key: _dataShipining,
                                   child: Column(
                                     spacing: 12.h,
                                     children: [
                                       Padding(
-                                        padding: EdgeInsetsDirectional.all(18.dg),
+                                        padding:
+                                            EdgeInsetsDirectional.all(18.dg),
                                         child: TextFormField(
                                           textInputAction: TextInputAction.next,
                                           keyboardType: TextInputType.text,
@@ -150,8 +154,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                           ),
                                           validator: (value) =>
                                               TextValidation.textValidation(
-                                                value!,
-                                              ),
+                                            value!,
+                                          ),
                                           onTapOutside: (event) {
                                             FocusManager.instance.primaryFocus
                                                 ?.unfocus();
@@ -159,7 +163,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: EdgeInsetsDirectional.all(18.dg),
+                                        padding:
+                                            EdgeInsetsDirectional.all(18.dg),
                                         child: TextFormField(
                                           textInputAction: TextInputAction.next,
                                           keyboardType: TextInputType.number,
@@ -179,15 +184,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                           ),
                                           validator: (value) =>
                                               TextValidation.textValidation(
-                                                value!,
-                                              ),
+                                            value!,
+                                          ),
                                           onTapOutside: (event) {
                                             FocusManager.instance.primaryFocus
                                                 ?.unfocus();
                                           },
                                         ),
                                       ),
-
                                       ElevatedButton(
                                         style: AppStyles.elevatedButtonStyle,
                                         onPressed: () {
@@ -268,16 +272,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   "checkout.contact_info".tr(),
                                   style: AppStyles.subTitleStyle,
                                 ),
-
-                                Text("checkout.country".tr(), style: AppStyles.subTitleStyle),
-                                Text("checkout.egypt".tr(), style: AppStyles.labelTextStyle),
+                                Text("checkout.country".tr(),
+                                    style: AppStyles.subTitleStyle),
+                                Text("checkout.egypt".tr(),
+                                    style: AppStyles.labelTextStyle),
                                 Form(
                                   key: _dataContactInformation,
                                   child: Column(
                                     spacing: 12.h,
                                     children: [
                                       Padding(
-                                        padding: EdgeInsetsDirectional.all(18.dg),
+                                        padding:
+                                            EdgeInsetsDirectional.all(18.dg),
                                         child: TextFormField(
                                           textInputAction: TextInputAction.next,
                                           keyboardType: TextInputType.text,
@@ -297,8 +303,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                           ),
                                           validator: (value) =>
                                               TextValidation.textValidation(
-                                                value!,
-                                              ),
+                                            value!,
+                                          ),
                                           onTapOutside: (event) {
                                             FocusManager.instance.primaryFocus
                                                 ?.unfocus();
@@ -306,7 +312,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: EdgeInsetsDirectional.all(18.dg),
+                                        padding:
+                                            EdgeInsetsDirectional.all(18.dg),
                                         child: TextFormField(
                                           textInputAction: TextInputAction.next,
                                           keyboardType: TextInputType.number,
@@ -326,15 +333,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                           ),
                                           validator: (value) =>
                                               TextValidation.textValidation(
-                                                value!,
-                                              ),
+                                            value!,
+                                          ),
                                           onTapOutside: (event) {
                                             FocusManager.instance.primaryFocus
                                                 ?.unfocus();
                                           },
                                         ),
                                       ),
-
                                       ElevatedButton(
                                         style: AppStyles.elevatedButtonStyle,
                                         onPressed: () {
@@ -389,7 +395,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   Row(
                     spacing: 10.w,
                     children: [
-                      Text("checkout.items".tr(), style: AppStyles.subTitleStyle),
+                      Text("checkout.items".tr(),
+                          style: AppStyles.subTitleStyle),
                       ClipRRect(
                         child: Container(
                           height: 45.h,
@@ -420,7 +427,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 child: Image.asset("images/greySweater.png"),
                               ),
                             ),
-
                             PositionedDirectional(
                               end: 0,
                               top: 0,
@@ -465,7 +471,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 child: Image.asset("images/greySweater.png"),
                               ),
                             ),
-
                             PositionedDirectional(
                               end: 0,
                               top: 0,
@@ -510,7 +515,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 child: Image.asset("images/greySweater.png"),
                               ),
                             ),
-
                             PositionedDirectional(
                               end: 0,
                               top: 0,
@@ -580,7 +584,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             });
                           },
                         ),
-
                         ListTile(
                           isThreeLine: true,
                           leading: Radio(
@@ -620,7 +623,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               child: Card(
                 color: Color(0XFFE8E8E8),
                 child: ListTile(
-                  title: Text("checkout.payment_method".tr(), style: AppStyles.subTitleStyle),
+                  title: Text("checkout.payment_method".tr(),
+                      style: AppStyles.subTitleStyle),
                   // Editing Card Info
                   trailing: IconButton(
                     onPressed: () {
@@ -744,7 +748,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("${"checkout.total".tr()} \$3000", style: AppStyles.normalTextStyle),
+                    Text("${"checkout.total".tr()} \$3000",
+                        style: AppStyles.normalTextStyle),
                     SizedBox(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -766,7 +771,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             ),
                           );
                         },
-                        child: Text("checkout.pay".tr(), style: AppStyles.normalTextStyle),
+                        child: Text("checkout.pay".tr(),
+                            style: AppStyles.normalTextStyle),
                       ),
                     ),
                   ],

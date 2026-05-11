@@ -1,6 +1,6 @@
-import 'package:dx/E-Commerce/checkout_screen.dart';
-import 'package:dx/E-Commerce/favourite_screen.dart';
-import 'package:dx/E-Commerce/shop_screen.dart';
+import 'package:dx/E-Commerce/Screens/checkout_screen.dart';
+import 'package:dx/E-Commerce/Screens/favourite_screen.dart';
+import 'package:dx/E-Commerce/Screens/shop_screen.dart';
 import 'package:dx/core/theme/appstyles.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +33,8 @@ class _CartScreenState extends State<CartScreen> {
             backgroundColor: Colors.white,
             flexibleSpace: FlexibleSpaceBar(
               title: Text("cart.title".tr(), style: AppStyles.mainTitleStyle),
-              titlePadding: EdgeInsetsDirectional.only(bottom: 10.h, start: 80.w),
+              titlePadding:
+                  EdgeInsetsDirectional.only(bottom: 10.h, start: 80.w),
             ),
             actions: [
               IconButton(
@@ -89,8 +90,8 @@ class _CartScreenState extends State<CartScreen> {
                       "${"cart.size".tr()} L  ${images[index]["price"]}",
                       style: AppStyles.normalTextStyle,
                     ),
-                    contentPadding: EdgeInsetsDirectional.symmetric(horizontal: 5),
-
+                    contentPadding:
+                        EdgeInsetsDirectional.symmetric(horizontal: 5),
                     trailing: Row(
                       spacing: 8.w,
                       mainAxisSize: MainAxisSize.min,
@@ -106,7 +107,6 @@ class _CartScreenState extends State<CartScreen> {
                             color: Color(0XFF32DBE6),
                           ),
                         ),
-
                         Container(
                           color: Color(0XFFE8E8E8),
                           child: Text(
@@ -146,7 +146,8 @@ class _CartScreenState extends State<CartScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Text("${"cart.total".tr()} \$3000", style: AppStyles.normalTextStyle),
+                    Text("${"cart.total".tr()} \$3000",
+                        style: AppStyles.normalTextStyle),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0XFF32DBE6),
@@ -158,7 +159,8 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                         );
                       },
-                      child: Text("cart.checkout".tr(), style: AppStyles.normalTextStyle),
+                      child: Text("cart.checkout".tr(),
+                          style: AppStyles.normalTextStyle),
                     ),
                   ],
                 ),

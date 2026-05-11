@@ -39,7 +39,16 @@ class StyleHubAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       actions: [
-        const NotificationBell(),
+        IconButton(
+          icon: Badge(
+            label: const Text('3'),
+            backgroundColor: Colors.red,
+            child: Icon(Icons.favorite_border, color: Colors.black, size: 26.r),
+          ),
+          onPressed: () {
+            //  Navigate to Notifications/Activity Screen
+          },
+        ),
         SizedBox(width: 8.w),
       ],
     );

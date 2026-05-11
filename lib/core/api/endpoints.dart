@@ -1,6 +1,10 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class Endpoints {
-  static String baseUrl =
+  static String baseUrl = dotenv.env['BASE_URL'] ??
       "https://style-hub-social-media-be-d369dfc7ce40.herokuapp.com/";
+  static String commerceBaseUrl = dotenv.env['COMMERCE_BASE_URL'] ??
+      "https://ecommerce-app-e6303c36e118.herokuapp.com/api/v1/";
 
   static String logIn = "auth/login";
   static String logout = "auth/logout";
@@ -27,6 +31,7 @@ class Endpoints {
   static String comments = "interactions/comments";
   static String myPosts = "posts/me";
   static String postById(String id) => "posts/$id";
+
   static String otherUserProfile(String userId) => "user/$userId/profile";
   static String otherBrandProfile(String userId) => "brand/$userId/profile";
   static String searchAccount(String id) => "search/account/$id";
@@ -45,6 +50,18 @@ class Endpoints {
   static const String myFollowing = "follow/following";
   static String userFollowers(String userId) => "follow/$userId/followers";
   static String userFollowing(String userId) => "follow/$userId/following";
+
+  static String getAllProductsByBrandId(String id) {
+    return "customer/brands/$id/products";
+  }
+
+  static String getProductsById(String brandid, String productId) {
+    return "customer/brands/$brandid/products/$productId";
+  }
+
+  static String getWishlistByBrandId(String id) {
+    return "customer/brands/$id/wishlist";
+  }
 }
 
 class ApiKey {
@@ -87,4 +104,33 @@ class ApiKey {
   static const String numberOfPosts = "numberOfPosts";
   static const String posts = "numberOfPosts";
   static const String verifiedCode = "token";
+  //Ecommerce
+  static const String items = "items";
+  static const String productId = "productId";
+  static const String thumbnail = "thumbnail";
+  static const String productNameEn = "productNameEn";
+  static const String productNameAr = "productNameAr";
+  static const String categoryNameEN = "categoryNameEN";
+  static const String categoryNameAr = "categoryNameAr";
+  static const String productDescriptionEn = "productDescriptionEn";
+  static const String productDescriptionAr = "productDescriptionAr";
+  static const String avgRating = "avgRating";
+  static const String countColorsAvailable = "countColorsAvailable";
+  static const String totalInStock = "totalInStock";
+  static const String isFavourite = "isFavourite";
+  static const String page = "page";
+  static const String size = "size";
+  static const String totalElements = "totalElements";
+  static const String totalPages = "totalPages";
+  static const String hasNext = "hasNext";
+  static const String hasPrevious = "hasPrevious";
+  static const String colorDetails = "colorDetails";
+  static const String productColorId = "productColorId";
+  static const String colorCode = "colorCode";
+  static const String colorImages = "colorImages";
+  static const String variantsDetailsDtos = "variantsDetailsDtos";
+  static const String productVariantId = "productVariantId";
+  static const String stock = "stock";
+  static const String sku = "sku";
+  static const String price = "price";
 }

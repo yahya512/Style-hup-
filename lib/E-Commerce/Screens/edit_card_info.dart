@@ -1,21 +1,21 @@
-import 'package:dx/E-Commerce/checkout_screen.dart';
+import 'package:dx/E-Commerce/Screens/checkout_screen.dart';
 import 'package:dx/core/theme/appstyles.dart';
 import 'package:dx/core/validators/text_validator.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class AddCardScreen extends StatefulWidget {
-  const AddCardScreen({super.key});
+class EditCardInfoScreen extends StatefulWidget {
+  const EditCardInfoScreen({super.key});
   @override
-  State<AddCardScreen> createState() {
-    return _AddCardState();
+  State<EditCardInfoScreen> createState() {
+    return _EditCardInfoScreenState();
   }
 }
 
-class _AddCardState extends State<AddCardScreen> {
+class _EditCardInfoScreenState extends State<EditCardInfoScreen> {
   //formkey
-  late GlobalKey<FormState> _addCardKey;
+  late final GlobalKey<FormState> _addCardKey;
   //controllers
   late TextEditingController _cardHolder;
   late TextEditingController _cardNumber;
@@ -46,7 +46,8 @@ class _AddCardState extends State<AddCardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("card.add_card_title".tr(), style: AppStyles.mainTitleStyle),
+        title:
+            Text("card.edit_card_title".tr(), style: AppStyles.mainTitleStyle),
         centerTitle: true,
       ),
       body: Form(
@@ -120,12 +121,10 @@ class _AddCardState extends State<AddCardScreen> {
                               TextValidation.textValidation(value!),
                         ),
                       ),
-
                       Expanded(
                         child: TextFormField(
                           controller: _cardCvv,
                           keyboardType: TextInputType.number,
-
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
                             label: Text(

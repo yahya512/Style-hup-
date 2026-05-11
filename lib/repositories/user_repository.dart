@@ -1,6 +1,8 @@
 import 'package:dx/Authentication/models/forget_password_model.dart';
 import 'package:dx/Authentication/models/refresh_token_model.dart';
 import 'package:dx/Authentication/models/reset_password_model.dart';
+import 'package:dx/E-Commerce/Models/all_products_list_model.dart';
+import 'package:dx/E-Commerce/Models/get_product_by_id_model.dart';
 import 'package:dx/core/api/api_consumer.dart';
 import 'package:dx/core/api/endpoints.dart';
 import 'package:dx/Authentication/models/brand_complete_profile_model.dart';
@@ -145,5 +147,48 @@ class UserRepository {
       },
     );
     return ResetPasswordModel.fromJson(response);
+  }
+
+  // GET all products list
+  Future<AllProductsListModel> getAllProductsList(int page, int size) async {
+    final response = await _api.get(
+      Endpoints.getAllProductsByBrandId("bee53d22-d94d-4d21-829b-267a011f6921"),
+      queryparametars: {ApiKey.page: page, ApiKey.size: size},
+    );
+
+    return AllProductsListModel.fromJson(response);
+  }
+
+  // add product to wishlist
+  Future<String> addToWishlist(String productId) async {
+    final response = await _api.post(
+        Endpoints.getWishlistByBrandId("bee53d22-d94d-4d21-829b-267a011f6921"),
+        queryparametars: {ApiKey.productId: productId});
+    return response;
+  }
+
+  // Remove product to Wishlist
+  Future<String> removeFromWishlist(String productId) async {
+    final response = await _api.delete(
+        Endpoints.getWishlistByBrandId("bee53d22-d94d-4d21-829b-267a011f6921"),
+        queryparametars: {ApiKey.productId: productId});
+    return response;
+  }
+
+  // Get Wishlist
+  Future<AllProductsListModel> getWishlist(int page, int size) async {
+    final response = await _api.get(
+      Endpoints.getWishlistByBrandId("bee53d22-d94d-4d21-829b-267a011f6921"),
+      queryparametars: {ApiKey.page: page, ApiKey.size: size},
+    );
+    return AllProductsListModel.fromJson(response);
+  }
+
+  // Get Product by id
+  Future<GetProductByIdModel> getProductById(
+      String brandid, String productId) async {
+    final response =
+        await _api.get(Endpoints.getProductsById(brandid, productId));
+    return GetProductByIdModel.fromJson(response);
   }
 }

@@ -1,5 +1,5 @@
-import 'package:dx/E-Commerce/home_screen.dart';
-import 'package:dx/E-Commerce/shop_screen.dart';
+import 'package:dx/E-Commerce/Screens/home_screen.dart';
+import 'package:dx/E-Commerce/Screens/shop_screen.dart';
 import 'package:dx/cache/cache_helper.dart';
 import 'package:dx/core/theme/appstyles.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -29,7 +29,8 @@ class _SettingEcommerceState extends State<SettingEcommerce> {
         ),
       ),
       body: ListView(
-        padding: EdgeInsetsDirectional.symmetric(horizontal: 20.w, vertical: 10.h),
+        padding:
+            EdgeInsetsDirectional.symmetric(horizontal: 20.w, vertical: 10.h),
         children: [
           // User Info Section
           Center(
@@ -55,7 +56,8 @@ class _SettingEcommerceState extends State<SettingEcommerce> {
           // Language Section
           ListTile(
             leading: const Icon(Icons.language, color: Colors.black),
-            title: Text("settings.language".tr(), style: AppStyles.normalTextStyle),
+            title: Text("settings.language".tr(),
+                style: AppStyles.normalTextStyle),
             trailing: Text(
               context.locale.languageCode == 'en' ? "English" : "العربية",
               style: AppStyles.labelTextStyle,
@@ -72,7 +74,8 @@ class _SettingEcommerceState extends State<SettingEcommerce> {
                         title: const Text("English"),
                         onTap: () async {
                           context.setLocale(const Locale('en'));
-                          await CacheHelper.sharedPreferences.setString('lang', 'en');
+                          await CacheHelper.sharedPreferences
+                              .setString('lang', 'en');
                           if (context.mounted) Navigator.pop(context);
                         },
                       ),
@@ -80,7 +83,8 @@ class _SettingEcommerceState extends State<SettingEcommerce> {
                         title: const Text("العربية"),
                         onTap: () async {
                           context.setLocale(const Locale('ar'));
-                          await CacheHelper.sharedPreferences.setString('lang', 'ar');
+                          await CacheHelper.sharedPreferences
+                              .setString('lang', 'ar');
                           if (context.mounted) Navigator.pop(context);
                         },
                       ),
@@ -95,7 +99,8 @@ class _SettingEcommerceState extends State<SettingEcommerce> {
           // Theme Section
           ListTile(
             leading: const Icon(Icons.dark_mode, color: Colors.black),
-            title: Text("settings.dark_mode".tr(), style: AppStyles.normalTextStyle),
+            title: Text("settings.dark_mode".tr(),
+                style: AppStyles.normalTextStyle),
             trailing: Switch(
               value: isDarkMode,
               onChanged: (value) {

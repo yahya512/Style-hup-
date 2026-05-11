@@ -1,4 +1,6 @@
-import 'package:dx/E-Commerce/home_screen.dart';
+// ignore_for_file: deprecated_member_use
+
+import 'package:dx/E-Commerce/Screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

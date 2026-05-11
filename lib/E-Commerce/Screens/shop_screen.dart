@@ -1,7 +1,7 @@
-import 'package:dx/E-Commerce/cart_screen.dart';
-import 'package:dx/E-Commerce/favourite_screen.dart';
-import 'package:dx/E-Commerce/home_screen.dart';
-import 'package:dx/E-Commerce/setting_screen.dart';
+import 'package:dx/E-Commerce/Screens/cart_screen.dart';
+import 'package:dx/E-Commerce/Screens/favourite_screen.dart';
+import 'package:dx/E-Commerce/Screens/home_screen.dart';
+import 'package:dx/E-Commerce/Screens/setting_screen.dart';
 import 'package:dx/core/theme/appstyles.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -115,7 +115,6 @@ class _ShopeScreenState extends State<ShopScreen> {
                               style: AppStyles.labelTextStyle,
                             ),
                           ),
-
                           Padding(
                             padding: EdgeInsetsDirectional.only(end: 10.w),
                             child: Icon(Icons.search_outlined, size: 32.dg),
@@ -168,8 +167,8 @@ class _ShopeScreenState extends State<ShopScreen> {
                                         ClipRRect(
                                           borderRadius:
                                               BorderRadiusDirectional.vertical(
-                                                top: Radius.circular(12.r),
-                                              ),
+                                            top: Radius.circular(12.r),
+                                          ),
                                           child: Image.asset(
                                             images[index]["image"]!,
                                             fit: BoxFit.contain,

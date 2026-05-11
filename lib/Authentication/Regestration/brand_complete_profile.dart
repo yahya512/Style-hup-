@@ -3,6 +3,8 @@ import 'package:dx/Authentication/models/brand_complete_profile_model.dart';
 import 'package:dx/Social-Media/shared/screens/main_layout.dart';
 import 'package:dx/Widgets/brand_information_filed.dart';
 import 'package:dx/Widgets/login_with_google.dart';
+import 'package:dx/cache/cache_helper.dart';
+import 'package:dx/core/api/endpoints.dart';
 import 'package:dx/core/errors/exceptions.dart';
 import 'package:dx/core/functions/upload_image_to_api.dart';
 import 'package:dx/core/services/service_locator.dart';
@@ -196,14 +198,14 @@ class _BrandCompelteProfileState extends State<BrandCompleteProfile> {
                             }
                             try {
                               //Complete profile API
-                              final response = await repository
-                                  .brandCompleteProfile(
-                                    _brandUserName.text,
-                                    _brandphone.text,
-                                    _brandName.text,
-                                    _brandDomain.text,
-                                    _brandDescription.text,
-                                  );
+                              final response =
+                                  await repository.brandCompleteProfile(
+                                _brandUserName.text,
+                                _brandphone.text,
+                                _brandName.text,
+                                _brandDomain.text,
+                                _brandDescription.text,
+                              );
                               _brandCompleteProfile = response;
                               // Image API
                               try {
@@ -235,6 +237,9 @@ class _BrandCompelteProfileState extends State<BrandCompleteProfile> {
                                 return; // ← stops "Validated data" from showing
                               }
                               if (!context.mounted) return;
+                              CacheHelper().saveData(
+                                  key: ApiKey.id,
+                                  value: _brandCompleteProfile!.baseUserId);
                               Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
                                   builder: (_) => const MainLayout(),

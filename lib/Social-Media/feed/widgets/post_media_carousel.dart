@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'post_video_player.dart'; // Import your new video player
@@ -22,7 +24,8 @@ class _PostMediaCarouselState extends State<PostMediaCarousel> {
   @override
   void didUpdateWidget(PostMediaCarousel oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.images != widget.images || oldWidget.videos != widget.videos) {
+    if (oldWidget.images != widget.images ||
+        oldWidget.videos != widget.videos) {
       setState(() => _current = 0);
     }
   }
@@ -36,7 +39,8 @@ class _PostMediaCarouselState extends State<PostMediaCarousel> {
         errorBuilder: (context, error, stackTrace) => Container(
           color: Colors.grey[100],
           alignment: Alignment.center,
-          child: Icon(Icons.broken_image_outlined, size: 48.r, color: Colors.grey[400]),
+          child: Icon(Icons.broken_image_outlined,
+              size: 48.r, color: Colors.grey[400]),
         ),
       );
     }
@@ -57,7 +61,7 @@ class _PostMediaCarouselState extends State<PostMediaCarousel> {
             onPageChanged: (i) => setState(() => _current = i),
             itemBuilder: (context, index) => _buildItem(index),
           ),
-          
+
           // Dot indicator
           if (total > 1)
             Positioned(

@@ -1,8 +1,8 @@
-import 'package:dx/E-Commerce/all_items_screen.dart';
-import 'package:dx/E-Commerce/cart_screen.dart';
-import 'package:dx/E-Commerce/favourite_screen.dart';
-import 'package:dx/E-Commerce/shop_screen.dart';
-import 'package:dx/E-Commerce/setting_screen.dart';
+import 'package:dx/E-Commerce/Screens/all_items_screen.dart';
+import 'package:dx/E-Commerce/Screens/cart_screen.dart';
+import 'package:dx/E-Commerce/Screens/favourite_screen.dart';
+import 'package:dx/E-Commerce/Screens/shop_screen.dart';
+import 'package:dx/E-Commerce/Screens/setting_screen.dart';
 import 'package:dx/core/theme/appstyles.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';

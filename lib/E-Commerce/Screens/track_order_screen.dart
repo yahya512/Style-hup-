@@ -1,6 +1,6 @@
-import 'package:dx/E-Commerce/cart_screen.dart';
-import 'package:dx/E-Commerce/favourite_screen.dart';
-import 'package:dx/E-Commerce/home_screen.dart';
+import 'package:dx/E-Commerce/Screens/cart_screen.dart';
+import 'package:dx/E-Commerce/Screens/favourite_screen.dart';
+import 'package:dx/E-Commerce/Screens/home_screen.dart';
 import 'package:dx/core/theme/appstyles.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -27,8 +27,10 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
             snap: true, //It appears immediately, not gradually
             expandedHeight: 50.h,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text("track_order.to_receive".tr(), style: AppStyles.mainTitleStyle),
-              titlePadding: EdgeInsetsDirectional.only(start: 80.w, bottom: 10.h),
+              title: Text("track_order.to_receive".tr(),
+                  style: AppStyles.mainTitleStyle),
+              titlePadding:
+                  EdgeInsetsDirectional.only(start: 80.w, bottom: 10.h),
             ),
             backgroundColor: Colors.white,
             leading: IconButton(
@@ -102,7 +104,8 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
                     ),
                     child: ListTile(
                       isThreeLine: true,
-                      title: Text("track_order.packed".tr(), style: AppStyles.normalTextStyle),
+                      title: Text("track_order.packed".tr(),
+                          style: AppStyles.normalTextStyle),
                       subtitle: Text(
                         "track_order.packed_subtitle".tr(),
                         style: AppStyles.normalTextStyle,
@@ -165,7 +168,8 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
                     ),
                     child: ListTile(
                       isThreeLine: true,
-                      title: Text("track_order.shipped".tr(), style: AppStyles.normalTextStyle),
+                      title: Text("track_order.shipped".tr(),
+                          style: AppStyles.normalTextStyle),
                       subtitle: Text(
                         "track_order.shipped_subtitle".tr(),
                         style: AppStyles.normalTextStyle,
@@ -209,7 +213,8 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
                       title: Row(
                         spacing: 10.w,
                         children: [
-                          Text("track_order.delivered".tr(), style: AppStyles.normalTextStyle),
+                          Text("track_order.delivered".tr(),
+                              style: AppStyles.normalTextStyle),
                           Icon(Icons.check_box, color: Color(0XFF32DBE6)),
                         ],
                       ),
