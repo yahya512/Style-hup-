@@ -1,5 +1,5 @@
+import 'package:dx/E-Commerce/Screens/all_items_screen.dart';
 import 'package:dx/E-Commerce/Screens/home_screen.dart';
-import 'package:dx/E-Commerce/Screens/shop_screen.dart';
 import 'package:dx/cache/cache_helper.dart';
 import 'package:dx/core/theme/appstyles.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -20,12 +20,13 @@ class _SettingEcommerceState extends State<SettingEcommerce> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("settings.settings".tr(), style: AppStyles.mainTitleStyle),
+        title: Text("settings.settings".tr(), style: AppStyles.mainTitleStyle.copyWith(color: Colors.white)),
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: const Color(0xFF800020),
+        iconTheme: const IconThemeData(color: Colors.white),
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
         ),
       ),
       body: ListView(
@@ -116,7 +117,9 @@ class _SettingEcommerceState extends State<SettingEcommerce> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIcon,
-        selectedItemColor: Color(0xFF32DBE6),
+        backgroundColor: const Color(0xFF800020),
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white70,
         type: BottomNavigationBarType.fixed,
         onTap: (value) {
           setState(() {
@@ -132,7 +135,7 @@ class _SettingEcommerceState extends State<SettingEcommerce> {
             } else if (_selectedIcon == 1) {
               Navigator.of(
                 context,
-              ).push(MaterialPageRoute(builder: (context) => ShopScreen()));
+              ).push(MaterialPageRoute(builder: (context) => AllItemsScreen()));
             }
           });
         },

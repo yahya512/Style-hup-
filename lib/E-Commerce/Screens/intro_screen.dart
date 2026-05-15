@@ -34,7 +34,7 @@ class IntroEcommerce extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 70.h),
-                backgroundColor: Color(0xFF32DBE6),
+                backgroundColor: const Color(0xFF800020),
                 padding: EdgeInsetsDirectional.all(10.dg),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadiusDirectional.circular(25.r),

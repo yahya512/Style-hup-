@@ -103,10 +103,11 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
             floating: true, //appear when scroll up
             snap: true, //It appears immediately, not gradually
             expandedHeight: 50.h,
-            backgroundColor: Colors.white,
+            backgroundColor: const Color(0xFF800020),
+            iconTheme: const IconThemeData(color: Colors.white),
             flexibleSpace: FlexibleSpaceBar(
               title:
-                  Text("favourite.title".tr(), style: AppStyles.mainTitleStyle),
+                  Text("favourite.title".tr(), style: AppStyles.mainTitleStyle.copyWith(color: Colors.white)),
               titlePadding:
                   EdgeInsetsDirectional.only(start: 80.w, bottom: 10.h),
             ),
@@ -121,7 +122,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                 onPressed: () {},
                 icon: Icon(
                   Icons.favorite_border_sharp,
-                  color: Color(0XFF32DBE6),
+                  color: Colors.white,
                 ),
               ),
               IconButton(

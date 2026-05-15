@@ -60,6 +60,7 @@ class Endpoints {
   static String markConversationSeen(String id) =>
       "chat/conversations/$id/seen";
 
+  // E-Commerce
   static String getAllProductsByBrandId(String id) {
     return "customer/brands/$id/products";
   }

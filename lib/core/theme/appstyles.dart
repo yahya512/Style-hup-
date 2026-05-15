@@ -73,7 +73,7 @@ class AppStyles {
 
   static ButtonStyle commerceButton = ElevatedButton.styleFrom(
     minimumSize: Size(double.infinity, 70.h),
-    backgroundColor: Color(0xFF32DBE6),
+    backgroundColor: const Color(0xFF800020),
     padding: EdgeInsets.all(10.dg),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadiusGeometry.circular(25.r),

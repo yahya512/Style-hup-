@@ -1,6 +1,6 @@
 {
   "home": {
-    "mostafa_mahmoud": "Mostafa Mahmoud",
+    "nike": "Nike",
     "hello_mostafa": "Hello , Mostafa",
     "search": "Search",
     "clothing": "Clothing",
@@ -153,6 +153,13 @@
   },
   "all_items": {
     "title": "ALL Items",
-    "dresses": "Dresses"
+    "dresses": "Dresses",
+    "filter": "Filter",
+    "min_rating": "Min Rating (1-5)",
+    "min_price": "Min Price",
+    "max_price": "Max Price",
+    "gender": "Gender",
+    "category": "Category",
+    "apply": "Apply"
   }
 }

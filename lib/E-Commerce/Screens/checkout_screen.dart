@@ -69,10 +69,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             floating: true, //appear when scroll up
             snap: true, //It appears immediately, not gradually
             expandedHeight: 50.h,
-            backgroundColor: Colors.white,
+            backgroundColor: const Color(0xFF800020),
+            iconTheme: const IconThemeData(color: Colors.white),
             flexibleSpace: FlexibleSpaceBar(
               title:
-                  Text("checkout.title".tr(), style: AppStyles.mainTitleStyle),
+                  Text("checkout.title".tr(), style: AppStyles.mainTitleStyle.copyWith(color: Colors.white)),
               titlePadding:
                   EdgeInsetsDirectional.only(bottom: 10.h, start: 80.w),
             ),
@@ -653,7 +654,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           borderRadius: BorderRadius.circular(20.r),
                         ),
                         child: MaterialButton(
-                          textColor: Color(0XFF32DBE6),
+                          textColor: const Color(0xFF800020),
                           child: Text(
                             "checkout.card".tr(),
                             style: TextStyle(
@@ -666,7 +667,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               (context) => !_isThereAcard
                                   ? Container(
                                       decoration: BoxDecoration(
-                                        color: Color(0XFF32DBE6),
+                                        color: const Color(0xFF800020),
                                         borderRadius: BorderRadius.circular(
                                           20.r,
                                         ),
@@ -718,7 +719,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           icon: Icon(
                             Icons.add_box,
                             size: 30,
-                            color: Color(0XFF32DBE6),
+                            color: const Color(0xFF800020),
                           ),
                           onPressed: () {
                             Navigator.of(context).push(
@@ -757,7 +758,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             MediaQuery.of(context).size.width * 0.6,
                             46.h,
                           ),
-                          backgroundColor: Color(0XFF32DBE6),
+                          backgroundColor: const Color(0xFF800020),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadiusDirectional.horizontal(
                               start: Radius.circular(20.r),

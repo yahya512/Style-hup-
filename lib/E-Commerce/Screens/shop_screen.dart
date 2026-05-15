@@ -48,9 +48,10 @@ class _ShopeScreenState extends State<ShopScreen> {
             floating: true, //appear when scroll up
             snap: true, //It appears immediately, not gradually
             expandedHeight: 50.h,
-            backgroundColor: Colors.white,
+            backgroundColor: const Color(0xFF800020),
+            iconTheme: const IconThemeData(color: Colors.white),
             flexibleSpace: FlexibleSpaceBar(
-              title: Text("nav.shop".tr(), style: AppStyles.mainTitleStyle),
+              title: Text("nav.shop".tr(), style: AppStyles.mainTitleStyle.copyWith(color: Colors.white)),
               titlePadding: EdgeInsetsDirectional.only(
                 start: 80.w,
                 bottom: 10.h,
@@ -228,7 +229,9 @@ class _ShopeScreenState extends State<ShopScreen> {
       // Bottom Icons
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIcon,
-        selectedItemColor: Color(0xFF32DBE6),
+        backgroundColor: const Color(0xFF800020),
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white70,
         type: BottomNavigationBarType.fixed,
         onTap: (value) {
           setState(() {

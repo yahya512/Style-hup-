@@ -26,13 +26,14 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
             floating: true, //appear when scroll up
             snap: true, //It appears immediately, not gradually
             expandedHeight: 50.h,
+            backgroundColor: const Color(0xFF800020),
+            iconTheme: const IconThemeData(color: Colors.white),
             flexibleSpace: FlexibleSpaceBar(
               title: Text("track_order.to_receive".tr(),
-                  style: AppStyles.mainTitleStyle),
+                  style: AppStyles.mainTitleStyle.copyWith(color: Colors.white)),
               titlePadding:
                   EdgeInsetsDirectional.only(start: 80.w, bottom: 10.h),
             ),
-            backgroundColor: Colors.white,
             leading: IconButton(
               onPressed: () {
                 Navigator.of(context).pop(context);

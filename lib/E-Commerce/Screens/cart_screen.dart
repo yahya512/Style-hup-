@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:dx/E-Commerce/Screens/checkout_screen.dart';
 import 'package:dx/E-Commerce/Screens/favourite_screen.dart';
 import 'package:dx/E-Commerce/Screens/shop_screen.dart';
@@ -30,9 +32,10 @@ class _CartScreenState extends State<CartScreen> {
             floating: true, //appear when scroll up
             snap: true, //It appears immediately, not gradually
             expandedHeight: 50.h,
-            backgroundColor: Colors.white,
+            backgroundColor: const Color(0xFF800020),
+            iconTheme: const IconThemeData(color: Colors.white),
             flexibleSpace: FlexibleSpaceBar(
-              title: Text("cart.title".tr(), style: AppStyles.mainTitleStyle),
+              title: Text("cart.title".tr(), style: AppStyles.mainTitleStyle.copyWith(color: Colors.white)),
               titlePadding:
                   EdgeInsetsDirectional.only(bottom: 10.h, start: 80.w),
             ),
@@ -47,7 +50,7 @@ class _CartScreenState extends State<CartScreen> {
               ),
               IconButton(
                 onPressed: () {},
-                icon: Icon(Icons.shopping_cart, color: Color(0XFF32DBE6)),
+                icon: Icon(Icons.shopping_cart, color: Colors.white),
               ),
             ],
             leading: IconButton(
@@ -62,67 +65,126 @@ class _CartScreenState extends State<CartScreen> {
           SliverPadding(
             padding: EdgeInsetsDirectional.all(16.dg),
             sliver: SliverList.builder(
-              // in List view
-              // shrinkWrap: true, // mange list size depend on items size
-              // physics: NeverScrollableScrollPhysics(),
               itemCount: _cartCount.length,
               itemBuilder: (context, index) {
                 if (_cartCount[index] == 0) {
-                  return SizedBox();
+                  return const SizedBox();
                 }
-                return Card(
-                  margin: EdgeInsets.symmetric(vertical: 16.h),
-                  color: Color(0XFFE8E8E8),
-                  child: ListTile(
-                    isThreeLine: true,
-                    leading: Card(
-                      child: Image.asset(
-                        "${images[index]["image"]}",
-                        // "images/Pants.png",
-                        fit: BoxFit.scaleDown,
+                return Container(
+                  margin: EdgeInsets.symmetric(vertical: 8.h),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
                       ),
-                    ),
-                    title: Text(
-                      "cart.black_pants".tr(),
-                      style: AppStyles.normalTextStyle,
-                    ),
-                    subtitle: Text(
-                      "${"cart.size".tr()} L  ${images[index]["price"]}",
-                      style: AppStyles.normalTextStyle,
-                    ),
-                    contentPadding:
-                        EdgeInsetsDirectional.symmetric(horizontal: 5),
-                    trailing: Row(
-                      spacing: 8.w,
-                      mainAxisSize: MainAxisSize.min,
+                    ],
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(12.dg),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _cartCount[index]++;
-                            });
-                          },
-                          icon: Icon(
-                            Icons.add_circle_outline,
-                            color: Color(0XFF32DBE6),
-                          ),
-                        ),
+                        // Image Container
                         Container(
-                          color: Color(0XFFE8E8E8),
-                          child: Text(
-                            "${_cartCount[index]}",
-                            style: AppStyles.subTitleStyle,
+                          width: 80.w,
+                          height: 80.w,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF5F5F5),
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12.r),
+                            child: Image.asset(
+                              "${images[index]["image"]}",
+                              fit: BoxFit.scaleDown,
+                            ),
                           ),
                         ),
-                        IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _cartCount[index]--;
-                            });
-                          },
-                          icon: Icon(
-                            Icons.remove_circle_outline,
-                            color: Color(0XFF32DBE6),
+                        SizedBox(width: 16.w),
+                        // Product Details
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "cart.black_pants".tr(),
+                                style: AppStyles.mainTitleStyle.copyWith(
+                                  fontSize: 16.sp,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              SizedBox(height: 4.h),
+                              Text(
+                                "${"cart.size".tr()} L",
+                                style: AppStyles.normalTextStyle.copyWith(
+                                  color: Colors.grey[600],
+                                  fontSize: 14.sp,
+                                ),
+                              ),
+                              SizedBox(height: 8.h),
+                              Text(
+                                "${images[index]["price"]}",
+                                style: AppStyles.mainTitleStyle.copyWith(
+                                  fontSize: 16.sp,
+                                  color: const Color(0XFF32DBE6),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Quantity Controls
+                        Container(
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF5F5F5),
+                            borderRadius: BorderRadius.circular(30.r),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                constraints: const BoxConstraints(),
+                                padding: EdgeInsets.all(8.dg),
+                                onPressed: () {
+                                  setState(() {
+                                    _cartCount[index]++;
+                                  });
+                                },
+                                icon: Icon(
+                                  Icons.add,
+                                  color: Colors.black87,
+                                  size: 18.sp,
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 4.w),
+                                child: Text(
+                                  "${_cartCount[index]}",
+                                  style: AppStyles.subTitleStyle.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                constraints: const BoxConstraints(),
+                                padding: EdgeInsets.all(8.dg),
+                                onPressed: () {
+                                  setState(() {
+                                    _cartCount[index]--;
+                                  });
+                                },
+                                icon: Icon(
+                                  Icons.remove,
+                                  color: Colors.black87,
+                                  size: 18.sp,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -137,30 +199,67 @@ class _CartScreenState extends State<CartScreen> {
             padding: EdgeInsetsDirectional.all(16.dg),
             sliver: SliverToBoxAdapter(
               child: Container(
-                margin: EdgeInsetsDirectional.only(bottom: 20.h),
+                margin: EdgeInsetsDirectional.only(bottom: 20.h, top: 10.h),
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadiusDirectional.circular(30.r),
-                  color: Color(0XFFE8E8E8),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(24.r),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.08),
+                      blurRadius: 15,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
                 ),
-                height: 60.h,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("${"cart.total".tr()} \$3000",
-                        style: AppStyles.normalTextStyle),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "cart.total".tr(),
+                          style: AppStyles.normalTextStyle.copyWith(
+                            color: Colors.grey[600],
+                            fontSize: 14.sp,
+                          ),
+                        ),
+                        Text(
+                          "\$3000",
+                          style: AppStyles.mainTitleStyle.copyWith(
+                            fontSize: 20.sp,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0XFF32DBE6),
+                        backgroundColor: const Color(0xFF800020),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 32.w,
+                          vertical: 12.h,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.r),
+                        ),
+                        elevation: 0,
                       ),
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => CheckoutScreen(),
+                            builder: (context) => const CheckoutScreen(),
                           ),
                         );
                       },
-                      child: Text("cart.checkout".tr(),
-                          style: AppStyles.normalTextStyle),
+                      child: Text(
+                        "cart.checkout".tr(),
+                        style: AppStyles.mainTitleStyle.copyWith(
+                          fontSize: 16.sp,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ],
                 ),

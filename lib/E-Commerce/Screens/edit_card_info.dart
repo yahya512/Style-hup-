@@ -47,8 +47,10 @@ class _EditCardInfoScreenState extends State<EditCardInfoScreen> {
     return Scaffold(
       appBar: AppBar(
         title:
-            Text("card.edit_card_title".tr(), style: AppStyles.mainTitleStyle),
+            Text("card.edit_card_title".tr(), style: AppStyles.mainTitleStyle.copyWith(color: Colors.white)),
         centerTitle: true,
+        backgroundColor: const Color(0xFF800020),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Form(
         key: _addCardKey,

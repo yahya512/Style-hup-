@@ -1,7 +1,8 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:dx/E-Commerce/Screens/all_items_screen.dart';
 import 'package:dx/E-Commerce/Screens/cart_screen.dart';
 import 'package:dx/E-Commerce/Screens/favourite_screen.dart';
-import 'package:dx/E-Commerce/Screens/shop_screen.dart';
 import 'package:dx/E-Commerce/Screens/setting_screen.dart';
 import 'package:dx/core/theme/appstyles.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -31,7 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
             floating: true, //appear when scroll up
             snap: true, //It appears immediately, not gradually
             expandedHeight: 50.h,
-            backgroundColor: Colors.white,
+            backgroundColor: const Color(0xFF800020),
+            iconTheme: const IconThemeData(color: Colors.white),
             leading: IconButton(
               onPressed: () {},
               icon: Icon(Icons.arrow_back_ios_new),
@@ -70,12 +72,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Image.asset(
                           height: 50.h,
                           width: 50.w,
-                          "images/avatar_profile2X.png",
+                          "images/Nike.png",
                           fit: BoxFit.cover,
                         ),
                       ),
                       Text(
-                        "home.mostafa_mahmoud".tr(),
+                        "home.nike".tr(),
                         style: AppStyles.subTitleStyle,
                       ),
                     ],
@@ -121,268 +123,261 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           SliverPadding(
-            padding: EdgeInsetsDirectional.all(16.dg),
+            padding: EdgeInsetsDirectional.symmetric(
+                horizontal: 16.dg, vertical: 8.h),
             sliver: SliverToBoxAdapter(
-              child: Column(
-                spacing: 30.h,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Clothing
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "home.clothing".tr(),
-                        style: AppStyles.subTitleStyle,
-                      ),
-                      TextButton(
-                        child: Text(
-                          "home.see_all".tr(),
-                          style: AppStyles.subTitleStyle,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => AllItemsScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
+                  Text(
+                    "home.all_items".tr(),
+                    style: AppStyles.subTitleStyle,
                   ),
-                  Wrap(
-                    spacing: 32.w,
-                    runSpacing: 16.h,
-                    children: [
-                      InkWell(
-                        onTap: () {},
-                        child: ClipRRect(
-                          borderRadius: BorderRadiusDirectional.circular(20.r),
-                          child: Column(
-                            children: [
-                              Image.asset(
+                  TextButton(
+                    child: Text(
+                      "home.see_all".tr(),
+                      style: AppStyles.subTitleStyle,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => AllItemsScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: EdgeInsetsDirectional.symmetric(
+                horizontal: 16.dg, vertical: 8.h),
+            sliver: SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 16.w,
+                mainAxisSpacing: 16.h,
+                childAspectRatio: 0.75,
+              ),
+              delegate: SliverChildListDelegate([
+                InkWell(
+                  onTap: () {},
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF3F3F3),
+                      borderRadius: BorderRadiusDirectional.circular(20.r),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(12.dg),
+                              child: Image.asset(
                                 "images/Dress_2x.png",
                                 fit: BoxFit.contain,
                               ),
-                              Text(
-                                "home.dress".tr(),
-                                style: AppStyles.normalTextStyle,
-                              ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: ClipRRect(
-                          borderRadius: BorderRadiusDirectional.circular(20.r),
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.symmetric(horizontal: 16.w),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Image.asset(
-                                "images/Pants.png",
-                                fit: BoxFit.contain,
-                              ),
                               Text(
-                                "home.pants".tr(),
+                                "home.red_dress".tr(),
                                 style: AppStyles.normalTextStyle,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: ClipRRect(
-                          borderRadius: BorderRadiusDirectional.vertical(
-                            top: Radius.circular(20),
-                            bottom: Radius.circular(20),
-                          ),
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                "images/Scirts.png",
-                                fit: BoxFit.contain,
-                              ),
+                              SizedBox(height: 4.h),
                               Text(
-                                "home.scirts".tr(),
-                                style: AppStyles.normalTextStyle,
+                                "20\$",
+                                style: AppStyles.normalTextStyle
+                                    .copyWith(fontWeight: FontWeight.bold),
                               ),
+                              SizedBox(height: 12.h),
                             ],
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: ClipRRect(
-                          borderRadius: BorderRadiusDirectional.circular(20.r),
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                "images/Shorts.png",
-                                fit: BoxFit.contain,
-                              ),
-                              Text(
-                                "home.shorts".tr(),
-                                style: AppStyles.normalTextStyle,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: ClipRRect(
-                          borderRadius: BorderRadiusDirectional.circular(20.r),
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                "images/Hoodies.png",
-                                fit: BoxFit.contain,
-                              ),
-                              Text(
-                                "home.hoodies".tr(),
-                                style: AppStyles.normalTextStyle,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: ClipRRect(
-                          borderRadius: BorderRadiusDirectional.circular(20.r),
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                "images/PoloShirt.png",
-                                fit: BoxFit.contain,
-                              ),
-                              Text(
-                                "home.polo_shirt".tr(),
-                                style: AppStyles.normalTextStyle,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "home.all_items".tr(),
-                        style: AppStyles.subTitleStyle,
-                      ),
-                      TextButton(
-                        child: Text(
-                          "home.see_all".tr(),
-                          style: AppStyles.subTitleStyle,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => AllItemsScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      spacing: 25.w,
-                      children: [
-                        InkWell(
-                          onTap: () {},
-                          child: ClipRRect(
-                            borderRadius: BorderRadiusDirectional.circular(
-                              20.r,
-                            ),
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  "images/Dress_2x.png",
-                                  fit: BoxFit.contain,
-                                ),
-                                Text(
-                                  "home.red_dress".tr(),
-                                  style: AppStyles.normalTextStyle,
-                                ),
-                                Text("20\$", style: AppStyles.normalTextStyle),
-                              ],
-                            ),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {},
-                          child: ClipRRect(
-                            borderRadius: BorderRadiusDirectional.circular(
-                              20.r,
-                            ),
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  "images/Shirts.png",
-                                  fit: BoxFit.contain,
-                                ),
-                                Text(
-                                  "home.shirts".tr(),
-                                  style: AppStyles.normalTextStyle,
-                                ),
-                                Text("20\$", style: AppStyles.normalTextStyle),
-                              ],
-                            ),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {},
-                          child: ClipRRect(
-                            borderRadius: BorderRadiusDirectional.circular(
-                              20.r,
-                            ),
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  "images/Hoodies.png",
-                                  fit: BoxFit.contain,
-                                ),
-                                Text(
-                                  "home.black_hoodie".tr(),
-                                  style: AppStyles.normalTextStyle,
-                                ),
-                                Text("20\$", style: AppStyles.normalTextStyle),
-                              ],
-                            ),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {},
-                          child: ClipRRect(
-                            borderRadius: BorderRadiusDirectional.circular(
-                              20.r,
-                            ),
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  "images/Jackets.png",
-                                  fit: BoxFit.contain,
-                                ),
-                                Text(
-                                  "home.modern_jackets".tr(),
-                                  style: AppStyles.normalTextStyle,
-                                ),
-                                Text("20\$", style: AppStyles.normalTextStyle),
-                              ],
-                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
+                ),
+                InkWell(
+                  onTap: () {},
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF3F3F3),
+                      borderRadius: BorderRadiusDirectional.circular(20.r),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(12.dg),
+                              child: Image.asset(
+                                "images/Shirts.png",
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.symmetric(horizontal: 16.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "home.shirts".tr(),
+                                style: AppStyles.normalTextStyle,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              SizedBox(height: 4.h),
+                              Text(
+                                "20\$",
+                                style: AppStyles.normalTextStyle
+                                    .copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 12.h),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {},
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF3F3F3),
+                      borderRadius: BorderRadiusDirectional.circular(20.r),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(12.dg),
+                              child: Image.asset(
+                                "images/Hoodies.png",
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.symmetric(horizontal: 16.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "home.black_hoodie".tr(),
+                                style: AppStyles.normalTextStyle,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              SizedBox(height: 4.h),
+                              Text(
+                                "20\$",
+                                style: AppStyles.normalTextStyle
+                                    .copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 12.h),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {},
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF3F3F3),
+                      borderRadius: BorderRadiusDirectional.circular(20.r),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(12.dg),
+                              child: Image.asset(
+                                "images/Jackets.png",
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.symmetric(horizontal: 16.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "home.modern_jackets".tr(),
+                                style: AppStyles.normalTextStyle,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              SizedBox(height: 4.h),
+                              Text(
+                                "20\$",
+                                style: AppStyles.normalTextStyle
+                                    .copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 12.h),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ]),
             ),
           ),
         ],
@@ -391,7 +386,9 @@ class _HomeScreenState extends State<HomeScreen> {
       // Bottom Icons
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIcon,
-        selectedItemColor: Color(0xFF32DBE6),
+        backgroundColor: const Color(0xFF800020),
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white70,
         type: BottomNavigationBarType.fixed,
         onTap: (value) {
           setState(() {
@@ -399,7 +396,7 @@ class _HomeScreenState extends State<HomeScreen> {
             if (_selectedIcon == 1) {
               Navigator.of(
                 context,
-              ).push(MaterialPageRoute(builder: (context) => ShopScreen()));
+              ).push(MaterialPageRoute(builder: (context) => AllItemsScreen()));
             } else if (_selectedIcon == 2) {
               // Navigator.of(
               //   context,

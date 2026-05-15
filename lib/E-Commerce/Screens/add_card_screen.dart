@@ -47,8 +47,10 @@ class _AddCardState extends State<AddCardScreen> {
     return Scaffold(
       appBar: AppBar(
         title:
-            Text("card.add_card_title".tr(), style: AppStyles.mainTitleStyle),
+            Text("card.add_card_title".tr(), style: AppStyles.mainTitleStyle.copyWith(color: Colors.white)),
         centerTitle: true,
+        backgroundColor: const Color(0xFF800020),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Form(
         key: _addCardKey,
@@ -148,12 +150,10 @@ class _AddCardState extends State<AddCardScreen> {
                     onPressed: () {
                       if (_addCardKey.currentState!.validate()) {
                         _cardAdded = true;
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                CheckoutScreen(data: _cardAdded),
-                          ),
-                        );
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) =>
+                              CheckoutScreen(data: _cardAdded),
+                        ));
                       }
                     },
                     style: AppStyles.commerceButton,

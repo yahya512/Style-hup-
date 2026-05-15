@@ -41,17 +41,19 @@ class _ViewSelectedItem extends State<ViewSelectedItem> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFF800020),
+        iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
         ),
         title: Text(
           "Ann dress", // TODO: Fetch real product name from API
           style: AppStyles.mainTitleStyle.copyWith(
             fontSize: 24.sp,
             fontWeight: FontWeight.w500,
+            color: Colors.white,
           ),
         ),
         centerTitle: false,
@@ -245,8 +247,7 @@ class _ViewSelectedItem extends State<ViewSelectedItem> {
                           // TODO: Implement existing Add to Cart logic
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(
-                              0xFF32DBE6), // Cyan color from reference
+                          backgroundColor: const Color(0xFF800020),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12.r),
                           ),

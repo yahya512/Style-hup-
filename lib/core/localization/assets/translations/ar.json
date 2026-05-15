@@ -1,6 +1,6 @@
 {
   "home": {
-    "mostafa_mahmoud": "مصطفى محمود",
+    "nike": "نايك",
     "hello_mostafa": "مرحباً ، مصطفى",
     "search": "بحث",
     "clothing": "الملابس",
@@ -153,6 +153,13 @@
   },
   "all_items": {
     "title": "كل المنتجات",
-    "dresses": "فساتين"
+    "dresses": "فساتين",
+    "filter": "تصنيف",
+    "min_rating": "اقل تصنيف  (1  - 5 )",
+    "min_price": "اقل سعر ",
+    "max_price": "اعلى سعر ",
+    "gender": "النوع",
+    "category": "الفئه",
+    "apply": "قبول"
   }
 }
