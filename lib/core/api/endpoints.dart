@@ -65,12 +65,29 @@ class Endpoints {
     return "customer/brands/$id/products";
   }
 
+  static String getBrandData(String id) {
+    return "customer/brands/$id";
+  }
+
   static String getProductsById(String brandid, String productId) {
     return "customer/brands/$brandid/products/$productId";
   }
 
-  static String getWishlistByBrandId(String id) {
-    return "customer/brands/$id/wishlist";
+  static String getWishlistByBrandId(String brandid) {
+    return "customer/brands/$brandid/wishlist";
+  }
+
+  static String getCartByBrandId(String brandid) {
+    return "customer/brands/$brandid/cart";
+  }
+
+  static String getParentChildByBrandId(String brandid) {
+    return "customer/brands/$brandid/categories";
+  }
+
+  static String deleteCartByBrandId(
+      String brandid, String cartID, String cartItemId) {
+    return "customer/brands/$brandid/cart/$cartID/items/$cartItemId";
   }
 }
 
@@ -143,4 +160,17 @@ class ApiKey {
   static const String stock = "stock";
   static const String sku = "sku";
   static const String price = "price";
+  static const String categoryId = "categoryid";
+  static const String minRating = "minRating";
+  static const String minPrice = "minPrice";
+  static const String maxPrice = "maxPrice";
+  static const String quantity = "quantity";
+  static const String cartId = "cartId";
+  static const String cartItemId = "cartItemId";
+  static const String cartStatus = "cartStatus";
+  static const String totalPrice = "totalPrice";
+  static const String hasChildren = "hasChildren";
+  static const String parentCategory = "parentCategory";
+  static const String brandEmail = "brandEmail";
+  static const String icon = "icon";
 }

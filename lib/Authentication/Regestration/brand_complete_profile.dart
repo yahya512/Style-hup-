@@ -257,6 +257,9 @@ class _BrandCompelteProfileState extends State<BrandCompleteProfile> {
                                 _brandDescription.text,
                               );
                               _brandCompleteProfile = response;
+                              CacheHelper().saveData(
+                                  key: ApiKey.baseUserId,
+                                  value: _brandCompleteProfile!.baseUserId);
                               try {
                                 await repository.imageupload(_selectedImage);
                               } on ServerException catch (e) {

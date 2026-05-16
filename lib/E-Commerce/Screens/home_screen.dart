@@ -1,10 +1,18 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:dx/E-Commerce/Models/all_products_list_model.dart';
+import 'package:dx/E-Commerce/Models/get_brand_data_model.dart';
 import 'package:dx/E-Commerce/Screens/all_items_screen.dart';
 import 'package:dx/E-Commerce/Screens/cart_screen.dart';
 import 'package:dx/E-Commerce/Screens/favourite_screen.dart';
 import 'package:dx/E-Commerce/Screens/setting_screen.dart';
+import 'package:dx/E-Commerce/Screens/view_selected_item.dart';
+import 'package:dx/cache/cache_helper.dart';
+import 'package:dx/core/api/endpoints.dart';
+import 'package:dx/core/errors/exceptions.dart';
+import 'package:dx/core/services/service_locator.dart';
 import 'package:dx/core/theme/appstyles.dart';
+import 'package:dx/repositories/user_repository.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,7 +28,86 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   // bottom icons
   int _selectedIcon = 0;
-  //boolean variables
+  // Api Variables
+  final repository = getIt<UserRepository>();
+// Scroll Setup
+  late final ScrollController _scrollController;
+  bool isLoading = false;
+  bool hasMore = true;
+  final List<ProductModel> data = [];
+  final Map<String, bool> _localFavoriteOverrides = {};
+  int currentPage = 0;
+  final int pageSize = 10;
+  GetBrandDataModel? brandData;
+
+  @override
+  void initState() {
+    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
+    _loadMoreData();
+    super.initState();
+  }
+
+  // Future<GetBrandDataModel?> _brandData() async {
+  //   final response = await repository.getBrandData();
+  //   brandData = response;
+  // }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (isLoading || !hasMore) return;
+    if (!_scrollController.hasClients) {
+      return; // wait until screen built before use Scrollcontroller
+    }
+    final pixels = _scrollController.position.pixels;
+    final max = _scrollController.position.maxScrollExtent;
+    final triggerDistance = 200;
+
+    if (pixels >= (max - triggerDistance)) {
+      // call api
+      _loadMoreData();
+    }
+  }
+
+  Future<void> _loadMoreData() async {
+    if (isLoading || !hasMore) return;
+
+    setState(() {
+      isLoading = true;
+    });
+    // write API here
+    try {
+      final response =
+          await repository.getAllProductsList(currentPage, pageSize);
+      final newitems = response.items;
+      hasMore = response.hasNext; // false or true
+      if (!context.mounted) return;
+      setState(() {
+        data.addAll(newitems);
+        isLoading = false;
+      });
+    } on ServerException catch (e) {
+      if (!mounted) return;
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            e.errormodel.message,
+            style: AppStyles.snackBarStyle,
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,10 +121,6 @@ class _HomeScreenState extends State<HomeScreen> {
             expandedHeight: 50.h,
             backgroundColor: const Color(0xFF800020),
             iconTheme: const IconThemeData(color: Colors.white),
-            leading: IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.arrow_back_ios_new),
-            ),
             actions: [
               IconButton(
                 onPressed: () {
@@ -83,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   Text(
-                    "home.hello_mostafa".tr(),
+                    "${"home.hello".tr()} ${CacheHelper().getData(key: ApiKey.firstName) ?? "empty"}",
                     style: AppStyles.subTitleStyle,
                   ),
                   SizedBox(height: 30.h),
@@ -122,6 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
+
           SliverPadding(
             padding: EdgeInsetsDirectional.symmetric(
                 horizontal: 16.dg, vertical: 8.h),
@@ -150,235 +234,197 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
+
+          // show items by using api data
           SliverPadding(
-            padding: EdgeInsetsDirectional.symmetric(
-                horizontal: 16.dg, vertical: 8.h),
-            sliver: SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16.w,
-                mainAxisSpacing: 16.h,
-                childAspectRatio: 0.75,
-              ),
-              delegate: SliverChildListDelegate([
-                InkWell(
-                  onTap: () {},
-                  child: Container(
+            padding: EdgeInsetsDirectional.all(24.dg),
+            sliver: SliverGrid.builder(
+                itemCount: data.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 16.h,
+                  crossAxisSpacing: 16.w,
+                  childAspectRatio: 0.72,
+                ),
+                itemBuilder: (context, index) {
+                  final product = data[index];
+                  final isArabic = context.locale.languageCode == 'ar';
+                  final name =
+                      isArabic ? product.productNameAr : product.productNameEn;
+                  final detailsText = isArabic ? "التفاصيل" : "Details";
+                  final isFavourite =
+                      _localFavoriteOverrides[product.productId] ??
+                          product.isFavourite;
+
+                  return Container(
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF3F3F3),
-                      borderRadius: BorderRadiusDirectional.circular(20.r),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16.r),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.05),
                           blurRadius: 10,
-                          offset: const Offset(0, 4),
+                          offset: const Offset(0, 5),
                         ),
                       ],
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Stack(
                       children: [
-                        Expanded(
-                          child: Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(12.dg),
-                              child: Image.asset(
-                                "images/Dress_2x.png",
-                                fit: BoxFit.contain,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Product Image
+                            Expanded(
+                              flex: 3,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(16.r)),
+                                child: Image.network(
+                                  product.thumbnail,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Container(
+                                    color: Colors.grey[200],
+                                    child: Icon(Icons.image_not_supported,
+                                        color: Colors.grey),
+                                  ),
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return Container(
+                                      color: Colors.grey[100],
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          value: loadingProgress
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                              : null,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              EdgeInsetsDirectional.symmetric(horizontal: 16.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "home.red_dress".tr(),
-                                style: AppStyles.normalTextStyle,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              SizedBox(height: 4.h),
-                              Text(
-                                "20\$",
-                                style: AppStyles.normalTextStyle
-                                    .copyWith(fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(height: 12.h),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF3F3F3),
-                      borderRadius: BorderRadiusDirectional.circular(20.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Center(
-                            child: Padding(
+                            // Product Details
+                            Padding(
                               padding: EdgeInsets.all(12.dg),
-                              child: Image.asset(
-                                "images/Shirts.png",
-                                fit: BoxFit.contain,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    name,
+                                    style: AppStyles.normalTextStyle
+                                        .copyWith(fontSize: 16.sp),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  SizedBox(height: 4.h),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (context) => ViewSelectedItem(
+                                              brandid:
+                                                  "bee53d22-d94d-4d21-829b-267a011f6921",
+                                              productid:
+                                                  data[index].productId)));
+                                    },
+                                    child: Text(
+                                      detailsText,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14.sp,
+                                        decoration: TextDecoration.underline,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                        Padding(
-                          padding:
-                              EdgeInsetsDirectional.symmetric(horizontal: 16.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "home.shirts".tr(),
-                                style: AppStyles.normalTextStyle,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              SizedBox(height: 4.h),
-                              Text(
-                                "20\$",
-                                style: AppStyles.normalTextStyle
-                                    .copyWith(fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(height: 12.h),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF3F3F3),
-                      borderRadius: BorderRadiusDirectional.circular(20.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(12.dg),
-                              child: Image.asset(
-                                "images/Hoodies.png",
-                                fit: BoxFit.contain,
-                              ),
+                        // Favorite Icon
+                        Positioned(
+                          top: 8.h,
+                          right: isArabic ? null : 8.w,
+                          left: isArabic ? 8.w : null,
+                          child: IconButton(
+                            onPressed: () async {
+                              if (isFavourite) {
+                                // Remove Favorite Condition
+                                try {
+                                  final response = await repository
+                                      .removeFromWishlist(product.productId);
+                                  if (!context.mounted) return;
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                          content: Text(
+                                    response,
+                                    style: AppStyles.snackBarStyle,
+                                  )));
+                                } on ServerException catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        e.errormodel.message,
+                                        style: AppStyles.snackBarStyle,
+                                      ),
+                                    ),
+                                  );
+                                }
+                                _localFavoriteOverrides[product.productId] =
+                                    false;
+                                setState(() {});
+                              } else {
+                                // Add To Wishlist Condition
+                                try {
+                                  final response = await repository
+                                      .addToWishlist(product.productId);
+                                  _localFavoriteOverrides[product.productId] =
+                                      true;
+                                  if (!context.mounted) return;
+                                  setState(() {});
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        response,
+                                        style: AppStyles.snackBarStyle,
+                                      ),
+                                    ),
+                                  );
+                                } on ServerException catch (e) {
+                                  if (!context.mounted) return;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        e.errormodel.message,
+                                        style: AppStyles.snackBarStyle,
+                                      ),
+                                    ),
+                                  );
+                                }
+                              }
+                            },
+                            icon: Icon(
+                              isFavourite
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              size: 24.dg,
                             ),
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              EdgeInsetsDirectional.symmetric(horizontal: 16.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "home.black_hoodie".tr(),
-                                style: AppStyles.normalTextStyle,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              SizedBox(height: 4.h),
-                              Text(
-                                "20\$",
-                                style: AppStyles.normalTextStyle
-                                    .copyWith(fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(height: 12.h),
-                            ],
+                            color: isFavourite ? Colors.blue : Colors.grey,
                           ),
                         ),
                       ],
                     ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF3F3F3),
-                      borderRadius: BorderRadiusDirectional.circular(20.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(12.dg),
-                              child: Image.asset(
-                                "images/Jackets.png",
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              EdgeInsetsDirectional.symmetric(horizontal: 16.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "home.modern_jackets".tr(),
-                                style: AppStyles.normalTextStyle,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              SizedBox(height: 4.h),
-                              Text(
-                                "20\$",
-                                style: AppStyles.normalTextStyle
-                                    .copyWith(fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(height: 12.h),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ]),
-            ),
+                  );
+                }),
           ),
         ],
       ),

@@ -75,6 +75,7 @@ class DioConsumer extends ApiConsumer {
     String path, {
     Object? data,
     Map<String, dynamic>? queryparametars,
+    isFormdata = false,
   }) async {
     try {
       final response = await dio.get(

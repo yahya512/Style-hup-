@@ -58,8 +58,7 @@ class ShopEntry extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: 28.w, vertical: 40.h),
+                padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 40.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -85,7 +84,7 @@ class ShopEntry extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => const HomeScreen(),
+                            builder: (context) => const HomeScreen(),
                           ),
                         );
                       },

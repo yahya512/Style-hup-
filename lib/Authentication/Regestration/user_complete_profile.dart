@@ -1,6 +1,8 @@
 import 'package:dx/Authentication/models/user_complete_profile_model.dart';
 import 'package:dx/Social-Media/shared/screens/main_layout.dart';
 import 'package:dx/Widgets/user_complete_profile_field.dart';
+import 'package:dx/cache/cache_helper.dart';
+import 'package:dx/core/api/endpoints.dart';
 import 'package:dx/core/errors/exceptions.dart';
 import 'package:dx/core/services/service_locator.dart';
 import 'package:dx/core/theme/appstyles.dart';
@@ -164,7 +166,6 @@ class _UserProfileState extends State<UserCompleteProfile> {
                         ),
                       ),
                       SizedBox(height: 24.h),
-
                       userCompleteProfile(
                         "Username",
                         TextInputType.name,
@@ -172,7 +173,6 @@ class _UserProfileState extends State<UserCompleteProfile> {
                         prefixIconData: Icons.alternate_email,
                       ),
                       SizedBox(height: 16.h),
-
                       userCompleteProfile(
                         "First name",
                         TextInputType.name,
@@ -180,7 +180,6 @@ class _UserProfileState extends State<UserCompleteProfile> {
                         prefixIconData: Icons.person_outline,
                       ),
                       SizedBox(height: 16.h),
-
                       userCompleteProfile(
                         "Last name",
                         TextInputType.name,
@@ -188,7 +187,6 @@ class _UserProfileState extends State<UserCompleteProfile> {
                         prefixIconData: Icons.person_outline,
                       ),
                       SizedBox(height: 16.h),
-
                       userCompleteProfile(
                         "Phone number",
                         TextInputType.phone,
@@ -196,7 +194,6 @@ class _UserProfileState extends State<UserCompleteProfile> {
                         prefixIconData: Icons.phone_outlined,
                       ),
                       SizedBox(height: 16.h),
-
                       userCompleteProfile(
                         "Bio",
                         TextInputType.text,
@@ -205,7 +202,6 @@ class _UserProfileState extends State<UserCompleteProfile> {
                         maxLines: 3,
                       ),
                       SizedBox(height: 16.h),
-
                       DropdownButtonFormField<String>(
                         hint: Text(
                           "Select your gender",
@@ -242,7 +238,6 @@ class _UserProfileState extends State<UserCompleteProfile> {
                         },
                       ),
                       SizedBox(height: 28.h),
-
                       _isLoading
                           ? const Center(
                               child: CircularProgressIndicator(
@@ -265,6 +260,9 @@ class _UserProfileState extends State<UserCompleteProfile> {
                                       _selectgender!,
                                     );
                                     _userRespone = response;
+                                    CacheHelper().saveData(
+                                        key: ApiKey.firstName,
+                                        value: _userRespone!.firstName);
                                     if (!context.mounted) return;
                                     Navigator.of(context).pushAndRemoveUntil(
                                       MaterialPageRoute(

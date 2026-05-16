@@ -1,7 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:dx/E-Commerce/Models/all_products_list_model.dart';
+import 'package:dx/E-Commerce/Models/parent_child_model.dart';
 import 'package:dx/E-Commerce/Screens/view_selected_item.dart';
+import 'package:dx/cache/cache_helper.dart';
+import 'package:dx/core/api/endpoints.dart';
 import 'package:dx/core/errors/exceptions.dart';
 import 'package:dx/core/services/service_locator.dart';
 import 'package:dx/core/theme/appstyles.dart';
@@ -39,6 +42,9 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
   final Map<String, bool> _localFavoriteOverrides = {};
   int currentPage = 0;
   final int pageSize = 10;
+  bool _parentHasChildren = false;
+  List<ParentChildModel> parentData = [];
+  List<ParentChildModel> childData = [];
 
   @override
   void initState() {
@@ -115,89 +121,49 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
     }
   }
 
+//   Future<void> _fetchParentCategories(
+//       void Function(void Function()) setDialogState) async {
+//     try {
+//       final response = await repository.getParentChildren();
+//       setDialogState(() {
+//         parentData = response;
+//       });
+//     } on ServerException catch (e) {
+//       if (!mounted) return;
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         SnackBar(
+//           content: Text(
+//             e.errormodel.message,
+//             style: AppStyles.snackBarStyle,
+//           ),
+//         ),
+//       );
+//     }
+//   }
+
+//   Future<void> _fetchChildCategories(String parentCategoryNameEn,
+//       void Function(void Function()) setDialogState) async {
+//     try {
+//       final response = await repository.getParentChildren(parentCategoryNameEn);
+//       setDialogState(() {
+//         childData = response;
+//       });
+//     } on ServerException catch (e) {
+//       if (!mounted) return;
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         SnackBar(
+//           content: Text(
+//             e.errormodel.message,
+//             style: AppStyles.snackBarStyle,
+//           ),
+//         ),
+//       );
+//     }
+//   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: Drawer(
-        child: Container(
-          margin: EdgeInsetsDirectional.only(top: 50.h, start: 20.w),
-          child: SingleChildScrollView(
-            // Filteration
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsetsDirectional.all(24.dg),
-                  child: Column(
-                    spacing: 10.h,
-                    children: [
-                      SizedBox(
-                        child: ListTile(
-                          title: Text(
-                            "all_items.dresses".tr(),
-                            style: AppStyles.mainTitleStyle,
-                          ),
-                          trailing: Icon(Icons.navigate_next_sharp, size: 40),
-                          onTap: () {},
-                        ),
-                      ),
-                      SizedBox(
-                        child: ListTile(
-                          title: Text(
-                            "all_items.dresses".tr(),
-                            style: AppStyles.mainTitleStyle,
-                          ),
-                          trailing: Icon(Icons.navigate_next_sharp, size: 40),
-                          onTap: () {},
-                        ),
-                      ),
-                      SizedBox(
-                        child: ListTile(
-                          title: Text(
-                            "all_items.dresses".tr(),
-                            style: AppStyles.mainTitleStyle,
-                          ),
-                          trailing: Icon(Icons.navigate_next_sharp, size: 40),
-                          onTap: () {},
-                        ),
-                      ),
-                      SizedBox(
-                        child: ListTile(
-                          title: Text(
-                            "all_items.dresses".tr(),
-                            style: AppStyles.mainTitleStyle,
-                          ),
-                          trailing: Icon(Icons.navigate_next_sharp, size: 40),
-                          onTap: () {},
-                        ),
-                      ),
-                      SizedBox(
-                        child: ListTile(
-                          title: Text(
-                            "all_items.dresses".tr(),
-                            style: AppStyles.mainTitleStyle,
-                          ),
-                          trailing: Icon(Icons.navigate_next_sharp, size: 40),
-                          onTap: () {},
-                        ),
-                      ),
-                      SizedBox(
-                        child: ListTile(
-                          title: Text(
-                            "all_items.dresses".tr(),
-                            style: AppStyles.mainTitleStyle,
-                          ),
-                          trailing: Icon(Icons.navigate_next_sharp, size: 40),
-                          onTap: () {},
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
@@ -205,8 +171,9 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
             backgroundColor: const Color(0xFF800020),
             iconTheme: const IconThemeData(color: Colors.white),
             flexibleSpace: FlexibleSpaceBar(
-              title:
-                  Text("all_items.title".tr(), style: AppStyles.mainTitleStyle.copyWith(color: Colors.white)),
+              title: Text("all_items.title".tr(),
+                  style:
+                      AppStyles.mainTitleStyle.copyWith(color: Colors.white)),
               titlePadding:
                   EdgeInsetsDirectional.only(start: 80.w, bottom: 10.h),
             ),
@@ -317,10 +284,16 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
                                   SizedBox(height: 4.h),
                                   GestureDetector(
                                     onTap: () {
+                                      //CacheHelper().getData(key: ApiKey.baseUserId)
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  ViewSelectedItem()));
+                                                  ViewSelectedItem(
+                                                    brandid:
+                                                        "bee53d22-d94d-4d21-829b-267a011f6921",
+                                                    productid:
+                                                        data[index].productId,
+                                                  )));
                                     },
                                     child: Text(
                                       detailsText,
@@ -432,110 +405,284 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.r),
-          ),
-          child: Container(
-            padding: EdgeInsets.all(24.dg),
-            decoration: BoxDecoration(
-              color: Colors.white,
+        return StatefulBuilder(builder: (context, setDialogState) {
+          final isArabic = context.locale.languageCode == 'ar';
+          // TODO: call parent categories API here to get localized category names (AR/EN)
+          if (parentData.isEmpty) {
+            // _fetchParentCategories(setDialogState);
+          }
+
+          return Dialog(
+            shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.r),
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "all_items.filter".tr(),
-                        style:
-                            AppStyles.mainTitleStyle.copyWith(fontSize: 22.sp),
-                      ),
-                      IconButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        icon: Icon(Icons.close),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16.h),
-                  _buildFilterField(
-                    label: "all_items.min_rating".tr(),
-                    controller: minRatingController,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      TextInputFormatter.withFunction((oldValue, newValue) {
-                        if (newValue.text.isEmpty) return newValue;
-                        final int? val = int.tryParse(newValue.text);
-                        if (val == null || val < 1 || val > 5) return oldValue;
-                        return newValue;
-                      }),
-                    ],
-                  ),
-                  SizedBox(height: 12.h),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildFilterField(
-                          label: "all_items.min_price".tr(),
-                          controller: minPriceController,
-                          keyboardType: TextInputType.number,
+            child: Container(
+              padding: EdgeInsets.all(24.dg),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20.r),
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "all_items.filter".tr(),
+                          style: AppStyles.mainTitleStyle
+                              .copyWith(fontSize: 22.sp),
                         ),
-                      ),
-                      SizedBox(width: 12.w),
-                      Expanded(
-                        child: _buildFilterField(
-                          label: "all_items.max_price".tr(),
-                          controller: maxPriceController,
-                          keyboardType: TextInputType.number,
+                        IconButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          icon: Icon(Icons.close),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 12.h),
-                  _buildFilterField(
-                    label: "all_items.gender".tr(),
-                    controller: genderController,
-                  ),
-                  SizedBox(height: 12.h),
-                  _buildFilterField(
-                    label: "all_items.category".tr(),
-                    controller: categoryIdController,
-                  ),
-                  SizedBox(height: 24.h),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Controllers retain the values. Just close the UI.
-                        Navigator.of(context).pop();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF800020),
-                        shape: RoundedRectangleBorder(
+                      ],
+                    ),
+                    SizedBox(height: 16.h),
+                    _buildFilterField(
+                      label: "all_items.min_rating".tr(),
+                      controller: minRatingController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        TextInputFormatter.withFunction((oldValue, newValue) {
+                          if (newValue.text.isEmpty) return newValue;
+                          final int? val = int.tryParse(newValue.text);
+                          if (val == null || val < 1 || val > 5)
+                            return oldValue;
+                          return newValue;
+                        }),
+                      ],
+                    ),
+                    SizedBox(height: 12.h),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildFilterField(
+                            label: "all_items.min_price".tr(),
+                            controller: minPriceController,
+                            keyboardType: TextInputType.number,
+                          ),
+                        ),
+                        SizedBox(width: 12.w),
+                        Expanded(
+                          child: _buildFilterField(
+                            label: "all_items.max_price".tr(),
+                            controller: maxPriceController,
+                            keyboardType: TextInputType.number,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 12.h),
+                    // Gender Dropdown
+                    DropdownButtonFormField<String>(
+                      value: genderController.text.isEmpty
+                          ? null
+                          : genderController.text,
+                      decoration: InputDecoration(
+                        labelText: "all_items.gender".tr(),
+                        labelStyle:
+                            TextStyle(color: Colors.grey[600], fontSize: 14.sp),
+                        filled: true,
+                        fillColor: Colors.grey[50],
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16.w, vertical: 14.h),
+                        border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.r),
+                          borderSide: BorderSide(color: Colors.grey[300]!),
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 16.h),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                          borderSide: BorderSide(color: Colors.grey[300]!),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                          borderSide: BorderSide(color: Colors.black),
+                        ),
                       ),
-                      child: Text(
-                        "all_items.apply".tr(),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
+                      items: [
+                        DropdownMenuItem(
+                          value: "m",
+                          child: Text("gender.male".tr()),
+                        ),
+                        DropdownMenuItem(
+                          value: "f",
+                          child: Text("gender.female".tr()),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        if (value != null) {
+                          genderController.text = value;
+                        }
+                      },
+                    ),
+                    SizedBox(height: 12.h),
+                    // Category Dropdown
+                    DropdownButtonFormField<String>(
+                      value: categoryIdController.text.isEmpty
+                          ? null
+                          : categoryIdController.text,
+                      decoration: InputDecoration(
+                        labelText: "all_items.category".tr(),
+                        labelStyle:
+                            TextStyle(color: Colors.grey[600], fontSize: 14.sp),
+                        filled: true,
+                        fillColor: Colors.grey[50],
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16.w, vertical: 14.h),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                          borderSide: BorderSide(color: Colors.grey[300]!),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                          borderSide: BorderSide(color: Colors.grey[300]!),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                          borderSide: BorderSide(color: Colors.black),
+                        ),
+                      ),
+                      items: parentData.map((category) {
+                        return DropdownMenuItem(
+                          value: category.categoryNameEN,
+                          child: Text(isArabic
+                              ? category.categoryNameAr
+                              : category.categoryNameEN),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        if (value != null) {
+                          categoryIdController.text = value;
+                          // TODO: call API here to check if selected category has children
+                          final selectedCategory = parentData.firstWhere(
+                              (element) => element.categoryId == value);
+                          setDialogState(() {
+                            _parentHasChildren = selectedCategory.hasChildren;
+                            if (_parentHasChildren) {
+                              // _fetchChildCategories(value, setDialogState);
+                            }
+                          });
+                        }
+                      },
+                    ),
+                    // Conditional Child Category Dropdown
+                    if (_parentHasChildren) ...[
+                      SizedBox(height: 12.h),
+                      // TODO: call child categories API here to populate child category dropdown
+                      DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          labelText:
+                              isArabic ? "الفئة الفرعية" : "Child Category",
+                          labelStyle: TextStyle(
+                              color: Colors.grey[600], fontSize: 14.sp),
+                          filled: true,
+                          fillColor: Colors.grey[50],
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 16.w, vertical: 14.h),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.grey[300]!),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.grey[300]!),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                        ),
+                        items: childData.map((category) {
+                          return DropdownMenuItem(
+                            value: category.categoryId,
+                            child: Text(isArabic
+                                ? category.categoryNameAr
+                                : category.categoryNameEN),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          if (value != null) {
+                            categoryIdController.text = value;
+                          }
+                        },
+                      ),
+                    ],
+                    SizedBox(height: 24.h),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          // Controllers retain the values. Just close the UI.
+                          setState(() {
+                            data.clear();
+                            currentPage = 0;
+                            hasMore = true;
+                            _parentHasChildren = false;
+                          });
+                          try {
+                            final responseFilter =
+                                await repository.getAllProductsList(
+                                    currentPage,
+                                    pageSize,
+                                    categoryIdController.text,
+                                    minRatingController.text,
+                                    minPriceController.text,
+                                    maxPriceController.text,
+                                    genderController.text);
+                            final newitems = responseFilter.items;
+                            hasMore = responseFilter.hasNext; // false or true
+                            setState(() {
+                              data.addAll(newitems);
+                              currentPage++;
+                              isLoading = true;
+                            });
+                          } on ServerException catch (e) {
+                            if (!context.mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                duration: Duration(seconds: 2),
+                                content: Text(
+                                  e.errormodel.message,
+                                  style: AppStyles.snackBarStyle,
+                                )));
+                          }
+                          if (!context.mounted) return;
+                          Navigator.of(context).pop();
+                          setState(() {
+                            categoryIdController.text = "";
+                            minRatingController.text = "";
+                            minPriceController.text = "";
+                            maxPriceController.text = "";
+                            genderController.text = "";
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF800020),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 16.h),
+                        ),
+                        child: Text(
+                          "all_items.apply".tr(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        );
+          );
+        });
       },
     );
   }

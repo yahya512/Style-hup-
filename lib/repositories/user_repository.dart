@@ -2,7 +2,11 @@ import 'package:dx/Authentication/models/forget_password_model.dart';
 import 'package:dx/Authentication/models/refresh_token_model.dart';
 import 'package:dx/Authentication/models/reset_password_model.dart';
 import 'package:dx/E-Commerce/Models/all_products_list_model.dart';
+import 'package:dx/E-Commerce/Models/get_brand_data_model.dart';
+import 'package:dx/E-Commerce/Models/get_cart_model.dart';
 import 'package:dx/E-Commerce/Models/get_product_by_id_model.dart';
+import 'package:dx/E-Commerce/Models/parent_child_model.dart';
+import 'package:dx/cache/cache_helper.dart';
 import 'package:dx/core/api/api_consumer.dart';
 import 'package:dx/core/api/endpoints.dart';
 import 'package:dx/Authentication/models/brand_complete_profile_model.dart';
@@ -150,11 +154,27 @@ class UserRepository {
   }
 
   // GET all products list
-  Future<AllProductsListModel> getAllProductsList(int page, int size) async {
+  Future<AllProductsListModel> getAllProductsList(int page, int size,
+      [String? categoryId,
+      String? minRating,
+      String? minPrice,
+      String? maxPrice,
+      String? gender]) async {
     final response = await _api.get(
-      Endpoints.getAllProductsByBrandId("bee53d22-d94d-4d21-829b-267a011f6921"),
-      queryparametars: {ApiKey.page: page, ApiKey.size: size},
-    );
+        isFormdata: true,
+        Endpoints.getAllProductsByBrandId(
+            "bee53d22-d94d-4d21-829b-267a011f6921"),
+        queryparametars: {
+          ApiKey.page: page,
+          ApiKey.size: size
+        },
+        data: {
+          ApiKey.categoryId: categoryId,
+          ApiKey.minRating: minRating,
+          ApiKey.minPrice: minPrice,
+          ApiKey.maxPrice: maxPrice,
+          ApiKey.gender: gender
+        });
 
     return AllProductsListModel.fromJson(response);
   }
@@ -190,5 +210,55 @@ class UserRepository {
     final response =
         await _api.get(Endpoints.getProductsById(brandid, productId));
     return GetProductByIdModel.fromJson(response);
+  }
+
+  // ADD to Cart
+  Future<String> addToCart(String brandid,
+      [String quantity = "1", String? productVariantId]) async {
+    final response = await _api.post(
+        Endpoints.getCartByBrandId("bee53d22-d94d-4d21-829b-267a011f6921"),
+        isFormdata: true,
+        data: {
+          ApiKey.quantity: quantity,
+          ApiKey.productVariantId: productVariantId
+        });
+    return response;
+  }
+
+  // Get Cart
+  Future<GetCartModel> getCart(int page, int size) async {
+    final response = await _api.get(
+      Endpoints.getCartByBrandId("bee53d22-d94d-4d21-829b-267a011f6921"),
+      isFormdata: true,
+    );
+    return GetCartModel.fromJson(response);
+  }
+
+  // delete from cart
+  Future<String> deleteFromCart() async {
+    final response = await _api.delete(Endpoints.deleteCartByBrandId(
+        "bee53d22-d94d-4d21-829b-267a011f6921",
+        CacheHelper().getData(key: ApiKey.cartId),
+        CacheHelper().getData(key: ApiKey.cartItemId)));
+    return response;
+  }
+
+  // Get parent Child category
+  Future<List<ParentChildModel>> getParentChildren(
+      [String? parentCategory]) async {
+    final response = await _api.get(
+        Endpoints.getParentChildByBrandId(
+            "bee53d22-d94d-4d21-829b-267a011f6921"),
+        isFormdata: true,
+        queryparametars: {ApiKey.parentCategory: parentCategory});
+
+    return (response as List).map((e) => ParentChildModel.fromJson(e)).toList();
+  }
+
+  // Get brand data
+  Future<GetBrandDataModel> getBrandData() async {
+    final response = await _api
+        .get(Endpoints.getBrandData("bee53d22-d94d-4d21-829b-267a011f6921"));
+    return GetBrandDataModel.fromjson(response);
   }
 }
