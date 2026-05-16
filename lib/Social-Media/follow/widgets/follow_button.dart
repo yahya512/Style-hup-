@@ -27,31 +27,52 @@ class FollowButton extends StatelessWidget {
 
         final isFollowing = state.status == FollowButtonStatus.following;
 
-        return OutlinedButton(
-          onPressed: () => _handleTap(context, isFollowing),
-          style: isFollowing
-              ? OutlinedButton.styleFrom(
-                  foregroundColor: Colors.grey[700],
-                  side: BorderSide(color: Colors.grey[400]!),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 6.h),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                )
-              : OutlinedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: const Color(0xFF32DBE6),
-                  side: BorderSide.none,
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 6.h),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
+        if (isFollowing) {
+          return OutlinedButton(
+            onPressed: () => _handleTap(context, isFollowing),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: Colors.grey[700],
+              side: BorderSide(color: Colors.grey[400]!),
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 6.h),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+            ),
+            child: Text(
+              'Unfollow',
+              style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
+            ),
+          );
+        }
+
+        return GestureDetector(
+          onTap: () => _handleTap(context, isFollowing),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 9.h),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF4A0010), Color(0xFF800020)],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+              borderRadius: BorderRadius.circular(8.r),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF800020).withValues(alpha: 0.35),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
                 ),
-          child: Text(
-            isFollowing ? 'Unfollow' : 'Follow',
-            style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
+              ],
+            ),
+            child: Text(
+              'Follow',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.4,
+              ),
+            ),
           ),
         );
       },

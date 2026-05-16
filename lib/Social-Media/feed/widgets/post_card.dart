@@ -10,6 +10,8 @@ import 'package:dx/Social-Media/interactions/cubit/reaction_cubit.dart';
 import 'package:dx/Social-Media/interactions/cubit/reaction_state.dart';
 import 'package:dx/Social-Media/interactions/widgets/comment_bottom_sheet.dart';
 import 'package:dx/Social-Media/user/screens/other_user_profile_screen.dart';
+import 'package:dx/Social-Media/user/screens/user_profile_screen.dart';
+import 'package:dx/Social-Media/brand/widgets/visit_store_button.dart';
 import 'post_media_carousel.dart';
 
 class PostCard extends StatelessWidget {
@@ -51,7 +53,12 @@ class PostCard extends StatelessWidget {
                   onTap: () {
                     final currentUserId =
                         CacheHelper().getData(key: ApiKey.userId) as String?;
-                    if (currentUserId == post.authorId) return;
+                    if (currentUserId == post.authorId) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => const UserProfileScreen(),
+                      ));
+                      return;
+                    }
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (_) =>
                           OtherUserProfilePage(userId: post.authorId),
@@ -77,6 +84,10 @@ class PostCard extends StatelessWidget {
                     ],
                   ),
                 ),
+                if (post.authorRole == 'BRAND') ...[
+                  SizedBox(width: 8.w),
+                  const ShopNowBadge(),
+                ],
                 const Spacer(),
                 _PostMenuButton(post: post, onDelete: onDelete, onEdit: onEdit),
               ],
@@ -122,13 +133,6 @@ class PostCard extends StatelessWidget {
                       ),
                     ),
                     Text('$commentCount', style: AppStyles.labelTextStyle),
-                    const Spacer(),
-                    IconButton(
-                      icon: const Icon(Icons.bookmark_border),
-                      iconSize: 24.r,
-                      color: Colors.black87,
-                      onPressed: () {},
-                    ),
                   ],
                 ),
               );

@@ -10,6 +10,7 @@ import 'package:dx/Social-Media/follow/cubit/follow_list_cubit.dart';
 import 'package:dx/Social-Media/follow/screens/follow_list_screen.dart';
 import 'package:dx/Social-Media/follow/services/follow_service.dart';
 import 'package:dx/Social-Media/follow/widgets/follow_button.dart';
+import 'package:dx/Social-Media/brand/widgets/visit_store_button.dart';
 import 'package:dx/Social-Media/profile_posts/services/my_posts_service.dart';
 import 'package:dx/Social-Media/shared/widgets/profile_avatar.dart';
 import 'package:dx/Social-Media/shared/widgets/profile_stat_item.dart';
@@ -188,6 +189,8 @@ class _OtherBrandProfileBody extends StatelessWidget {
                   ),
                   SizedBox(height: 12.h),
                   const FollowButton(),
+                  SizedBox(height: 10.h),
+                  VisitStoreButton(brandId: userId),
                 ],
               ),
             ),

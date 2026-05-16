@@ -15,6 +15,7 @@ import 'package:dx/Social-Media/brand/cubit/brand_profile_state.dart';
 import 'package:dx/Social-Media/brand/models/brand_profile_model.dart';
 import 'package:dx/Social-Media/brand/services/brand_profile_service.dart';
 import 'package:dx/Social-Media/brand/widgets/brand_edit_bottom_sheet.dart';
+import 'package:dx/Social-Media/brand/widgets/visit_store_button.dart';
 import 'package:dx/core/theme/appstyles.dart';
 import 'package:dx/Social-Media/feed/widgets/error_view.dart';
 import 'package:dx/Social-Media/profile_posts/cubit/my_posts_cubit.dart';
@@ -311,6 +312,8 @@ class _BrandBioSection extends StatelessWidget {
               ],
             ),
           ],
+          SizedBox(height: 14.h),
+          VisitStoreButton(brandId: profile.id),
         ],
       ),
     );
