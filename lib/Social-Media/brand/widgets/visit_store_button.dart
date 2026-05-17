@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:dx/E-Commerce/Screens/brands_directory_page.dart';
 import 'package:dx/E-Commerce/Screens/home_screen.dart';
 
 class VisitStoreButton extends StatelessWidget {
@@ -11,7 +12,7 @@ class VisitStoreButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
+        MaterialPageRoute(builder: (_) => HomeScreen(brandId: brandId)),
       ),
       child: Container(
         width: double.infinity,
@@ -63,7 +64,7 @@ class ShopNowBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
+        MaterialPageRoute(builder: (_) => const BrandsDirectoryPage()),
       ),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),

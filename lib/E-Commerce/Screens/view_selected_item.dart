@@ -342,10 +342,17 @@ class _ViewSelectedItem extends State<ViewSelectedItem> {
                     child: ElevatedButton(
                       onPressed: () async {
                         try {
-                          //TODO: Review the api agian
-// CacheHelper().getData(key: ApiKey.baseUserId)
-                          final response = repository.addToCart(
-                              "bee53d22-d94d-4d21-829b-267a011f6921");
+                          final variantId = currentVariants.isNotEmpty
+                              ? currentVariants[_selectedSizeIndex].productVariantId
+                              : null;
+                          final response = await repository.addToCart(
+                              widget.brandid, "1", variantId);
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                            response,
+                            style: AppStyles.snackBarStyle,
+                          )));
                         } on ServerException catch (e) {
                           if (!context.mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(

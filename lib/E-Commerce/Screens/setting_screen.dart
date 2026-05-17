@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SettingEcommerce extends StatefulWidget {
-  const SettingEcommerce({super.key});
+  final String brandId;
+  const SettingEcommerce({super.key, required this.brandId});
 
   @override
   State<SettingEcommerce> createState() => _SettingEcommerceState();
@@ -125,17 +126,16 @@ class _SettingEcommerceState extends State<SettingEcommerce> {
           setState(() {
             _selectedIcon = value;
             if (_selectedIcon == 0) {
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (context) => HomeScreen()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => HomeScreen(brandId: widget.brandId)));
             } else if (_selectedIcon == 2) {
               // Navigator.of(
               //   context,
               // ).push(MaterialPageRoute(builder: (context) => DashBoard()));
             } else if (_selectedIcon == 1) {
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (context) => AllItemsScreen()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      AllItemsScreen(brandId: widget.brandId)));
             }
           });
         },

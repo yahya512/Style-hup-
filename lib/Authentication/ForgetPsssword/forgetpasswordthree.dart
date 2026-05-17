@@ -2,8 +2,6 @@ import 'package:dx/Authentication/Regestration/login.dart';
 import 'package:dx/Authentication/models/reset_password_model.dart';
 import 'package:dx/Widgets/password_confirm_field.dart';
 import 'package:dx/Widgets/password_form_field.dart';
-import 'package:dx/cache/cache_helper.dart';
-import 'package:dx/core/api/endpoints.dart';
 import 'package:dx/core/errors/exceptions.dart';
 import 'package:dx/core/services/service_locator.dart';
 import 'package:dx/core/theme/appstyles.dart';
@@ -12,29 +10,29 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+const _primary = Color(0xFF800020);
+
 class ForgetpassordThree extends StatefulWidget {
   final String otpCode;
-  const ForgetpassordThree({super.key, required this.otpCode});
+  final String emailUser;
+  const ForgetpassordThree({
+    super.key,
+    required this.otpCode,
+    required this.emailUser,
+  });
   @override
-  State<StatefulWidget> createState() {
-    return _ForgetpasswordTwoState();
-  }
+  State<StatefulWidget> createState() => _ForgetpasswordThreeState();
 }
 
-class _ForgetpasswordTwoState extends State<ForgetpassordThree> {
-  // password Form key
+class _ForgetpasswordThreeState extends State<ForgetpassordThree> {
   late final GlobalKey<FormState> _passwordFormKey;
-
-  // controllers
   late TextEditingController _passwordController;
   late TextEditingController _confirmPasswordController;
-
-  // password visiability
   bool _visiblePassword = false;
   bool _visibleConfirmPassword = false;
+  bool _isLoading = false;
 
-  //API
-  final respository = getIt<UserRepository>();
+  final repository = getIt<UserRepository>();
   ResetPasswordModel? resetPasswordModel;
 
   @override
@@ -55,120 +53,180 @@ class _ForgetpasswordTwoState extends State<ForgetpassordThree> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Container(
-        padding: EdgeInsetsDirectional.all(30),
-        child: SingleChildScrollView(
-          child: Column(
-            spacing: 15.h,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("forget_password.title".tr(), style: AppStyles.mainTitleStyle),
-              Text(
-                "forget_password.enter_new_password".tr(),
-                style: AppStyles.subTitleStyle,
-              ),
-              SizedBox(height: 25),
-              Form(
-                key: _passwordFormKey,
-                child: Column(
-                  spacing: 20.h,
-                  children: [
-                    passwordField(
-                      _passwordController,
-                      _visiblePassword,
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _visiblePassword = !_visiblePassword;
-                          });
-                        },
-                        icon: _visiblePassword
-                            ? Icon(Icons.visibility_off_outlined)
-                            : Icon(Icons.visibility_outlined),
-                      ),
-                    ),
-                    // confirm password
-                    passwordConfirmField(
-                      _passwordController, // Checker
-                      _confirmPasswordController,
-                      _visibleConfirmPassword,
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _visibleConfirmPassword = !_visibleConfirmPassword;
-                          });
-                        },
-                        icon: _visibleConfirmPassword
-                            ? Icon(Icons.visibility_off_outlined)
-                            : Icon(Icons.visibility_outlined),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 85.h),
-              Center(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
+      backgroundColor: _primary,
+      body: Column(
+        children: [
+          // ── Maroon header ──
+          SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 28.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: const Icon(Icons.arrow_back_ios,
+                        color: Colors.white, size: 20),
                   ),
-                  onPressed: () async {
-                    // valdation check
-                    if (_passwordFormKey.currentState!.validate()) {
-                      //API of reset password
-                      try {
-                        final response = await respository.resetPassword(
-                          CacheHelper()
-                              .getDataString(key: ApiKey.role)
-                              .toString(),
-                          CacheHelper()
-                              .getDataString(key: ApiKey.email)
-                              .toString(),
-                          widget.otpCode,
-                          _passwordController.text,
-                          _confirmPasswordController.text,
-                        );
-
-                        resetPasswordModel = response;
-                        if (!context.mounted) return;
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            duration: Duration(seconds: 2),
-                            content: Text(
-                              resetPasswordModel!.message,
-                              style: AppStyles.snackBarStyle,
-                            ),
-                          ),
-                        );
-                        Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) => LogIn()),
-                          (route) => false,
-                        );
-                      } on ServerException catch (e) {
-                        if (!context.mounted) return;
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            duration: Duration(seconds: 3),
-                            content: Text(
-                              e.errormodel.message,
-                              style: AppStyles.snackBarStyle,
-                            ),
-                          ),
-                        );
-                      }
-                    }
-                  },
-                  child: Text(
-                    "forget_password.confirm".tr(),
-                    style: AppStyles.whiteTextButtonStyle,
+                  SizedBox(height: 20.h),
+                  Text(
+                    "forget_password.title".tr(),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 26.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
+                  SizedBox(height: 6.h),
+                  Text(
+                    "forget_password.enter_new_password".tr(),
+                    style: TextStyle(color: Colors.white70, fontSize: 13.sp),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+
+          // ── White card ──
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(32.r),
+                  topRight: Radius.circular(32.r),
+                ),
+              ),
+              child: SingleChildScrollView(
+                padding:
+                    EdgeInsets.symmetric(horizontal: 24.w, vertical: 36.h),
+                child: Form(
+                  key: _passwordFormKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "forget_password.enter_new_password".tr(),
+                        style: TextStyle(
+                          fontSize: 22.sp,
+                          fontWeight: FontWeight.bold,
+                          color: _primary,
+                        ),
+                      ),
+                      SizedBox(height: 24.h),
+                      passwordField(
+                        _passwordController,
+                        _visiblePassword,
+                        IconButton(
+                          onPressed: () => setState(
+                              () => _visiblePassword = !_visiblePassword),
+                          icon: Icon(
+                            _visiblePassword
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 16.h),
+                      passwordConfirmField(
+                        _passwordController,
+                        _confirmPasswordController,
+                        _visibleConfirmPassword,
+                        IconButton(
+                          onPressed: () => setState(() =>
+                              _visibleConfirmPassword =
+                                  !_visibleConfirmPassword),
+                          icon: Icon(
+                            _visibleConfirmPassword
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 36.h),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _primary,
+                            padding: EdgeInsets.symmetric(vertical: 14.h),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                          ),
+                          onPressed: _isLoading
+                              ? null
+                              : () async {
+                                  if (_passwordFormKey.currentState!
+                                      .validate()) {
+                                    setState(() => _isLoading = true);
+                                    try {
+                                      final response =
+                                          await repository.resetPassword(
+                                        widget.emailUser,
+                                        widget.otpCode,
+                                        _passwordController.text,
+                                        _confirmPasswordController.text,
+                                      );
+                                      resetPasswordModel = response;
+                                      if (!context.mounted) return;
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          duration: Duration(seconds: 2),
+                                          content: Text(
+                                            resetPasswordModel!.message,
+                                            style: AppStyles.snackBarStyle,
+                                          ),
+                                        ),
+                                      );
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) => LogIn()),
+                                        (route) => false,
+                                      );
+                                    } on ServerException catch (e) {
+                                      if (!context.mounted) return;
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          duration: Duration(seconds: 3),
+                                          content: Text(
+                                            e.errormodel.message,
+                                            style: AppStyles.snackBarStyle,
+                                          ),
+                                        ),
+                                      );
+                                    } finally {
+                                      if (mounted) {
+                                        setState(() => _isLoading = false);
+                                      }
+                                    }
+                                  }
+                                },
+                          child: _isLoading
+                              ? SizedBox(
+                                  height: 20.h,
+                                  width: 20.w,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Text(
+                                  "forget_password.confirm".tr(),
+                                  style: AppStyles.whiteTextButtonStyle,
+                                ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

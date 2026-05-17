@@ -56,7 +56,9 @@ class FeedPostModel {
       authorImage = json['authorImage'] as String?;
     }
 
-    final authorRoleStr = author?['role'] as String?;
+    final authorRoleStr = (author?['role'] as String?)
+        ?? (json['authorRole'] as String?)
+        ?? (json['authorType'] as String?);
 
     return FeedPostModel(
       id: json['id'] as String,

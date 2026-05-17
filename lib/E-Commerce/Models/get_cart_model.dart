@@ -14,9 +14,9 @@ class GetCartModel {
 
   factory GetCartModel.fromJson(Map<String, dynamic> jsonData) {
     return GetCartModel(
-        page: jsonData[ApiKey.page],
-        size: jsonData[ApiKey.size],
-        hasNext: jsonData[ApiKey.hasNext],
+        page: jsonData[ApiKey.page]?.toString() ?? '0',
+        size: jsonData[ApiKey.size]?.toString() ?? '0',
+        hasNext: jsonData[ApiKey.hasNext]?.toString() ?? 'false',
         items: (jsonData[ApiKey.items] as List<dynamic>? ?? [])
             .map((e) => ProductModel.fromJson(e))
             .toList());

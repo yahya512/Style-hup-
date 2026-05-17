@@ -1,4 +1,4 @@
-import 'package:dx/E-Commerce/Screens/home_screen.dart';
+import 'package:dx/E-Commerce/Screens/brands_directory_page.dart';
 import 'package:dx/core/theme/appstyles.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,7 @@ class IntroEcommerce extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                  MaterialPageRoute(builder: (context) => const BrandsDirectoryPage()),
                   (route) => false,
                 );
               },

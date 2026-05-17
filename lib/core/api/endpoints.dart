@@ -60,10 +60,16 @@ class Endpoints {
   static String markConversationSeen(String id) =>
       "chat/conversations/$id/seen";
 
+  // Brands directory (social-media backend, public endpoint)
+  static String brands = "brand";
+
   // E-Commerce
   static String getAllProductsByBrandId(String id) {
     return "customer/brands/$id/products";
   }
+
+  static String searchProductsByBrand(String brandId) =>
+      "customer/brands/$brandId/products/search";
 
   static String getBrandData(String id) {
     return "customer/brands/$id";
@@ -88,6 +94,15 @@ class Endpoints {
   static String deleteCartByBrandId(
       String brandid, String cartID, String cartItemId) {
     return "customer/brands/$brandid/cart/$cartID/items/$cartItemId";
+  }
+
+  static String updateCartItem(
+      String brandid, String cartID, String cartItemId) {
+    return "customer/brands/$brandid/cart/$cartID/items/$cartItemId";
+  }
+
+  static String checkoutByBrandId(String brandId) {
+    return "customer/brands/$brandId/checkout";
   }
 }
 
@@ -160,7 +175,7 @@ class ApiKey {
   static const String stock = "stock";
   static const String sku = "sku";
   static const String price = "price";
-  static const String categoryId = "categoryid";
+  static const String categoryId = "categoryId";
   static const String minRating = "minRating";
   static const String minPrice = "minPrice";
   static const String maxPrice = "maxPrice";
@@ -173,4 +188,10 @@ class ApiKey {
   static const String parentCategory = "parentCategory";
   static const String brandEmail = "brandEmail";
   static const String icon = "icon";
+  // Checkout
+  static const String streetEn = "streetEn";
+  static const String streetAr = "streetAr";
+  static const String cityEn = "cityEn";
+  static const String cityAr = "cityAr";
+  static const String buildingNumber = "buildingNumber";
 }

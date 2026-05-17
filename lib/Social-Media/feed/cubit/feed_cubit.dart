@@ -58,9 +58,14 @@ class FeedCubit extends Cubit<FeedState> {
     try {
       final page = await _feedService.getFeed(offset: offset, limit: _limit);
 
+      final merged = append ? [...state.items, ...page.items] : page.items;
+      final seen = <String>{};
+      final deduped =
+          merged.where((item) => seen.add(item.post.id)).toList();
+
       emit(state.copyWith(
         status: FeedStatus.success,
-        items: append ? [...state.items, ...page.items] : page.items,
+        items: deduped,
         hasMore: page.hasMore,
         offset: offset + page.items.length,
       ));

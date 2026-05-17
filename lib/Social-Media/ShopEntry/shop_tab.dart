@@ -1,4 +1,4 @@
-import 'package:dx/E-Commerce/Screens/home_screen.dart';
+import 'package:dx/E-Commerce/Screens/brands_directory_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -84,7 +84,7 @@ class ShopEntry extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => const HomeScreen(),
+                            builder: (context) => const BrandsDirectoryPage(),
                           ),
                         );
                       },

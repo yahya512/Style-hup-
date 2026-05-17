@@ -5,18 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+const _primary = Color(0xFF800020);
+
 class ForgetpassordTwo extends StatefulWidget {
   final String emailUser;
   const ForgetpassordTwo({super.key, required this.emailUser});
   @override
-  State<StatefulWidget> createState() {
-    return _ForgetpasswordTwoState();
-  }
+  State<StatefulWidget> createState() => _ForgetpasswordTwoState();
 }
 
 class _ForgetpasswordTwoState extends State<ForgetpassordTwo> {
   late final GlobalKey<FormState> _otpFormKey = GlobalKey();
-
   late final TextEditingController _otpController;
 
   @override
@@ -26,87 +25,154 @@ class _ForgetpasswordTwoState extends State<ForgetpassordTwo> {
   }
 
   @override
+  void dispose() {
+    _otpController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Container(
-        padding: EdgeInsetsDirectional.all(30),
-        child: Column(
-          spacing: 15.h,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("forget_password.title".tr(), style: AppStyles.mainTitleStyle),
-            RichText(
-              text: TextSpan(
+      backgroundColor: _primary,
+      body: Column(
+        children: [
+          // ── Maroon header ──
+          SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 28.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextSpan(
-                    text: "forget_password.enter_code_sent_to".tr(),
-                    style: TextStyle(color: Colors.black, fontSize: 20.sp),
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: const Icon(Icons.arrow_back_ios,
+                        color: Colors.white, size: 20),
                   ),
-                  TextSpan(
-                    text: widget.emailUser,
+                  SizedBox(height: 20.h),
+                  Text(
+                    "forget_password.title".tr(),
                     style: TextStyle(
-                      fontSize: 20.sp,
-                      color: Colors.lightBlue,
-                      decoration: TextDecoration.underline,
+                      color: Colors.white,
+                      fontSize: 26.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 6.h),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "forget_password.enter_code_sent_to".tr(),
+                          style: TextStyle(
+                              color: Colors.white70, fontSize: 13.sp),
+                        ),
+                        TextSpan(
+                          text: widget.emailUser,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w600,
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 25.h),
-            Form(
-              key: _otpFormKey,
-              child: PinCodeTextField(
-                appContext: context,
-                length: 6,
-                controller: _otpController,
-                keyboardType: TextInputType.number,
-                animationType: AnimationType.fade,
-                pinTheme: PinTheme(
-                  shape: PinCodeFieldShape.box,
-                  borderRadius: BorderRadius.circular(20.r),
-                  fieldHeight: 55.h,
-                  fieldWidth: 45.w,
-                  activeColor: Colors.blue,
-                  selectedColor: Colors.blue,
-                  inactiveColor: Colors.grey,
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "forget_password.code_required".tr();
-                  }
-                  if (value.length < 6) {
-                    return "forget_password.code_length".tr();
-                  }
+          ),
 
-                  return null;
-                },
+          // ── White card ──
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(32.r),
+                  topRight: Radius.circular(32.r),
+                ),
               ),
-            ),
-            SizedBox(height: 85.h),
-            Center(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
-                onPressed: () {
-                  // valdation check
-                  if (_otpFormKey.currentState!.validate()) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ForgetpassordThree(otpCode: _otpController.text),
+              child: SingleChildScrollView(
+                padding:
+                    EdgeInsets.symmetric(horizontal: 24.w, vertical: 36.h),
+                child: Form(
+                  key: _otpFormKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "forget_password.submit_code".tr(),
+                        style: TextStyle(
+                          fontSize: 22.sp,
+                          fontWeight: FontWeight.bold,
+                          color: _primary,
+                        ),
                       ),
-                    );
-                  }
-                },
-                child: Text(
-                  "forget_password.submit_code".tr(),
-                  style: AppStyles.whiteTextButtonStyle,
+                      SizedBox(height: 28.h),
+                      PinCodeTextField(
+                        appContext: context,
+                        length: 6,
+                        controller: _otpController,
+                        keyboardType: TextInputType.number,
+                        animationType: AnimationType.fade,
+                        pinTheme: PinTheme(
+                          shape: PinCodeFieldShape.box,
+                          borderRadius: BorderRadius.circular(12.r),
+                          fieldHeight: 55.h,
+                          fieldWidth: 45.w,
+                          activeColor: _primary,
+                          selectedColor: _primary,
+                          inactiveColor: Colors.grey[300]!,
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "forget_password.code_required".tr();
+                          }
+                          if (value.length < 6) {
+                            return "forget_password.code_length".tr();
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 36.h),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _primary,
+                            padding: EdgeInsets.symmetric(vertical: 14.h),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                          ),
+                          onPressed: () {
+                            if (_otpFormKey.currentState!.validate()) {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ForgetpassordThree(
+                                    otpCode: _otpController.text,
+                                    emailUser: widget.emailUser,
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          child: Text(
+                            "forget_password.submit_code".tr(),
+                            style: AppStyles.whiteTextButtonStyle,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TrackOrderScreen extends StatefulWidget {
-  const TrackOrderScreen({super.key});
+  final String brandId;
+  const TrackOrderScreen({super.key, required this.brandId});
   @override
   State<TrackOrderScreen> createState() {
     return _TrackOrderScreenState();
@@ -44,7 +45,7 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
               IconButton(
                 onPressed: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => FavouriteScreen()),
+                    MaterialPageRoute(builder: (context) => FavouriteScreen(brandId: widget.brandId)),
                   );
                 },
                 icon: Icon(Icons.favorite_border),
@@ -53,7 +54,7 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
                 onPressed: () {
                   Navigator.of(
                     context,
-                  ).push(MaterialPageRoute(builder: (context) => CartScreen()));
+                  ).push(MaterialPageRoute(builder: (context) => CartScreen(brandId: widget.brandId)));
                 },
                 icon: Icon(Icons.shopping_cart_outlined),
               ),
@@ -236,7 +237,9 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
                       ),
                       onPressed: () {
                         Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  HomeScreen(brandId: widget.brandId)),
                           (route) => false,
                         );
                       },

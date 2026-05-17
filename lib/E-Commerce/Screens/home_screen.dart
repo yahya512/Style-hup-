@@ -3,12 +3,11 @@
 import 'package:dx/E-Commerce/Models/all_products_list_model.dart';
 import 'package:dx/E-Commerce/Models/get_brand_data_model.dart';
 import 'package:dx/E-Commerce/Screens/all_items_screen.dart';
+import 'package:dx/E-Commerce/Screens/product_search_screen.dart';
 import 'package:dx/E-Commerce/Screens/cart_screen.dart';
 import 'package:dx/E-Commerce/Screens/favourite_screen.dart';
 import 'package:dx/E-Commerce/Screens/setting_screen.dart';
 import 'package:dx/E-Commerce/Screens/view_selected_item.dart';
-import 'package:dx/cache/cache_helper.dart';
-import 'package:dx/core/api/endpoints.dart';
 import 'package:dx/core/errors/exceptions.dart';
 import 'package:dx/core/services/service_locator.dart';
 import 'package:dx/core/theme/appstyles.dart';
@@ -18,7 +17,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final String brandId;
+  const HomeScreen({super.key, required this.brandId});
   @override
   State<HomeScreen> createState() {
     return _HomeScreenState();
@@ -34,6 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
   late final ScrollController _scrollController;
   bool isLoading = false;
   bool hasMore = true;
+  bool _hasError = false;
+  String? _errorMessage;
   final List<ProductModel> data = [];
   final Map<String, bool> _localFavoriteOverrides = {};
   int currentPage = 0;
@@ -45,13 +47,18 @@ class _HomeScreenState extends State<HomeScreen> {
     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
     _loadMoreData();
+    _loadBrandData();
     super.initState();
   }
 
-  // Future<GetBrandDataModel?> _brandData() async {
-  //   final response = await repository.getBrandData();
-  //   brandData = response;
-  // }
+  Future<void> _loadBrandData() async {
+    try {
+      final result = await repository.getBrandData(widget.brandId);
+      if (mounted) setState(() => brandData = result);
+    } catch (_) {
+      // Brand header is cosmetic — silently ignore failures.
+    }
+  }
 
   @override
   void dispose() {
@@ -83,33 +90,97 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     // write API here
     try {
-      final response =
-          await repository.getAllProductsList(currentPage, pageSize);
+      final response = await repository.getAllProductsList(
+          widget.brandId, currentPage, pageSize);
       final newitems = response.items;
-      hasMore = response.hasNext; // false or true
+      hasMore = response.hasNext;
       if (!context.mounted) return;
       setState(() {
         data.addAll(newitems);
         isLoading = false;
+        currentPage++;
       });
     } on ServerException catch (e) {
       if (!mounted) return;
       setState(() {
         isLoading = false;
+        if (data.isEmpty) {
+          _hasError = true;
+          _errorMessage = e.errormodel.message;
+        }
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            e.errormodel.message,
-            style: AppStyles.snackBarStyle,
+      if (data.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.errormodel.message, style: AppStyles.snackBarStyle),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_hasError && data.isEmpty) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF800020),
+          iconTheme: const IconThemeData(color: Colors.white),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
+        body: Center(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 32.w),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.store_mall_directory_outlined,
+                    size: 72.r, color: Colors.grey[300]),
+                SizedBox(height: 20.h),
+                Text(
+                  'This brand has no products yet.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  _errorMessage ?? 'Check back later for new arrivals.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 14.sp, color: Colors.grey[500]),
+                ),
+                SizedBox(height: 28.h),
+                ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF800020),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 32.w, vertical: 12.h),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.r)),
+                    elevation: 0,
+                  ),
+                  child: Text(
+                    'Go Back',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15.sp,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -125,16 +196,18 @@ class _HomeScreenState extends State<HomeScreen> {
               IconButton(
                 onPressed: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => FavouriteScreen()),
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            FavouriteScreen(brandId: widget.brandId)),
                   );
                 },
                 icon: Icon(Icons.favorite_border),
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.of(
-                    context,
-                  ).push(MaterialPageRoute(builder: (context) => CartScreen()));
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          CartScreen(brandId: widget.brandId)));
                 },
                 icon: Icon(Icons.shopping_cart_outlined),
               ),
@@ -152,22 +225,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadiusDirectional.circular(80.r),
-                        child: Image.asset(
-                          height: 50.h,
-                          width: 50.w,
-                          "images/Nike.png",
-                          fit: BoxFit.cover,
-                        ),
+                        child: brandData?.icon != null
+                            ? Image.network(
+                                brandData!.icon,
+                                height: 50.h,
+                                width: 50.w,
+                                fit: BoxFit.cover,
+                                errorBuilder: (_, __, ___) => _BrandIconFallback(),
+                              )
+                            : _BrandIconFallback(),
                       ),
                       Text(
-                        "home.nike".tr(),
+                        brandData?.brandName ?? '',
                         style: AppStyles.subTitleStyle,
                       ),
                     ],
-                  ),
-                  Text(
-                    "${"home.hello".tr()} ${CacheHelper().getData(key: ApiKey.firstName) ?? "empty"}",
-                    style: AppStyles.subTitleStyle,
                   ),
                   SizedBox(height: 30.h),
                   InkWell(
@@ -198,7 +270,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     onTap: () {
-                      showSearch(context: context, delegate: CustomSearch());
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) =>
+                            ProductSearchScreen(brandId: widget.brandId),
+                      ));
                     },
                   ),
                 ],
@@ -225,7 +300,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => AllItemsScreen(),
+                          builder: (context) =>
+                              AllItemsScreen(brandId: widget.brandId),
                         ),
                       );
                     },
@@ -330,8 +406,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     onTap: () {
                                       Navigator.of(context).push(MaterialPageRoute(
                                           builder: (context) => ViewSelectedItem(
-                                              brandid:
-                                                  "bee53d22-d94d-4d21-829b-267a011f6921",
+                                              brandid: widget.brandId,
                                               productid:
                                                   data[index].productId)));
                                     },
@@ -361,7 +436,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 // Remove Favorite Condition
                                 try {
                                   final response = await repository
-                                      .removeFromWishlist(product.productId);
+                                      .removeFromWishlist(widget.brandId, product.productId);
                                   if (!context.mounted) return;
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
@@ -386,7 +461,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 // Add To Wishlist Condition
                                 try {
                                   final response = await repository
-                                      .addToWishlist(product.productId);
+                                      .addToWishlist(widget.brandId, product.productId);
                                   _localFavoriteOverrides[product.productId] =
                                       true;
                                   if (!context.mounted) return;
@@ -440,16 +515,18 @@ class _HomeScreenState extends State<HomeScreen> {
           setState(() {
             _selectedIcon = value;
             if (_selectedIcon == 1) {
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (context) => AllItemsScreen()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      AllItemsScreen(brandId: widget.brandId)));
             } else if (_selectedIcon == 2) {
               // Navigator.of(
               //   context,
               // ).push(MaterialPageRoute(builder: (context) => DashBoard()));
             } else if (_selectedIcon == 3) {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => SettingEcommerce()),
+                MaterialPageRoute(
+                    builder: (context) =>
+                        SettingEcommerce(brandId: widget.brandId)),
               );
             }
           });
@@ -477,100 +554,18 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class CustomSearch extends SearchDelegate {
-  // list items from API
-  List names = [
-    "yahya",
-    "zaid",
-    "mohamed",
-    "aly",
-    "mostafa",
-    "adham",
-    "yasser",
-    "shady",
-    "ibrahim",
-    "omar",
-    "ahmed",
-    "abdulla",
-    "gazer",
-    "darwish",
-    "bahaa",
-    "mahmoud",
-    "moomen",
-    "youssef",
-  ];
+class _BrandIconFallback extends StatelessWidget {
   @override
-  List<Widget>? buildActions(BuildContext context) {
-    return [
-      IconButton(
-        onPressed: () {
-          query = ""; // clear the field
-        },
-        icon: Icon(Icons.close_rounded),
+  Widget build(BuildContext context) {
+    return Container(
+      height: 50.h,
+      width: 50.w,
+      decoration: const BoxDecoration(
+        color: Color(0xFF800020),
+        shape: BoxShape.circle,
       ),
-    ];
-  }
-
-  @override
-  Widget? buildLeading(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        close(context, null);
-      },
-      icon: Icon(Icons.arrow_back_ios_new, size: 25),
+      child: Icon(Icons.storefront_rounded, color: Colors.white, size: 28.r),
     );
   }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    return Card(child: Text(query, style: AppStyles.mainTitleStyle));
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    // field isEmpty return all the list
-    if (query == "") {
-      return ListView.builder(
-        itemCount: names.length,
-        itemBuilder: (BuildContext context, int i) {
-          return InkWell(
-            onTap: () {
-              showResults(context);
-            },
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Text("${names[i]}", style: AppStyles.subTitleStyle),
-              ),
-            ),
-          );
-        },
-      );
-    }
-    // return suggestion based on character you typed
-    else {
-      // element.contains => any name contain the character will appear
-      final suggestion = names
-          .where(
-            (element) => element.toLowerCase().startsWith(query.toLowerCase()),
-          )
-          .toList();
-      return ListView.builder(
-        itemCount: suggestion.length,
-        itemBuilder: (BuildContext context, int i) {
-          return InkWell(
-            onTap: () {
-              showResults(context);
-            },
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Text("${suggestion[i]}", style: AppStyles.subTitleStyle),
-              ),
-            ),
-          );
-        },
-      );
-    }
-  }
 }
+

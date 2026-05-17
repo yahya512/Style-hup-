@@ -1,9 +1,7 @@
-import 'package:dio/dio.dart';
 import 'package:dx/Authentication/Regestration/login.dart';
 import 'package:dx/Social-Media/shared/screens/main_layout.dart';
 import 'package:dx/cache/cache_helper.dart';
 import 'package:dx/core/api/endpoints.dart';
-import 'package:dx/core/api/jwt_helper.dart';
 import 'package:dx/core/navigation/navigation_service.dart';
 import 'package:dx/core/services/service_locator.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -13,47 +11,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'dart:ui' as ui;
 
-/// Proactively refreshes an expired access token at startup so the user is
-/// never sent to [MainLayout] holding a stale token.
-///
-/// On success  : updates both tokens in SharedPreferences.
-/// On failure  : removes both tokens so [MyApp] redirects to [LogIn].
-Future<void> _tryRefreshOnStartup() async {
-  final prefs = CacheHelper.sharedPreferences;
-  final accessToken = prefs.getString(ApiKey.accessToken);
-
-  if (!JwtHelper.isExpired(accessToken)) return;
-
-  final refreshToken = prefs.getString(ApiKey.refreshToken);
-  if (refreshToken == null || refreshToken.isEmpty) {
-    await CacheHelper().removeData(key: ApiKey.accessToken);
-    return;
-  }
-
-  try {
-    final dio = Dio()..options.baseUrl = Endpoints.baseUrl;
-    final response = await dio.post<Map<String, dynamic>>(
-      Endpoints.refreshToken,
-      data: {ApiKey.refreshToken: refreshToken},
-    );
-    final body = response.data;
-    final newAccess = body?[ApiKey.accessToken] as String?;
-    final newRefresh = body?[ApiKey.refreshToken] as String?;
-
-    if (newAccess != null && newRefresh != null) {
-      await CacheHelper().saveData(key: ApiKey.accessToken, value: newAccess);
-      await CacheHelper().saveData(key: ApiKey.refreshToken, value: newRefresh);
-    } else {
-      await CacheHelper().removeData(key: ApiKey.accessToken);
-      await CacheHelper().removeData(key: ApiKey.refreshToken);
-    }
-  } catch (_) {
-    // Refresh failed (network error, expired refresh token, etc.) — logout.
-    await CacheHelper().removeData(key: ApiKey.accessToken);
-    await CacheHelper().removeData(key: ApiKey.refreshToken);
-  }
-}
-
 void main() async {
   //setup for Shared_preferences
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,9 +18,6 @@ void main() async {
 
   await EasyLocalization.ensureInitialized();
   await CacheHelper().init();
-
-  // Refresh expired access token before deciding which screen to show.
-  await _tryRefreshOnStartup();
 
   // Read saved language
   final String? savedLang = CacheHelper.sharedPreferences.getString('lang');

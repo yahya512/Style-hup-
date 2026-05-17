@@ -1,4 +1,5 @@
 import 'package:dx/Social-Media/feed/models/post_model.dart';
+import 'package:dx/Social-Media/feed/widgets/post_video_player.dart';
 import 'package:dx/Social-Media/profile_posts/screens/post_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -65,13 +66,16 @@ class ProfilePostsGrid extends StatelessWidget {
         final post = posts[index];
         final imageUrl = post.images.firstOrNull;
         final hasVideo = post.videos.isNotEmpty;
+        final isTextOnly = post.images.isEmpty && post.videos.isEmpty;
 
         return GestureDetector(
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => PostDetailScreen(
                 post: post,
-                onDelete: onPostDelete != null ? () => onPostDelete!(post.id) : null,
+                onDelete: onPostDelete != null
+                    ? () => onPostDelete!(post.id)
+                    : null,
                 onEdit: onPostEdit != null
                     ? (content, vis) => onPostEdit!(post.id, content, vis)
                     : null,
@@ -79,36 +83,53 @@ class ProfilePostsGrid extends StatelessWidget {
             ),
           ),
           child: Container(
-          color: Colors.grey[100],
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              if (imageUrl != null)
-                Image.network(imageUrl, fit: BoxFit.cover)
-              else
-                Center(
-                  child: Icon(
-                    hasVideo
-                        ? Icons.videocam_outlined
-                        : Icons.image_outlined,
-                    size: 28.r,
-                    color: Colors.grey[400],
+            color: Colors.grey[100],
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                // Image thumbnail
+                if (imageUrl != null)
+                  Image.network(imageUrl, fit: BoxFit.cover)
+                // Video-only post — show the actual video (muted, looping)
+                else if (hasVideo)
+                  ClipRect(
+                    child: SizedBox.expand(
+                      child: PostVideoPlayer(videoUrl: post.videos.first),
+                    ),
+                  )
+                // Text-only post — show the actual text
+                else if (isTextOnly)
+                  Container(
+                    color: Colors.grey[50],
+                    padding: EdgeInsets.all(8.r),
+                    alignment: Alignment.center,
+                    child: Text(
+                      post.content ?? '',
+                      maxLines: 4,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 11.sp,
+                        color: Colors.black87,
+                        height: 1.4,
+                      ),
+                    ),
                   ),
-                ),
-              if (hasVideo && imageUrl != null)
-                Positioned(
-                  top: 4,
-                  right: 4,
-                  child: Icon(
-                    Icons.videocam,
-                    size: 16.r,
-                    color: Colors.white,
-                    shadows: const [Shadow(blurRadius: 4)],
+                // Video badge over image
+                if (hasVideo && imageUrl != null)
+                  Positioned(
+                    top: 4,
+                    right: 4,
+                    child: Icon(
+                      Icons.videocam,
+                      size: 16.r,
+                      color: Colors.white,
+                      shadows: const [Shadow(blurRadius: 4)],
+                    ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
-        ),
         );
       },
     );

@@ -15,7 +15,7 @@ class ParentChildModel {
   factory ParentChildModel.fromJson(Map<String, dynamic> jsonData) {
     return ParentChildModel(
         categoryId: jsonData[ApiKey.categoryId] ?? "",
-        categoryNameEN: jsonData[ApiKey.categoryNameEN] ?? "",
+        categoryNameEN: jsonData["categoryNameEn"] ?? "",
         categoryNameAr: jsonData[ApiKey.categoryNameAr] ?? "",
         hasChildren: jsonData[ApiKey.hasChildren] ?? false);
   }

@@ -9,9 +9,10 @@ import 'package:dx/Social-Media/feed/widgets/edit_post_bottom_sheet.dart';
 import 'package:dx/Social-Media/interactions/cubit/reaction_cubit.dart';
 import 'package:dx/Social-Media/interactions/cubit/reaction_state.dart';
 import 'package:dx/Social-Media/interactions/widgets/comment_bottom_sheet.dart';
+import 'package:dx/Social-Media/brand/screens/other_brand_profile_screen.dart';
 import 'package:dx/Social-Media/user/screens/other_user_profile_screen.dart';
-import 'package:dx/Social-Media/user/screens/user_profile_screen.dart';
-import 'package:dx/Social-Media/brand/widgets/visit_store_button.dart';
+import 'package:dx/core/navigation/tab_notifier.dart';
+import 'package:dx/E-Commerce/Screens/home_screen.dart';
 import 'post_media_carousel.dart';
 
 class PostCard extends StatelessWidget {
@@ -54,8 +55,13 @@ class PostCard extends StatelessWidget {
                     final currentUserId =
                         CacheHelper().getData(key: ApiKey.userId) as String?;
                     if (currentUserId == post.authorId) {
+                      appTabNotifier.value = 4;
+                      return;
+                    }
+                    if (post.authorRole == 'BRAND') {
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => const UserProfileScreen(),
+                        builder: (_) =>
+                            OtherBrandProfilePage(userId: post.authorId),
                       ));
                       return;
                     }
@@ -84,10 +90,6 @@ class PostCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (post.authorRole == 'BRAND') ...[
-                  SizedBox(width: 8.w),
-                  const ShopNowBadge(),
-                ],
                 const Spacer(),
                 _PostMenuButton(post: post, onDelete: onDelete, onEdit: onEdit),
               ],
@@ -133,6 +135,20 @@ class PostCard extends StatelessWidget {
                       ),
                     ),
                     Text('$commentCount', style: AppStyles.labelTextStyle),
+                    if (post.authorRole == 'BRAND') ...[
+                      SizedBox(width: 4.w),
+                      IconButton(
+                        icon: const Icon(Icons.storefront_rounded),
+                        iconSize: 24.r,
+                        color: const Color(0xFF800020),
+                        onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                HomeScreen(brandId: post.authorId),
+                          ),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               );

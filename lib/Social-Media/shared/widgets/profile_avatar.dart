@@ -32,25 +32,26 @@ class ProfileAvatar extends StatelessWidget {
                 ? Icon(defaultIcon, size: 40.r, color: Colors.white)
                 : null,
           ),
-          Positioned(
-            bottom: 2,
-            right: 2,
-            child: Container(
-              padding: const EdgeInsets.all(2),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-              ),
+          if (onTap != null)
+            Positioned(
+              bottom: 2,
+              right: 2,
               child: Container(
                 padding: const EdgeInsets.all(2),
                 decoration: const BoxDecoration(
-                  color: Color(0xFF32DBE6),
+                  color: Colors.white,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.add, color: Colors.white, size: 14.r),
+                child: Container(
+                  padding: const EdgeInsets.all(2),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF800020),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(Icons.add, color: Colors.white, size: 14.r),
+                ),
               ),
             ),
-          ),
         ],
       ),
     );

@@ -1,4 +1,3 @@
-import 'package:dx/E-Commerce/Screens/checkout_screen.dart';
 import 'package:dx/core/theme/appstyles.dart';
 import 'package:dx/core/validators/text_validator.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -6,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddCardScreen extends StatefulWidget {
-  const AddCardScreen({super.key});
+  final String brandId;
+  final String cartId;
+  const AddCardScreen({super.key, required this.brandId, required this.cartId});
   @override
   State<AddCardScreen> createState() {
     return _AddCardState();
@@ -21,8 +22,6 @@ class _AddCardState extends State<AddCardScreen> {
   late TextEditingController _cardNumber;
   late TextEditingController _cardCvv;
   late TextEditingController _cardValid;
-  // bool
-  bool? _cardAdded;
   @override
   void initState() {
     _addCardKey = GlobalKey();
@@ -149,11 +148,11 @@ class _AddCardState extends State<AddCardScreen> {
                   ElevatedButton(
                     onPressed: () {
                       if (_addCardKey.currentState!.validate()) {
-                        _cardAdded = true;
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) =>
-                              CheckoutScreen(data: _cardAdded),
-                        ));
+                        Navigator.of(context).pop<Map<String, String>>({
+                          'holder': _cardHolder.text,
+                          'number': _cardNumber.text,
+                          'expiry': _cardValid.text,
+                        });
                       }
                     },
                     style: AppStyles.commerceButton,

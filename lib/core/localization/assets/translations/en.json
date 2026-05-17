@@ -1,7 +1,6 @@
 {
   "home": {
     "nike": "Nike",
-    "hello": "Hello",
     "search": "Search",
     "clothing": "Clothing",
     "see_all": "See All",
@@ -97,8 +96,10 @@
     "title": "Cart",
     "total": "Total",
     "checkout": "Checkout",
-    "size": "Size",
-    "black_pants": "black Pants"
+    "size": "Size:",
+    "empty": "Your cart is empty",
+    "empty_subtitle": "Add items to get started",
+    "continue_shopping": "Continue Shopping"
   },
   "checkout": {
     "title": "Checkout",
@@ -121,7 +122,15 @@
     "payment_method": "Payment method",
     "card": "Card",
     "pay": "Pay",
-    "total": "Total"
+    "total": "Total",
+    "street_en": "Street (English)",
+    "street_ar": "Street (Arabic)",
+    "city_en": "City (English)",
+    "city_ar": "City (Arabic)",
+    "building_number": "Building Number",
+    "order_failed": "Order failed. Please try again.",
+    "tap_to_add": "Tap to add address",
+    "edit": "Edit"
   },
   "track_order": {
     "to_receive": "To Receive",
@@ -165,5 +174,12 @@
   "gender": {
     "male": "Male",
     "female": "Female"
+  },
+  "brands": {
+    "title": "Brands",
+    "subtitle": "Discover all fashion brands",
+    "retry": "Retry",
+    "error": "Failed to load brands. Please try again.",
+    "no_brands": "No brands available yet."
   }
 }

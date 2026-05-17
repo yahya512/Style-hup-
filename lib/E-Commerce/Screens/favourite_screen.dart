@@ -11,7 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FavouriteScreen extends StatefulWidget {
-  const FavouriteScreen({super.key});
+  final String brandId;
+  const FavouriteScreen({super.key, required this.brandId});
   @override
   State<FavouriteScreen> createState() {
     return _FavouriteScreenState();
@@ -67,7 +68,8 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
     });
 
     try {
-      final response = await repository.getWishlist(currentPage, pageSize);
+      final response =
+          await repository.getWishlist(widget.brandId, currentPage, pageSize);
       final newitems = response.items;
       hasMore = response.hasNext;
       setState(() {
@@ -127,9 +129,9 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.of(
-                    context,
-                  ).push(MaterialPageRoute(builder: (context) => CartScreen()));
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          CartScreen(brandId: widget.brandId)));
                 },
                 icon: Icon(Icons.shopping_cart_outlined),
               ),

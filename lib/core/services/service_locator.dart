@@ -13,6 +13,7 @@ import 'package:dx/Social-Media/chat/services/chat_service.dart';
 import 'package:dx/Social-Media/notifications/cubit/notification_cubit.dart';
 import 'package:dx/Social-Media/notifications/services/notification_service.dart';
 import 'package:dx/Social-Media/notifications/services/socket_service.dart';
+import 'package:dx/E-Commerce/Services/brand_directory_service.dart';
 import 'package:dx/core/api/endpoints.dart';
 import 'package:get_it/get_it.dart';
 
@@ -24,6 +25,10 @@ void setupServiceLocator() {
   getIt.registerLazySingleton(() => DioConsumer(dio: getIt<Dio>()));
 
   getIt.registerLazySingleton(() => UserRepository(api: getIt<DioConsumer>()));
+
+  getIt.registerLazySingleton(
+    () => BrandDirectoryService(api: getIt<DioConsumer>()),
+  );
 
   getIt.registerLazySingleton(() => FeedService());
 

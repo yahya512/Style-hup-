@@ -15,7 +15,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AllItemsScreen extends StatefulWidget {
-  const AllItemsScreen({super.key});
+  final String brandId;
+  const AllItemsScreen({super.key, required this.brandId});
   @override
   State<AllItemsScreen> createState() {
     return _AllItemsScreenState();
@@ -43,6 +44,7 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
   int currentPage = 0;
   final int pageSize = 10;
   bool _parentHasChildren = false;
+  bool _parentCategoriesFetched = false;
   List<ParentChildModel> parentData = [];
   List<ParentChildModel> childData = [];
 
@@ -96,8 +98,8 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
     });
     // write API here
     try {
-      final response =
-          await repository.getAllProductsList(currentPage, pageSize);
+      final response = await repository.getAllProductsList(
+          widget.brandId, currentPage, pageSize);
       final newitems = response.items;
       hasMore = response.hasNext; // false or true
       setState(() {
@@ -121,45 +123,49 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
     }
   }
 
-//   Future<void> _fetchParentCategories(
-//       void Function(void Function()) setDialogState) async {
-//     try {
-//       final response = await repository.getParentChildren();
-//       setDialogState(() {
-//         parentData = response;
-//       });
-//     } on ServerException catch (e) {
-//       if (!mounted) return;
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         SnackBar(
-//           content: Text(
-//             e.errormodel.message,
-//             style: AppStyles.snackBarStyle,
-//           ),
-//         ),
-//       );
-//     }
-//   }
+  Future<void> _fetchParentCategories() async {
+    _parentCategoriesFetched = true;
+    try {
+      final response = await repository.getParentChildren(widget.brandId);
+      if (!mounted) return;
+      setState(() {
+        parentData = response;
+      });
+    } on ServerException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            e.errormodel.message,
+            style: AppStyles.snackBarStyle,
+          ),
+        ),
+      );
+    }
+  }
 
-//   Future<void> _fetchChildCategories(String parentCategoryNameEn,
-//       void Function(void Function()) setDialogState) async {
-//     try {
-//       final response = await repository.getParentChildren(parentCategoryNameEn);
-//       setDialogState(() {
-//         childData = response;
-//       });
-//     } on ServerException catch (e) {
-//       if (!mounted) return;
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         SnackBar(
-//           content: Text(
-//             e.errormodel.message,
-//             style: AppStyles.snackBarStyle,
-//           ),
-//         ),
-//       );
-//     }
-//   }
+  Future<void> _fetchChildCategories(
+      String parentCategoryNameEn,
+      BuildContext dialogContext,
+      void Function(void Function()) setDialogState) async {
+    try {
+      final response = await repository.getParentChildren(widget.brandId, parentCategoryNameEn);
+      if (!dialogContext.mounted) return;
+      setDialogState(() {
+        childData = response;
+      });
+    } on ServerException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            e.errormodel.message,
+            style: AppStyles.snackBarStyle,
+          ),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -289,8 +295,7 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   ViewSelectedItem(
-                                                    brandid:
-                                                        "bee53d22-d94d-4d21-829b-267a011f6921",
+                                                    brandid: widget.brandId,
                                                     productid:
                                                         data[index].productId,
                                                   )));
@@ -321,7 +326,7 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
                                 // Remove Favorite Condition
                                 try {
                                   final response = await repository
-                                      .removeFromWishlist(product.productId);
+                                      .removeFromWishlist(widget.brandId, product.productId);
                                   if (!context.mounted) return;
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
@@ -346,7 +351,7 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
                                 // Add To Wishlist Condition
                                 try {
                                   final response = await repository
-                                      .addToWishlist(product.productId);
+                                      .addToWishlist(widget.brandId, product.productId);
                                   _localFavoriteOverrides[product.productId] =
                                       true;
                                   if (!context.mounted) return;
@@ -401,16 +406,19 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
     );
   }
 
-  void _showFilterDialog() {
+  Future<void> _showFilterDialog() async {
+    if (!_parentCategoriesFetched) {
+      await _fetchParentCategories();
+    }
+    if (!mounted) return;
+    categoryIdController.text = "";
+    _parentHasChildren = false;
+    childData = [];
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(builder: (context, setDialogState) {
           final isArabic = context.locale.languageCode == 'ar';
-          // TODO: call parent categories API here to get localized category names (AR/EN)
-          if (parentData.isEmpty) {
-            // _fetchParentCategories(setDialogState);
-          }
 
           return Dialog(
             shape: RoundedRectangleBorder(
@@ -560,11 +568,12 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
                           categoryIdController.text = value;
                           // TODO: call API here to check if selected category has children
                           final selectedCategory = parentData.firstWhere(
-                              (element) => element.categoryId == value);
+                              (element) => element.categoryNameEN == value);
                           setDialogState(() {
                             _parentHasChildren = selectedCategory.hasChildren;
+                            childData = [];
                             if (_parentHasChildren) {
-                              // _fetchChildCategories(value, setDialogState);
+                              _fetchChildCategories(value, context, setDialogState);
                             }
                           });
                         }
@@ -627,6 +636,7 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
                           try {
                             final responseFilter =
                                 await repository.getAllProductsList(
+                                    widget.brandId,
                                     currentPage,
                                     pageSize,
                                     categoryIdController.text,
@@ -639,7 +649,7 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
                             setState(() {
                               data.addAll(newitems);
                               currentPage++;
-                              isLoading = true;
+                              isLoading = false;
                             });
                           } on ServerException catch (e) {
                             if (!context.mounted) return;

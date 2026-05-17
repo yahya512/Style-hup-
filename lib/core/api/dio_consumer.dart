@@ -13,7 +13,7 @@ class DioConsumer extends ApiConsumer {
     dio.options.baseUrl = Endpoints.baseUrl;
 
     // interceptors is observers of request and response
-    dio.interceptors.add(ApiInterceptors(retryDio: Dio()));
+    dio.interceptors.add(ApiInterceptors());
     // print reguest and response
     // if we ae in debug mode not release mode
     if (kDebugMode) {

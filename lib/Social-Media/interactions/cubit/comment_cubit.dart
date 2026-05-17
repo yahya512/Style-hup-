@@ -45,16 +45,13 @@ class CommentCubit extends Cubit<CommentState> {
     if (trimmed.isEmpty || trimmed.length > 1000) return;
     emit(state.copyWith(status: CommentStatus.submitting));
     try {
-      final comment = await _service.addComment(
+      await _service.addComment(
         postId: _postId,
         content: trimmed,
       );
-      emit(state.copyWith(
-        status: CommentStatus.success,
-        comments: [comment, ...state.comments],
-        offset: state.offset + 1,
-      ));
       _onCountChanged(1);
+      // Reload to get full author data (name + image) from the server.
+      await loadComments();
     } catch (_) {
       emit(state.copyWith(
         status: CommentStatus.failure,

@@ -1,6 +1,7 @@
 import 'package:dx/E-Commerce/Screens/cart_screen.dart';
 import 'package:dx/E-Commerce/Screens/favourite_screen.dart';
 import 'package:dx/E-Commerce/Screens/home_screen.dart';
+import 'package:dx/E-Commerce/Screens/product_search_screen.dart';
 import 'package:dx/E-Commerce/Screens/setting_screen.dart';
 import 'package:dx/core/theme/appstyles.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -8,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ShopScreen extends StatefulWidget {
-  const ShopScreen({super.key});
+  final String brandId;
+  const ShopScreen({super.key, required this.brandId});
   @override
   State<StatefulWidget> createState() {
     return _ShopeScreenState();
@@ -60,7 +62,9 @@ class _ShopeScreenState extends State<ShopScreen> {
             leading: IconButton(
               onPressed: () {
                 Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          HomeScreen(brandId: widget.brandId)),
                   (route) => false,
                 );
               },
@@ -70,7 +74,9 @@ class _ShopeScreenState extends State<ShopScreen> {
               IconButton(
                 onPressed: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => FavouriteScreen()),
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          FavouriteScreen(brandId: widget.brandId)),
                   );
                 },
                 icon: Icon(Icons.favorite_border),
@@ -79,7 +85,9 @@ class _ShopeScreenState extends State<ShopScreen> {
                 onPressed: () {
                   Navigator.of(
                     context,
-                  ).push(MaterialPageRoute(builder: (context) => CartScreen()));
+                  ).push(MaterialPageRoute(
+                      builder: (context) =>
+                          CartScreen(brandId: widget.brandId)));
                 },
                 icon: Icon(Icons.shopping_cart_outlined),
               ),
@@ -99,7 +107,10 @@ class _ShopeScreenState extends State<ShopScreen> {
               ),
               child: InkWell(
                 onTap: () {
-                  showSearch(context: context, delegate: CustomSearch());
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) =>
+                        ProductSearchScreen(brandId: widget.brandId),
+                  ));
                 },
                 child: Row(
                   children: [
@@ -237,16 +248,17 @@ class _ShopeScreenState extends State<ShopScreen> {
           setState(() {
             _selectedIcon = value;
             if (_selectedIcon == 0) {
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (context) => HomeScreen()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => HomeScreen(brandId: widget.brandId)));
             } else if (_selectedIcon == 2) {
               // Navigator.of(
               //   context,
               // ).push(MaterialPageRoute(builder: (context) => DashBoard()));
             } else if (_selectedIcon == 3) {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => SettingEcommerce()),
+                MaterialPageRoute(
+                    builder: (context) =>
+                        SettingEcommerce(brandId: widget.brandId)),
               );
             }
           });
