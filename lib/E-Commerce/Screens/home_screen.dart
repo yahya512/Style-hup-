@@ -15,6 +15,7 @@ import 'package:dx/repositories/user_repository.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   final String brandId;
@@ -160,8 +161,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () => Navigator.of(context).pop(),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF800020),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 32.w, vertical: 12.h),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 32.w, vertical: 12.h),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.r)),
                     elevation: 0,
@@ -231,7 +232,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 50.h,
                                 width: 50.w,
                                 fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) => _BrandIconFallback(),
+                                errorBuilder: (_, __, ___) =>
+                                    _BrandIconFallback(),
                               )
                             : _BrandIconFallback(),
                       ),
@@ -404,11 +406,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                   SizedBox(height: 4.h),
                                   GestureDetector(
                                     onTap: () {
-                                      Navigator.of(context).push(MaterialPageRoute(
-                                          builder: (context) => ViewSelectedItem(
-                                              brandid: widget.brandId,
-                                              productid:
-                                                  data[index].productId)));
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ViewSelectedItem(
+                                                      brandid: widget.brandId,
+                                                      productid: data[index]
+                                                          .productId)));
                                     },
                                     child: Text(
                                       detailsText,
@@ -435,8 +439,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               if (isFavourite) {
                                 // Remove Favorite Condition
                                 try {
-                                  final response = await repository
-                                      .removeFromWishlist(widget.brandId, product.productId);
+                                  final response =
+                                      await repository.removeFromWishlist(
+                                          widget.brandId, product.productId);
                                   if (!context.mounted) return;
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
@@ -460,8 +465,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               } else {
                                 // Add To Wishlist Condition
                                 try {
-                                  final response = await repository
-                                      .addToWishlist(widget.brandId, product.productId);
+                                  final response =
+                                      await repository.addToWishlist(
+                                          widget.brandId, product.productId);
                                   _localFavoriteOverrides[product.productId] =
                                       true;
                                   if (!context.mounted) return;
@@ -511,17 +517,45 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white70,
         type: BottomNavigationBarType.fixed,
-        onTap: (value) {
+        onTap: (value) async {
+          if (value == 2) {
+            final Uri url =
+                Uri.parse('https://model-dashboard-wine.vercel.app/#/login');
+            try {
+              if (!await launchUrl(
+                url,
+                mode: LaunchMode.inAppWebView,
+              )) {
+                debugPrint('Could not launch $url');
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Could not launch the dashboard website.'),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                }
+              }
+            } catch (e) {
+              debugPrint('Error launching URL: $e');
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Error launching website: $e'),
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+              }
+            }
+            return;
+          }
+
           setState(() {
             _selectedIcon = value;
             if (_selectedIcon == 1) {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) =>
                       AllItemsScreen(brandId: widget.brandId)));
-            } else if (_selectedIcon == 2) {
-              // Navigator.of(
-              //   context,
-              // ).push(MaterialPageRoute(builder: (context) => DashBoard()));
             } else if (_selectedIcon == 3) {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -568,4 +602,3 @@ class _BrandIconFallback extends StatelessWidget {
     );
   }
 }
-

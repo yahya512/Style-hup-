@@ -3,8 +3,6 @@
 import 'package:dx/E-Commerce/Models/all_products_list_model.dart';
 import 'package:dx/E-Commerce/Models/parent_child_model.dart';
 import 'package:dx/E-Commerce/Screens/view_selected_item.dart';
-import 'package:dx/cache/cache_helper.dart';
-import 'package:dx/core/api/endpoints.dart';
 import 'package:dx/core/errors/exceptions.dart';
 import 'package:dx/core/services/service_locator.dart';
 import 'package:dx/core/theme/appstyles.dart';
@@ -149,7 +147,8 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
       BuildContext dialogContext,
       void Function(void Function()) setDialogState) async {
     try {
-      final response = await repository.getParentChildren(widget.brandId, parentCategoryNameEn);
+      final response = await repository.getParentChildren(
+          widget.brandId, parentCategoryNameEn);
       if (!dialogContext.mounted) return;
       setDialogState(() {
         childData = response;
@@ -325,8 +324,9 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
                               if (isFavourite) {
                                 // Remove Favorite Condition
                                 try {
-                                  final response = await repository
-                                      .removeFromWishlist(widget.brandId, product.productId);
+                                  final response =
+                                      await repository.removeFromWishlist(
+                                          widget.brandId, product.productId);
                                   if (!context.mounted) return;
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
@@ -350,8 +350,9 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
                               } else {
                                 // Add To Wishlist Condition
                                 try {
-                                  final response = await repository
-                                      .addToWishlist(widget.brandId, product.productId);
+                                  final response =
+                                      await repository.addToWishlist(
+                                          widget.brandId, product.productId);
                                   _localFavoriteOverrides[product.productId] =
                                       true;
                                   if (!context.mounted) return;
@@ -573,7 +574,8 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
                             _parentHasChildren = selectedCategory.hasChildren;
                             childData = [];
                             if (_parentHasChildren) {
-                              _fetchChildCategories(value, context, setDialogState);
+                              _fetchChildCategories(
+                                  value, context, setDialogState);
                             }
                           });
                         }
