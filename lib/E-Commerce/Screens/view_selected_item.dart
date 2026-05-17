@@ -1,6 +1,4 @@
 import 'package:dx/E-Commerce/Models/get_product_by_id_model.dart';
-import 'package:dx/cache/cache_helper.dart';
-import 'package:dx/core/api/endpoints.dart';
 import 'package:dx/core/errors/exceptions.dart';
 import 'package:dx/core/services/service_locator.dart';
 import 'package:dx/core/theme/appstyles.dart';
@@ -343,7 +341,8 @@ class _ViewSelectedItem extends State<ViewSelectedItem> {
                       onPressed: () async {
                         try {
                           final variantId = currentVariants.isNotEmpty
-                              ? currentVariants[_selectedSizeIndex].productVariantId
+                              ? currentVariants[_selectedSizeIndex]
+                                  .productVariantId
                               : null;
                           final response = await repository.addToCart(
                               widget.brandid, "1", variantId);
