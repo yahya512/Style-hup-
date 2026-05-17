@@ -27,6 +27,7 @@ import 'package:dx/Social-Media/notifications/services/socket_service.dart';
 import 'package:dx/Social-Media/notifications/widgets/notification_banner.dart';
 import 'package:dx/Social-Media/feed/screens/feed_screen.dart';
 import 'package:dx/core/navigation/tab_notifier.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // lib/Social-Media/main_layout.dart
 
@@ -136,59 +137,142 @@ class _MainLayoutContentState extends State<_MainLayoutContent> {
     );
   }
 
+  Future<void> _openDashboardWebsite() async {
+    final Uri url =
+        Uri.parse('https://static-dashboard-five.vercel.app/#/login');
+    try {
+      if (!await launchUrl(
+        url,
+        mode: LaunchMode.inAppWebView,
+      )) {
+        debugPrint('Could not launch $url');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Could not launch the dashboard website.'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      debugPrint('Error launching URL: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error launching website: $e'),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final role = CacheHelper().getData(key: ApiKey.role) as String?;
+    final isBrand = (role == 'BRAND');
 
     final List<Widget> screens = [
-      const FeedPage(), 
+      const FeedPage(),
       const ShopEntry(),
       const ConversationsScreen(),
       const SearchPage(),
       // role-aware profile entry
-      role == 'BRAND' ? const BrandProfilePage() : const UserProfileScreen(),
+      isBrand ? const BrandProfilePage() : const UserProfileScreen(),
       // hidden tab — notifications (index 5)
       const NotificationsScreen(),
     ];
 
+    // Build navigation items
+    final List<BottomNavigationBarItem> navItems = [
+      _navItem(_currentIndex == 0 ? Icons.home : Icons.home_outlined, 0),
+      _navItem(Icons.shopping_cart_outlined, 1),
+    ];
+
+    if (isBrand) {
+      navItems.add(
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.dashboard_rounded,
+            color: Colors.white54, // visually inactive
+            size: 28.r,
+          ),
+          label: '',
+        ),
+      );
+    }
+
+    navItems.addAll([
+      _navItem(Icons.send_outlined, 2),
+      _navItem(Icons.search, 3),
+      BottomNavigationBarItem(
+        icon: _ProfileAvatar(isActive: _currentIndex == 4, role: role),
+        label: 'Profile',
+      ),
+    ]);
+
+    // Visual selected index mapping for BottomNavigationBar
+    int navBarCurrentIndex;
+    if (isBrand) {
+      if (_currentIndex == 0) {
+        navBarCurrentIndex = 0;
+      } else if (_currentIndex == 1) {
+        navBarCurrentIndex = 1;
+      } else if (_currentIndex == 2) {
+        navBarCurrentIndex = 3; // Chat
+      } else if (_currentIndex == 3) {
+        navBarCurrentIndex = 4; // Search
+      } else {
+        navBarCurrentIndex = 5; // Profile / Notifications
+      }
+    } else {
+      navBarCurrentIndex = _currentIndex.clamp(0, 4);
+    }
+
     return BlocListener<NotificationCubit, NotificationState>(
-      listenWhen: (prev, curr) =>
-          curr.bannerNotification != null &&
-          prev.bannerNotification != curr.bannerNotification,
-      listener: (_, state) => _showBanner(state.bannerNotification!),
-      child: Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: screens,
-      ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: const Color(0xFF800020),
-          border: Border(top: BorderSide(color: const Color(0xFF600018), width: 0.5)),
-        ),
-        child: BottomNavigationBar(
-          currentIndex: _currentIndex.clamp(0, 4),
-          onTap: (index) {
-            appTabNotifier.value = index;
-          },
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: const Color(0xFF800020),
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          elevation: 0,
-          items: [
-            _navItem(_currentIndex == 0 ? Icons.home : Icons.home_outlined, 0),
-            _navItem(Icons.shopping_cart_outlined, 1),
-            _navItem(Icons.send_outlined, 2),
-            _navItem(Icons.search, 3),
-            BottomNavigationBarItem(
-              icon: _ProfileAvatar(isActive: _currentIndex == 4, role: role),
-              label: 'Profile',
+        listenWhen: (prev, curr) =>
+            curr.bannerNotification != null &&
+            prev.bannerNotification != curr.bannerNotification,
+        listener: (_, state) => _showBanner(state.bannerNotification!),
+        child: Scaffold(
+          body: IndexedStack(
+            index: _currentIndex,
+            children: screens,
+          ),
+          bottomNavigationBar: Container(
+            decoration: BoxDecoration(
+              color: const Color(0xFF800020),
+              border: Border(
+                  top: BorderSide(color: const Color(0xFF600018), width: 0.5)),
             ),
-          ],
-        ),
-      ),
-    ));
+            child: BottomNavigationBar(
+              currentIndex: navBarCurrentIndex,
+              onTap: (index) {
+                if (isBrand) {
+                  if (index == 2) {
+                    _openDashboardWebsite();
+                    return;
+                  }
+                  // Map visual navigation index back to actual screen index
+                  int screenIndex = index;
+                  if (index > 2) {
+                    screenIndex = index - 1;
+                  }
+                  appTabNotifier.value = screenIndex;
+                } else {
+                  appTabNotifier.value = index;
+                }
+              },
+              type: BottomNavigationBarType.fixed,
+              backgroundColor: const Color(0xFF800020),
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              elevation: 0,
+              items: navItems,
+            ),
+          ),
+        ));
   }
 
   BottomNavigationBarItem _navItem(IconData icon, int index) {
